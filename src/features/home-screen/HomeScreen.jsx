@@ -1,14 +1,13 @@
 import React from 'react';
 import { View } from 'react-native';
 import { Text } from 'react-native-paper';
+import TimerView from './TimerView';
 
 function HomeScreen() {
+
   return (
     <View>
-      <View>
-        <Text>0:00</Text>
-        <Text>Until Void</Text>
-      </View>
+      <TimerView />
       <View>
         <View>
           <Text>+Intake</Text>
