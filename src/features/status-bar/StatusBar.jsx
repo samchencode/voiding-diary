@@ -13,7 +13,6 @@ function StatusBar() {
         style={{
           backgroundColor: colors.primary,
           height: Constants.statusBarHeight,
-          elevation: 5,
         }}
       />
       <StatusBarControl style="light" />

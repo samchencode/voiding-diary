@@ -1,13 +1,19 @@
 import React from 'react';
-import { View } from 'react-native';
-import { Text } from 'react-native-paper';
+import { View, ScrollView, StyleSheet } from 'react-native';
+import { useTheme, Text } from 'react-native-paper';
 import TimerView from './TimerView';
+import IntakeChart from './IntakeChart';
 
 function HomeScreen() {
+  const { colors } = useTheme();
 
   return (
-    <View>
+    <ScrollView contentContainerStyle={{
+      backgroundColor: colors.bg,
+      flex: 1,
+    }}>
       <TimerView />
+      <IntakeChart />
       <View>
         <View>
           <Text>+Intake</Text>
@@ -22,7 +28,7 @@ function HomeScreen() {
           <Text>Tea 12oz 7:30am</Text>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
