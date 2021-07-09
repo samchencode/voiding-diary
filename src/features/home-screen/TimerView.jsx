@@ -8,6 +8,8 @@ function TimerView() {
   const { width } = useWindowDimensions();
   const { colors } = useTheme();
 
+  const height = Math.min(width, 400);
+
   const margin = {
     top: 40,
     right: 40,
@@ -18,7 +20,8 @@ function TimerView() {
   const widthInnerCircle = 10;
 
   const radius =
-    (width - Math.max(margin.left + margin.right, margin.top + margin.bottom)) /
+    (height -
+      Math.max(margin.left + margin.right, margin.top + margin.bottom)) /
     2;
 
   const tickLength = (2 * Math.PI * radius) / 80;
@@ -39,20 +42,26 @@ function TimerView() {
         backgroundColor: colors.primary,
         borderBottomLeftRadius: width,
         borderBottomRightRadius: width,
-        transform: [{ translateX: -width / 2 }],
+        transform: [
+          { translateX: -width / 2 },
+          { translateY: -(width - height) },
+        ],
         shadowColor: colors.dark,
         shadowOpacity: 0.25,
         shadowRadius: 5,
         elevation: 5,
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'flex-end',
+        justifyContent: 'center',
       }}
     >
       <Svg
-        width={width}
-        height={width}
-        viewBox={`0 0 ${width} ${width}`}
+        width={height}
+        height={height}
+        viewBox={`0 0 ${height} ${height}`}
         style={{
           padding: 8,
-          transform: [{ translateX: width / 2 }],
         }}
       >
         <G x={margin.left} y={margin.top}>
