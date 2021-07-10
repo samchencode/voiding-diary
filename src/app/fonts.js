@@ -40,13 +40,10 @@ function useAppIcons() {
   const [ready, setReady] = useState(false);
   const fonts = [Ionicons.font, MaterialCommunityIcons.font];
 
-  useEffect(
-    () =>
-      Promise.all(fonts.map((f) => Font.loadAsync(f))).then(() =>
-        setReady(true)
-      ),
-    []
-  );
+  useEffect(() => {
+    const loadFonts = fonts.map((f) => Font.loadAsync(f));
+    Promise.all(loadFonts).then(() => setReady(true));
+  }, []);
 
   return ready;
 }
