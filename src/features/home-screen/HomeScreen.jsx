@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, ScrollView, StyleSheet } from 'react-native';
+import { View, ScrollView } from 'react-native';
 import { useTheme, Text } from 'react-native-paper';
 import TimerView from './TimerView';
 import IntakeChart from './IntakeChart';
+import LoggerButtonGroup from './LoggerButtonGroup';
 
 function HomeScreen() {
   const { colors } = useTheme();
@@ -21,13 +22,48 @@ function HomeScreen() {
           marginRight: 16,
         }}
       >
-        <IntakeChart />
+        <LoggerButtonGroup />
+        <IntakeChart style={{ marginTop: 16 }} />
         <View>
+          <Text>History</Text>
           <View>
-            <Text>+Intake</Text>
+            <Text>Tea 12oz 7:30am</Text>
           </View>
+        </View>
+        <View>
+          <Text>History</Text>
           <View>
-            <Text>+Void</Text>
+            <Text>Tea 12oz 7:30am</Text>
+          </View>
+        </View>
+        <View>
+          <Text>History</Text>
+          <View>
+            <Text>Tea 12oz 7:30am</Text>
+          </View>
+        </View>
+        <View>
+          <Text>History</Text>
+          <View>
+            <Text>Tea 12oz 7:30am</Text>
+          </View>
+        </View>
+        <View>
+          <Text>History</Text>
+          <View>
+            <Text>Tea 12oz 7:30am</Text>
+          </View>
+        </View>
+        <View>
+          <Text>History</Text>
+          <View>
+            <Text>Tea 12oz 7:30am</Text>
+          </View>
+        </View>
+        <View>
+          <Text>History</Text>
+          <View>
+            <Text>Tea 12oz 7:30am</Text>
           </View>
         </View>
         <View>

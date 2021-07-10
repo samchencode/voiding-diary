@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Svg, { Rect, Line, Text as SvgText } from 'react-native-svg';
 import { useTheme } from 'react-native-paper';
+import Card from './Card';
 import d3 from '../../lib/d3';
 
-function IntakeChart() {
+function IntakeChart(props) {
   const data = {
     goal: 32,
     intake: 40,
@@ -29,18 +30,16 @@ function IntakeChart() {
   const { colors } = useTheme();
 
   return (
-    <View
+    <Card
       onLayout={onLayout}
-      style={{
-        width: '100%',
-        backgroundColor: colors.light,
-        shadowColor: colors.dark,
-        shadowOpacity: 0.25,
-        shadowRadius: 5,
-        elevation: 5,
-        padding: containerPadding,
-        display: 'flex',
-      }}
+      style={[
+        {
+          width: '100%',
+          padding: containerPadding,
+          display: 'flex',
+        },
+        props.style,
+      ]}
     >
       <View style={styles.titleContainer}>
         <Text style={styles.title}>20oz</Text>
@@ -94,7 +93,7 @@ function IntakeChart() {
           oz
         </SvgText>
       </Svg>
-    </View>
+    </Card>
   );
 }
 
