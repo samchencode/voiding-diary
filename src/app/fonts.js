@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import * as Font from 'expo-font';
 import {
   useFonts,
@@ -40,7 +40,13 @@ function useAppIcons() {
   const [ready, setReady] = useState(false);
   const fonts = [Ionicons.font, MaterialCommunityIcons.font];
 
-  Promise.all(fonts.map((f) => Font.loadAsync(f))).then(() => setReady(true));
+  useEffect(
+    () =>
+      Promise.all(fonts.map((f) => Font.loadAsync(f))).then(() =>
+        setReady(true)
+      ),
+    []
+  );
 
   return ready;
 }
