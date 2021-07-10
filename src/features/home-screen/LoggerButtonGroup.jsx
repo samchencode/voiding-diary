@@ -4,9 +4,9 @@ import Card from './Card';
 import SvgBeerCelebration from './svg/BeerCelebration';
 import SvgPassingBy from './svg/PassingBy';
 
-function LoggerButtonGroup() {
+function LoggerButtonGroup(props) {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, props.style]}>
       <Card style={[styles.card, { marginRight: 8 }]}>
         <SvgBeerCelebration
           width="80%"
@@ -40,7 +40,6 @@ const styles = StyleSheet.create({
   container: {
     display: 'flex',
     flexDirection: 'row',
-    marginTop: 16,
   },
   card: { flex: 1, height: 120 },
   buttonTitle: {
