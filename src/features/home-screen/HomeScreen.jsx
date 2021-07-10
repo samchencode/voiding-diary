@@ -11,7 +11,8 @@ function HomeScreen() {
 
   return (
     <ScrollView
-      style={[styles.scrollContainer, { backgroundColor: colors.bg }]}
+      style={[styles.scrollContainer, { backgroundColor: colors.primary }]}
+      contentContainerStyle={{ backgroundColor: colors.bg }}
     >
       <TimerView />
       <View style={styles.cardContainer}>
