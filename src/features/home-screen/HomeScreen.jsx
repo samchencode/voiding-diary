@@ -1,80 +1,42 @@
 import React from 'react';
-import { View, ScrollView } from 'react-native';
-import { useTheme, Text } from 'react-native-paper';
+import { View, ScrollView, StyleSheet } from 'react-native';
+import { useTheme } from 'react-native-paper';
 import TimerView from './TimerView';
 import IntakeChart from './IntakeChart';
 import LoggerButtonGroup from './LoggerButtonGroup';
+import HistoryView from './HistoryView';
 
 function HomeScreen() {
   const { colors } = useTheme();
 
   return (
     <ScrollView
-      style={{
-        backgroundColor: colors.bg,
-        flex: 1,
-      }}
+      style={[styles.scrollContainer, { backgroundColor: colors.bg }]}
     >
       <TimerView />
-      <View
-        style={{
-          marginLeft: 16,
-          marginRight: 16,
-        }}
-      >
-        <LoggerButtonGroup />
-        <IntakeChart style={{ marginTop: 16 }} />
-        <View>
-          <Text>History</Text>
-          <View>
-            <Text>Tea 12oz 7:30am</Text>
-          </View>
-        </View>
-        <View>
-          <Text>History</Text>
-          <View>
-            <Text>Tea 12oz 7:30am</Text>
-          </View>
-        </View>
-        <View>
-          <Text>History</Text>
-          <View>
-            <Text>Tea 12oz 7:30am</Text>
-          </View>
-        </View>
-        <View>
-          <Text>History</Text>
-          <View>
-            <Text>Tea 12oz 7:30am</Text>
-          </View>
-        </View>
-        <View>
-          <Text>History</Text>
-          <View>
-            <Text>Tea 12oz 7:30am</Text>
-          </View>
-        </View>
-        <View>
-          <Text>History</Text>
-          <View>
-            <Text>Tea 12oz 7:30am</Text>
-          </View>
-        </View>
-        <View>
-          <Text>History</Text>
-          <View>
-            <Text>Tea 12oz 7:30am</Text>
-          </View>
-        </View>
-        <View>
-          <Text>History</Text>
-          <View>
-            <Text>Tea 12oz 7:30am</Text>
-          </View>
-        </View>
+      <View style={styles.cardContainer}>
+        <LoggerButtonGroup style={styles.item} />
+        <IntakeChart style={styles.item} />
+        <HistoryView style={[styles.item, styles.lastItem]} />
       </View>
     </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  scrollContainer: {
+    flex: 1,
+  },
+  cardContainer: {
+    marginLeft: 16,
+    marginRight: 16,
+  },
+  item: {
+    marginTop: 16,
+  },
+  lastItem: {
+    marginBottom: 16,
+  },
+});
 
 export default HomeScreen;

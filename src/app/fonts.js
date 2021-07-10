@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import * as Font from 'expo-font';
 import {
   useFonts,
   Roboto_100Thin,
@@ -13,6 +15,7 @@ import {
   Roboto_900Black,
   Roboto_900Black_Italic,
 } from '@expo-google-fonts/roboto';
+import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 
 function useAppFonts() {
   const [fontsLoaded] = useFonts({
@@ -33,4 +36,13 @@ function useAppFonts() {
   return fontsLoaded;
 }
 
-export default useAppFonts;
+function useAppIcons() {
+  const [ready, setReady] = useState(false);
+  const fonts = [Ionicons.font, MaterialCommunityIcons.font];
+
+  Promise.all(fonts.map((f) => Font.loadAsync(f))).then(() => setReady(true));
+
+  return ready;
+}
+
+export { useAppFonts, useAppIcons };
