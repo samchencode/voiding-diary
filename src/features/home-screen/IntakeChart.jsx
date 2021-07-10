@@ -1,27 +1,121 @@
-import React from 'react';
-import { View } from 'react-native';
-import Svg, { Rect } from 'react-native-svg';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import Svg, { Rect, Line, Text as SvgText } from 'react-native-svg';
 import { useTheme } from 'react-native-paper';
+import d3 from '../../lib/d3';
 
 function IntakeChart() {
+  const data = {
+    goal: 32,
+    intake: 40,
+  };
+
+  const [width, setWidth] = useState(0);
+  const containerPadding = 16;
+  function onLayout({ nativeEvent }) {
+    setWidth(nativeEvent.layout.width - containerPadding * 2);
+  }
+  const barHeight = 15;
+  const markerHeight = 40;
+  const barOffsetY = markerHeight - barHeight;
+  const svgHeight = markerHeight;
+  const goalTextOffsetX = 24;
+
+  const scaleX = d3
+    .scaleLinear()
+    .domain([0, Math.max(data.goal, data.intake)])
+    .range([0, width]);
 
   const { colors } = useTheme();
 
-  return(
-    <View style={{
-      margin: 10,
-      width: 200,
-      backgroundColor: colors.light,
-      shadowColor: colors.dark,
-      shadowOpacity: 0.25,
-      shadowRadius: 5,
-      elevation: 5,
-    }}>
-      <Svg width={100} height={100} viewBox='0 0 100 100'>
-        <Rect x={0} y={0} height={100} width={100} fill="black" />
+  return (
+    <View
+      onLayout={onLayout}
+      style={{
+        width: '100%',
+        backgroundColor: colors.light,
+        shadowColor: colors.dark,
+        shadowOpacity: 0.25,
+        shadowRadius: 5,
+        elevation: 5,
+        padding: containerPadding,
+        display: 'flex',
+      }}
+    >
+      <View style={styles.titleContainer}>
+        <Text style={styles.title}>20oz</Text>
+        <Text style={styles.subtitle}>Intake</Text>
+      </View>
+      <Svg
+        width={width}
+        height={svgHeight}
+        viewBox={`0 0 ${width} ${svgHeight}`}
+      >
+        <Rect
+          x={0}
+          y={barOffsetY}
+          rx={barHeight / 2}
+          width={width}
+          height={barHeight}
+          fill={colors.bg}
+        />
+        <Rect
+          x={0}
+          y={barOffsetY}
+          rx={barHeight / 2}
+          width={scaleX(data.intake)}
+          height={barHeight}
+          fill={colors.accent}
+        />
+        <Line
+          x1={scaleX(data.goal)}
+          x2={scaleX(data.goal)}
+          y1={0}
+          y2={svgHeight}
+          stroke={colors.danger}
+          strokeWidth={2}
+        />
+        <SvgText
+          x={scaleX(data.goal) - goalTextOffsetX}
+          y={16}
+          fontSize={16}
+          fill={colors.danger}
+          textAnchor="end"
+        >
+          {data.goal}
+        </SvgText>
+        <SvgText
+          x={scaleX(data.goal) - goalTextOffsetX + 18}
+          y={16}
+          fontSize={16}
+          fill={colors.danger}
+          textAnchor="end"
+        >
+          oz
+        </SvgText>
       </Svg>
     </View>
-  )
+  );
 }
+
+const styles = StyleSheet.create({
+  titleContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+    marginTop: -12,
+    marginBottom: -6,
+  },
+  title: {
+    fontWeight: 'bold',
+    fontSize: 36,
+    fontFamily: 'Roboto_700Bold',
+  },
+  subtitle: {
+    fontSize: 24,
+    fontFamily: 'Roboto_300Light',
+    paddingBottom: 3,
+  },
+});
 
 export default IntakeChart;

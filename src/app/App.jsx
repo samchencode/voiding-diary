@@ -1,12 +1,14 @@
 import StatusBar from '../features/status-bar';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
+import AppLoading from 'expo-app-loading';
+import useFonts from './fonts';
 import HomeScreen from '../features/home-screen';
-import Constants from 'expo-constants';
-import { useTheme } from 'react-native-paper';
 
 function App() {
-  const { colors } = useTheme();
+
+  const fontsLoaded = useFonts();
+  if(!fontsLoaded) return <AppLoading />
 
   return (
     <View style={styles.container}>

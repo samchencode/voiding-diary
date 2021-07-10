@@ -8,24 +8,33 @@ function HomeScreen() {
   const { colors } = useTheme();
 
   return (
-    <ScrollView contentContainerStyle={{
-      backgroundColor: colors.bg,
-      flex: 1,
-    }}>
+    <ScrollView
+      contentContainerStyle={{
+        backgroundColor: colors.bg,
+        flex: 1,
+      }}
+    >
       <TimerView />
-      <IntakeChart />
-      <View>
+      <View
+        style={{
+          marginLeft: 16,
+          marginRight: 16,
+        }}
+      >
+        <IntakeChart />
         <View>
-          <Text>+Intake</Text>
+          <View>
+            <Text>+Intake</Text>
+          </View>
+          <View>
+            <Text>+Void</Text>
+          </View>
         </View>
         <View>
-          <Text>+Void</Text>
-        </View>
-      </View>
-      <View>
-        <Text>History</Text>
-        <View>
-          <Text>Tea 12oz 7:30am</Text>
+          <Text>History</Text>
+          <View>
+            <Text>Tea 12oz 7:30am</Text>
+          </View>
         </View>
       </View>
     </ScrollView>
