@@ -10,7 +10,7 @@ function HomeScreen() {
 
   return (
     <ScrollView
-      contentContainerStyle={{
+      style={{
         backgroundColor: colors.bg,
         flex: 1,
       }}
