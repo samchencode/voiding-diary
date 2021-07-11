@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import Card from './Card';
+import { Card } from '../common';
 import { HistoryRow } from '../history-screen';
 
 function HistoryView(props) {
