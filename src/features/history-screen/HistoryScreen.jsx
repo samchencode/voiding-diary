@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { FlatList, View, StyleSheet, Text } from 'react-native';
+import React, { useState } from 'react';
+import { SectionList, View, StyleSheet, Text } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import HistoryCard from './HistoryCard';
 import Separator from './Separator';
@@ -8,38 +8,70 @@ import data from './data';
 
 const parseDatetime = d3.timeParse('%Y-%m-%d %H:%M:%S');
 
-const DATA = data
-  .map((d) => {
-    const datum = Object.assign({}, d);
-    datum.datetime = parseDatetime(d.datetime);
-    return datum;
-  })
-  .sort((d1, d2) => d1.datetime < d2.datetime);
+const DATA = Object.values(
+  data
+    .map((d) => {
+      const datum = Object.assign({}, d);
+      datum.datetime = parseDatetime(d.datetime);
+      return datum;
+    })
+    .reduce((ag, v) => {
+      const makeDateStr = (dt) =>
+        dt.getDay() + ' ' + dt.getMonth() + ' ' + dt.getYear();
+
+      let arr;
+      if ((arr = ag[makeDateStr(v.datetime)]?.data)) {
+        arr.push(v);
+      } else {
+        ag[makeDateStr(v.datetime)] = {
+          datetime: v.datetime,
+          data: [v],
+        };
+      }
+
+      return ag;
+    }, {})
+).sort((s1, s2) => s1.datetime < s2.datetime);
 
 function HistoryScreen() {
   const { colors } = useTheme();
 
+  const [contentOffset, setContentOffset] = useState({ x: 0, y: 0 });
+  const [contentSize, setContentSize] = useState({ height: 0, width: 0 });
+
+  const handleScroll = ({ nativeEvent: e }) => {
+    setContentOffset(e.contentOffset);
+    setContentSize(e.contentSize);
+  };
+
   return (
-    <View style={[styles.container, { backgroundColor: colors.bg }]}>
-      <FlatList
-        data={DATA}
-        renderItem={({ item, index }) => (
-          <HistoryCard
-            style={[styles.card, index !== 0 && styles.belowTopCard]}
-          />
-        )}
-        ItemSeparatorComponent={(props) => (
-          <Separator style={styles.separator} data={DATA} {...props} />
-        )}
-        keyExtractor={(item) => '' + item.id}
-      />
-    </View>
+    <SectionList
+      style={[styles.container, { backgroundColor: colors.bg }]}
+      sections={DATA}
+      renderItem={({ item }) => (
+        <HistoryCard style={[styles.card, styles.belowTopCard]} />
+      )}
+      renderSectionHeader={({ section }) => (
+        <Separator style={styles.separator} datetime={section.datetime} />
+      )}
+      keyExtractor={(item) => '' + item.id}
+      onScroll={handleScroll}
+      ListHeaderComponent={() => <Text style={styles.title}>History</Text>}
+    />
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    display: 'flex',
     flex: 1,
+  },
+  title: {
+    fontFamily: 'Roboto_700Bold',
+    fontSize: 36,
+    marginTop: 8,
+    marginLeft: 16,
+    marginBottom: 8,
   },
   card: {
     margin: 16,
