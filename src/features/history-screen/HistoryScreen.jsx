@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SectionList, View, StyleSheet, Text } from 'react-native';
+import { SectionList, StyleSheet, Text } from 'react-native';
 import { useTheme } from 'react-native-paper';
 import HistoryCard from './HistoryCard';
 import Separator from './Separator';
