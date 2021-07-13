@@ -11,13 +11,14 @@ function TimerView() {
   const height = Math.min(width, 400);
 
   const margin = {
-    top: 40,
-    right: 40,
-    bottom: 40,
-    left: 40,
+    top: 30,
+    right: 30,
+    bottom: 30,
+    left: 30,
   };
-  const offsetInnerCircle = 40;
-  const widthInnerCircle = 10;
+  const offsetInnerCircle = 30;
+  const widthInnerCircle = 5;
+  const widthOuterCircle = 20;
 
   const radius =
     (height -
@@ -70,7 +71,7 @@ function TimerView() {
             cx={radius}
             cy={radius}
             stroke={colors.accent}
-            strokeWidth={30}
+            strokeWidth={widthOuterCircle}
             strokeDasharray={[tickLength * 0.2, tickLength * 0.8]}
           />
           <G x={radius} y={radius}>

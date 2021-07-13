@@ -1,11 +1,9 @@
-import StatusBar from '../features/status-bar';
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
+import StatusBar from '../features/status-bar';
 import AppLoading from 'expo-app-loading';
 import { useAppIcons, useAppFonts} from './fonts';
-import HomeScreen from '../features/home-screen';
-import HistoryScreen from '../features/history-screen';
-import GoalScreen from '../features/goal-screen';
+import Router from './Router';
 
 function App() {
 
@@ -16,7 +14,7 @@ function App() {
   return (
     <View style={styles.container}>
       <StatusBar />
-      <GoalScreen />
+      <Router />
     </View>
   );
 }
