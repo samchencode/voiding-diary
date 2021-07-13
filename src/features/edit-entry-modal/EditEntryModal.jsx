@@ -17,23 +17,35 @@ function EditEntryModal(props) {
   return (
     <Modal onDismiss={() => navigation.goBack()}>
       <Text style={styles.title}>+Intake</Text>
-      <Text style={styles.label}>Beverage</Text>
-      <TextInput style={[styles.input, styles.inputText]} placeholder="Name" />
+      <View style={styles.inputGroup}>
+        <Text style={styles.label}>Beverage</Text>
+        <TextInput
+          style={[styles.input, styles.inputText]}
+          placeholder="Name"
+        />
+      </View>
       <Text style={styles.label}>Amount</Text>
-      <View style={styles.amountInputGroup}>
+      <View style={[styles.inputGroup, styles.amountInputGroup]}>
         <TouchableOpacity>
           <Text style={[styles.inputText, { color: colors.primary }]}>8oz</Text>
         </TouchableOpacity>
         <TouchableOpacity>
-          <Text style={[styles.inputText, { color: colors.primary }]}>12oz</Text>
+          <Text style={[styles.inputText, { color: colors.primary }]}>
+            12oz
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity>
-          <Text style={[styles.inputText, { color: colors.primary }]}>16oz</Text>
+          <Text style={[styles.inputText, { color: colors.primary }]}>
+            16oz
+          </Text>
         </TouchableOpacity>
-        <TextInput style={styles.inputText} placeholder="other" />
+        <TextInput
+          style={[styles.input, styles.inputText]}
+          placeholder="other"
+        />
       </View>
       <TouchableHighlight>
-        <View >
+        <View>
           <Text>Save</Text>
         </View>
       </TouchableHighlight>
@@ -47,14 +59,16 @@ const styles = StyleSheet.create({
   title: { ...fonts.lg },
   label: { ...fonts.sm },
   input: {
-    marginBottom: spaces.sm,
+    borderBottomWidth: 1,
   },
-  inputText: { ...fonts.md },
+  inputText: { ...fonts.mdBold },
+  inputGroup: {
+    marginBottom: spaces.lg,
+  },
   amountInputGroup: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: spaces.lg,
   },
 });
 
