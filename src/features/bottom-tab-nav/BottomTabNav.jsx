@@ -12,7 +12,7 @@ function Nav(props) {
     <Tab.Navigator
       tabBarOptions={{
         activeTintColor: colors.primary,
-        inactiveTintColor: colors.dark,
+        inactiveTintColor: colors.gray,
         labelStyle: styles.label
       }}
       style={{ backgroundColor: colors.bg }}

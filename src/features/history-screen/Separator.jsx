@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { useTheme } from 'react-native-paper';
 import d3 from '../../lib/d3';
 
 function HistorySeparator(props) {
@@ -9,6 +10,8 @@ function HistorySeparator(props) {
   const formatDate = d3.timeFormat('%e');
   const formatDay = d3.timeFormat('%A');
 
+  const { colors } = useTheme();
+
   return (
     <View style={[props.style, styles.container]}>
       <View style={styles.labelContainer}>
@@ -17,7 +20,7 @@ function HistorySeparator(props) {
           {formatDate(datetime).trim()}
         </Text>
       </View>
-      <View style={styles.line} />
+      <View style={[styles.line, { borderBottomColor: colors.gray }]} />
     </View>
   );
 }
@@ -42,7 +45,6 @@ const styles = StyleSheet.create({
   line: {
     flex: 1,
     height: 0,
-    borderBottomColor: 'gray',
     borderBottomWidth: 2,
   },
 });
