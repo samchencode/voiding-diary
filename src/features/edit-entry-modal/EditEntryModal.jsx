@@ -4,10 +4,10 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  TouchableHighlight,
   StyleSheet,
 } from 'react-native';
 import { useTheme, baseTheme } from '../theme';
+import { Button } from '../common';
 import Modal from './Modal';
 
 function EditEntryModal(props) {
@@ -42,18 +42,23 @@ function EditEntryModal(props) {
         <TextInput
           style={[styles.input, styles.inputText]}
           placeholder="other"
+          keyboardType="numeric"
         />
       </View>
-      <TouchableHighlight>
-        <View>
-          <Text>Save</Text>
-        </View>
-      </TouchableHighlight>
+      <View style={styles.buttonGroup}>
+      <TouchableOpacity>
+        <Text style={[styles.outlineButton, styles.button, {
+          color: colors.gray,
+          borderColor: colors.gray,
+        }]}>Cancel</Text>
+      </TouchableOpacity>
+      <Button.Success title="Save" onPress={() => {}} style={[styles.button]} />
+      </View>
     </Modal>
   );
 }
 
-const { spaces, fonts } = baseTheme;
+const { spaces, fonts, br } = baseTheme;
 
 const styles = StyleSheet.create({
   title: { ...fonts.lg },
@@ -70,6 +75,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  buttonGroup: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-evenly'
+  },
+  button: {
+    width: 100,
+  },
+  outlineButton: {
+    ...fonts.mdBold,
+    textAlign: 'center',
+    borderRadius: br,
+    borderWidth: 1,
+    paddingTop: spaces.sm - 1,
+    paddingBottom: spaces.sm - 1,
+  }
 });
 
 export default EditEntryModal;
