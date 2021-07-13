@@ -46,13 +46,25 @@ function EditEntryModal(props) {
         />
       </View>
       <View style={styles.buttonGroup}>
-      <TouchableOpacity>
-        <Text style={[styles.outlineButton, styles.button, {
-          color: colors.gray,
-          borderColor: colors.gray,
-        }]}>Cancel</Text>
-      </TouchableOpacity>
-      <Button.Success title="Save" onPress={() => {}} style={[styles.button]} />
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Text
+            style={[
+              styles.outlineButton,
+              styles.button,
+              {
+                color: colors.gray,
+                borderColor: colors.gray,
+              },
+            ]}
+          >
+            Cancel
+          </Text>
+        </TouchableOpacity>
+        <Button.Success
+          title="Save"
+          onPress={() => {}}
+          style={[styles.button]}
+        />
       </View>
     </Modal>
   );
@@ -78,7 +90,7 @@ const styles = StyleSheet.create({
   buttonGroup: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'space-evenly'
+    justifyContent: 'space-evenly',
   },
   button: {
     width: 100,
@@ -90,7 +102,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingTop: spaces.sm - 1,
     paddingBottom: spaces.sm - 1,
-  }
+  },
 });
 
 export default EditEntryModal;
