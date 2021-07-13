@@ -36,7 +36,7 @@ function GoalScreen() {
           <Text style={styles.label}>Daily Intake</Text>
           <IntakeInput />
         </View>
-        <Button.Danger title="Set" onPress={() => {}} />
+        <Button.Success title="Set" onPress={() => {}} />
       </Card>
     </ScrollView>
   );
