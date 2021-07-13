@@ -1,1 +1,1 @@
-export { default as default } from './EditEntryModal';
+export { default as default } from './Modal';
