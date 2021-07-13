@@ -7,9 +7,8 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import { useTheme, baseTheme } from '../theme';
-import { Card } from '../common';
+import { Card, Button } from '../common';
 import SvgTarget from './svg/Target';
-import Button from './Button';
 import { TimeInput, IntakeInput } from './Input';
 
 function GoalScreen() {
@@ -37,7 +36,7 @@ function GoalScreen() {
           <Text style={styles.label}>Daily Intake</Text>
           <IntakeInput />
         </View>
-        <Button title="Save" />
+        <Button.Danger title="Set" onPress={() => {}} />
       </Card>
     </ScrollView>
   );
