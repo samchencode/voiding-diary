@@ -6,7 +6,7 @@ import IntakeChart from './IntakeChart';
 import LoggerButtonGroup from './LoggerButtonGroup';
 import HistoryView from './HistoryView';
 
-function HomeScreen() {
+function HomeScreen({ navigation }) {
   const { colors } = useTheme();
 
   return (
@@ -16,7 +16,11 @@ function HomeScreen() {
     >
       <TimerView />
       <View style={styles.cardContainer}>
-        <LoggerButtonGroup style={styles.item} />
+        <LoggerButtonGroup
+          style={styles.item}
+          onPressIntake={() => navigation.navigate('EditModal')}
+          onPressVoid={() => {}}
+        />
         <IntakeChart style={styles.item} />
         <HistoryView style={[styles.item, styles.lastItem]} />
       </View>
