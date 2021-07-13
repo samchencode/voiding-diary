@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, useWindowDimensions } from 'react-native';
-import { useTheme } from 'react-native-paper';
+import { useTheme } from '../theme';
 import Svg, { G, Circle, Text, Path } from 'react-native-svg';
 import d3 from '../../lib/d3';
 

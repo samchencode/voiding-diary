@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { SectionList, StyleSheet, Text } from 'react-native';
-import { useTheme } from 'react-native-paper';
+import { useTheme } from '../theme';
 import HistoryCard from './HistoryCard';
 import Separator from './Separator';
 import d3 from '../../lib/d3';

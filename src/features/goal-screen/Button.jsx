@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, TouchableHighlight, Text, StyleSheet } from 'react-native';
-import { useTheme } from 'react-native-paper';
+import { useTheme } from '../theme';
 
 function Button(props) {
   const { title, onPress, style } = props;

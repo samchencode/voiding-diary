@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Svg, { Rect, Line, Text as SvgText } from 'react-native-svg';
-import { useTheme } from 'react-native-paper';
+import { useTheme } from '../theme';
 import { Card } from '../common';
 import d3 from '../../lib/d3';
 

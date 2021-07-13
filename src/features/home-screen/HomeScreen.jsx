@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
-import { useTheme } from 'react-native-paper';
+import { useTheme } from '../theme';
 import TimerView from './TimerView';
 import IntakeChart from './IntakeChart';
 import LoggerButtonGroup from './LoggerButtonGroup';

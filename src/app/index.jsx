@@ -1,10 +1,9 @@
 import React from 'react';
 import App from './App';
-import { Provider as PaperProvider } from 'react-native-paper';
-import theme from './theme';
+import ThemeContext, { defaultTheme } from '../features/theme';
 
 export default () => (
-  <PaperProvider theme={theme}>
+  <ThemeContext.Provider value={defaultTheme}>
     <App />
-  </PaperProvider>
+  </ThemeContext.Provider>
 );

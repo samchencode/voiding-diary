@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { useTheme } from 'react-native-paper';
+import { useTheme } from '../theme';
 
 function Card(props) {
   const { colors } = useTheme();

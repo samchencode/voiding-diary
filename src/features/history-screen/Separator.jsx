@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { useTheme } from 'react-native-paper';
+import { useTheme } from '../theme';
 import d3 from '../../lib/d3';
 
 function HistorySeparator(props) {

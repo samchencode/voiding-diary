@@ -6,7 +6,7 @@ import {
   StyleSheet,
   useWindowDimensions,
 } from 'react-native';
-import { useTheme } from 'react-native-paper';
+import { useTheme } from '../theme';
 import { Card } from '../common';
 import SvgTarget from './svg/Target';
 import Button from './Button';
