@@ -7,6 +7,7 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import { useTheme, baseTheme } from '../theme';
+import StatusBar from '../status-bar';
 import { Card, Button } from '../common';
 import SvgTarget from './svg/Target';
 import { TimeInput, IntakeInput } from './Input';
@@ -21,6 +22,7 @@ function GoalScreen() {
       style={[styles.container, { backgroundColor: colors.bg }]}
       contentContainerStyle={styles.contentContainer}
     >
+      <StatusBar statusBarStyle="dark" color={colors.bg} />
       <SvgTarget width={svgWidth} height={0.66 * svgWidth} style={styles.svg} />
       <Card style={styles.card}>
         <Text style={styles.title}>Set Goals</Text>
@@ -47,7 +49,7 @@ const { spaces, fonts } = baseTheme;
 const styles = StyleSheet.create({
   container: { flex: 1 },
   contentContainer: {
-    paddingTop: spaces.lg,
+    paddingTop: spaces.sm,
   },
   svg: {
     marginBottom: -spaces.lg,

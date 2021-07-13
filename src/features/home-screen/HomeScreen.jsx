@@ -5,6 +5,7 @@ import TimerView from './TimerView';
 import IntakeChart from './IntakeChart';
 import LoggerButtonGroup from './LoggerButtonGroup';
 import HistoryView from './HistoryView';
+import StatusBar from '../status-bar';
 
 function HomeScreen({ navigation }) {
   const { colors } = useTheme();
@@ -14,6 +15,7 @@ function HomeScreen({ navigation }) {
       style={[styles.scrollContainer, { backgroundColor: colors.primary }]}
       contentContainerStyle={{ backgroundColor: colors.bg }}
     >
+      <StatusBar color={colors.primary} statusBarStyle="light" />
       <TimerView />
       <View style={styles.cardContainer}>
         <LoggerButtonGroup

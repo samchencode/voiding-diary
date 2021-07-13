@@ -1,6 +1,5 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import StatusBar from '../features/status-bar';
 import AppLoading from 'expo-app-loading';
 import { useAppIcons, useAppFonts} from './fonts';
 import Router from './Router';
@@ -13,7 +12,6 @@ function App() {
 
   return (
     <View style={styles.container}>
-      <StatusBar />
       <Router />
     </View>
   );

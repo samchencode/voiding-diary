@@ -1,21 +1,20 @@
 import React from 'react';
 import { View } from 'react-native';
 import { StatusBar as StatusBarControl } from 'expo-status-bar';
-import { useTheme } from '../theme';
 import Constants from 'expo-constants';
 
-function StatusBar() {
-  const { colors } = useTheme();
+function StatusBar(props) {
+  const { color, statusBarStyle } = props;
 
   return (
     <>
       <View
         style={{
-          backgroundColor: colors.primary,
+          backgroundColor: color,
           height: Constants.statusBarHeight,
         }}
       />
-      <StatusBarControl style="light" />
+      <StatusBarControl style={statusBarStyle} />
     </>
   );
 }

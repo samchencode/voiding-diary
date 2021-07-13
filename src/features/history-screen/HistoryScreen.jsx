@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { SectionList, StyleSheet, Text } from 'react-native';
 import { useTheme, baseTheme } from '../theme';
+import StatusBar from '../status-bar';
 import HistoryCard from './HistoryCard';
 import Separator from './Separator';
 import d3 from '../../lib/d3';
@@ -56,7 +57,12 @@ function HistoryScreen() {
       )}
       keyExtractor={(item) => '' + item.id}
       onScroll={handleScroll}
-      ListHeaderComponent={() => <Text style={styles.title}>History</Text>}
+      ListHeaderComponent={() => (
+        <>
+          <StatusBar statusBarStyle="dark" color={colors.bg} />
+          <Text style={styles.title}>History</Text>
+        </>
+      )}
     />
   );
 }
