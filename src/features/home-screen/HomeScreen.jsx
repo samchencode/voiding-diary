@@ -15,7 +15,7 @@ function HomeScreen({ navigation }) {
       style={[styles.scrollContainer, { backgroundColor: colors.primary }]}
       contentContainerStyle={{ backgroundColor: colors.bg }}
     >
-      <StatusBar color={colors.primary} statusBarStyle="light" />
+      <StatusBar color={colors.primary} statusBarStyle="light" elevated/>
       <TimerView />
       <View style={styles.cardContainer}>
         <LoggerButtonGroup

@@ -4,7 +4,7 @@ import { StatusBar as StatusBarControl } from 'expo-status-bar';
 import Constants from 'expo-constants';
 
 function StatusBar(props) {
-  const { color, statusBarStyle } = props;
+  const { color, statusBarStyle, elevated } = props;
 
   return (
     <>
@@ -12,6 +12,7 @@ function StatusBar(props) {
         style={{
           backgroundColor: color,
           height: Constants.statusBarHeight,
+          ...(elevated && {elevation: 5})
         }}
       />
       <StatusBarControl style={statusBarStyle} />
