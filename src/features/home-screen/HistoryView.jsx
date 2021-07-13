@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
     padding: spaces.lg,
   },
   title: {
+    marginTop: -6,
     fontSize: 36,
     fontFamily: 'Roboto_700Bold',
   }
