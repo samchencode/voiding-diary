@@ -8,7 +8,12 @@ function HistoryRow() {
 
   return (
     <View style={styles.container}>
-      <MaterialCommunityIcons name="cup" size={32} color={colors.accent} style={styles.icon}/>
+      <MaterialCommunityIcons
+        name="cup"
+        size={32}
+        color={colors.accent}
+        style={styles.icon}
+      />
       <Text style={styles.title}>Tea</Text>
       <Text style={styles.subtitle}>12oz</Text>
       <Text style={styles.data}>7:30am</Text>
