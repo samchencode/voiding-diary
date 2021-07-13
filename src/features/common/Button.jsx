@@ -34,8 +34,8 @@ Button.Success = function (props) {
     <Button
       underlayColor="green"
       backgroundColor={colors.success}
-      {...props}
       darkText
+      {...props}
     />
   );
 };
