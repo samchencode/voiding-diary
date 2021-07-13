@@ -61,9 +61,6 @@ function TimerView() {
         width={height}
         height={height}
         viewBox={`0 0 ${height} ${height}`}
-        style={{
-          padding: 8,
-        }}
       >
         <G x={margin.left} y={margin.top}>
           <Circle

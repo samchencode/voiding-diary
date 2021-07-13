@@ -3,11 +3,14 @@ import { View, Text, StyleSheet } from 'react-native';
 import { Card } from '../common';
 import SvgBeerCelebration from './svg/BeerCelebration';
 import SvgPassingBy from './svg/PassingBy';
+import { baseTheme } from '../theme';
+
+const { spaces } = baseTheme;
 
 function LoggerButtonGroup(props) {
   return (
     <View style={[styles.container, props.style]}>
-      <Card style={[styles.card, { marginRight: 8 }]}>
+      <Card style={[styles.card, { marginRight: spaces.lg / 2 }]}>
         <SvgBeerCelebration
           width="80%"
           height="100%"
@@ -20,7 +23,7 @@ function LoggerButtonGroup(props) {
         />
         <Text style={styles.buttonTitle}>+Intake</Text>
       </Card>
-      <Card style={[styles.card, { marginLeft: 8 }]}>
+      <Card style={[styles.card, { marginLeft: spaces.lg / 2 }]}>
         <SvgPassingBy
           width="60%"
           height="100%"

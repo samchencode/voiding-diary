@@ -6,7 +6,7 @@ import {
   StyleSheet,
   useWindowDimensions,
 } from 'react-native';
-import { useTheme } from '../theme';
+import { useTheme, baseTheme } from '../theme';
 import { Card } from '../common';
 import SvgTarget from './svg/Target';
 import Button from './Button';
@@ -43,22 +43,24 @@ function GoalScreen() {
   );
 }
 
+const { spaces, br } = baseTheme;
+
 const styles = StyleSheet.create({
   container: { flex: 1 },
   contentContainer: {
-    paddingTop: 16,
+    paddingTop: spaces.lg,
   },
   svg: {
-    marginBottom: -16,
+    marginBottom: -spaces.lg,
   },
   card: {
-    margin: 16,
+    margin: spaces.lg,
     marginTop: 0,
-    padding: 16,
+    padding: spaces.lg,
     elevation: 5,
   },
   title: {
-    marginTop: -8,
+    marginTop: -spaces.sm,
     fontSize: 36,
     fontFamily: 'Roboto_700Bold',
   },
@@ -67,7 +69,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto_300Light',
   },
   inputGroup: {
-    marginBottom: 16,
+    marginBottom: spaces.lg,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'flex-end',

@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useTheme } from '../theme';
+import { useTheme, baseTheme } from '../theme';
 
 function HistoryRow() {
   const { colors } = useTheme();
@@ -16,16 +16,17 @@ function HistoryRow() {
   );
 }
 
+const { spaces } = baseTheme;
+
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'flex-end',
-    paddingTop: 12,
-    paddingBottom: 12,
+    padding: spaces.sm,
   },
   icon: {
-    marginRight: 16,
+    marginRight: spaces.sm,
   },
   title: {
     fontSize: 24,

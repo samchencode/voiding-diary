@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Svg, { Rect, Line, Text as SvgText } from 'react-native-svg';
-import { useTheme } from '../theme';
+import { useTheme, baseTheme } from '../theme';
 import { Card } from '../common';
 import d3 from '../../lib/d3';
 
@@ -12,7 +12,7 @@ function IntakeChart(props) {
   };
 
   const [width, setWidth] = useState(0);
-  const containerPadding = 16;
+  const containerPadding = spaces.lg;
   function onLayout({ nativeEvent }) {
     setWidth(nativeEvent.layout.width - containerPadding * 2);
   }
@@ -76,7 +76,7 @@ function IntakeChart(props) {
         />
         <SvgText
           x={scaleX(data.goal) - goalTextOffsetX}
-          y={16}
+          y={spaces.lg}
           fontSize={16}
           fill={colors.danger}
           textAnchor="end"
@@ -85,7 +85,7 @@ function IntakeChart(props) {
         </SvgText>
         <SvgText
           x={scaleX(data.goal) - goalTextOffsetX + 18}
-          y={16}
+          y={spaces.lg}
           fontSize={16}
           fill={colors.danger}
           textAnchor="end"
@@ -96,6 +96,8 @@ function IntakeChart(props) {
     </Card>
   );
 }
+
+const { spaces } = baseTheme;
 
 const styles = StyleSheet.create({
   titleContainer: {

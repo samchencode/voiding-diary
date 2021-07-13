@@ -1,3 +1,5 @@
+import baseTheme from './baseTheme';
+
 const colors = {
   dark: '#454549',
   light: '#FEFBFE',
@@ -10,5 +12,6 @@ const colors = {
 };
 
 export default {
+  ...baseTheme,
   colors,
 }

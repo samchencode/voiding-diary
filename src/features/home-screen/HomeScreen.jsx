@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
-import { useTheme } from '../theme';
+import { useTheme, baseTheme } from '../theme';
 import TimerView from './TimerView';
 import IntakeChart from './IntakeChart';
 import LoggerButtonGroup from './LoggerButtonGroup';
@@ -24,19 +24,21 @@ function HomeScreen() {
   );
 }
 
+const { spaces } = baseTheme;
+
 const styles = StyleSheet.create({
   scrollContainer: {
     flex: 1,
   },
   cardContainer: {
-    marginLeft: 16,
-    marginRight: 16,
+    marginLeft: spaces.lg,
+    marginRight: spaces.lg,
   },
   item: {
-    marginTop: 16,
+    marginTop: spaces.lg,
   },
   lastItem: {
-    marginBottom: 16,
+    marginBottom: spaces.lg,
   },
 });
 

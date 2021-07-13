@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import { useTheme } from '../theme';
+import { useTheme, baseTheme } from '../theme';
 import d3 from '../../lib/d3';
 
 function HistorySeparator(props) {
@@ -25,18 +25,20 @@ function HistorySeparator(props) {
   );
 }
 
+const { spaces } = baseTheme;
+
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: spaces.lg,
   },
   labelContainer: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'flex-end',
-    marginRight: 16,
+    marginRight: spaces.lg,
   },
   dateLabel: {
     fontFamily: 'Roboto_300Light',

@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Card } from '../common';
 import { HistoryRow } from '../history-screen';
+import { baseTheme } from '../theme';
 
 function HistoryView(props) {
   return (
@@ -16,16 +17,16 @@ function HistoryView(props) {
   );
 }
 
+const { spaces } = baseTheme;
+
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
-    padding: 16,
+    padding: spaces.lg,
   },
   title: {
     fontSize: 36,
     fontFamily: 'Roboto_700Bold',
-    marginTop: -12,
-    marginBottom: -6,
   }
 })
 

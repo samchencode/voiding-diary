@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import { Card } from '../common';
 import HistoryRow from './HistoryRow';
+import { baseTheme } from '../theme';
 
 function HistoryCard(props) {
   return (
@@ -11,9 +12,11 @@ function HistoryCard(props) {
   );
 }
 
+const { spaces } = baseTheme;
+
 const styles = StyleSheet.create({
   container: {
-    padding: 8,
+    padding: spaces.sm,
   },
 });
 

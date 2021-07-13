@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, TouchableHighlight, Text, StyleSheet } from 'react-native';
-import { useTheme } from '../theme';
+import { useTheme, baseTheme } from '../theme';
 
 function Button(props) {
   const { title, onPress, style } = props;
@@ -19,14 +19,16 @@ function Button(props) {
   );
 }
 
+const { spaces, br } = baseTheme;
+
 const styles = StyleSheet.create({
   buttonContainer: {
-    borderRadius: 16,
+    borderRadius: br,
   },
   button: {
-    paddingTop: 8,
-    paddingBottom: 8,
-    borderRadius: 16,
+    paddingTop: spaces.sm,
+    paddingBottom: spaces.sm,
+    borderRadius: br,
     display: 'flex',
   },
   buttonLabel: {

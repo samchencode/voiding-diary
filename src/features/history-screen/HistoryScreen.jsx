@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { SectionList, StyleSheet, Text } from 'react-native';
-import { useTheme } from '../theme';
+import { useTheme, baseTheme } from '../theme';
 import HistoryCard from './HistoryCard';
 import Separator from './Separator';
 import d3 from '../../lib/d3';
@@ -61,6 +61,8 @@ function HistoryScreen() {
   );
 }
 
+const { spaces } = baseTheme;
+
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
@@ -69,19 +71,19 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: 'Roboto_700Bold',
     fontSize: 36,
-    marginTop: 8,
-    marginLeft: 16,
-    marginBottom: 8,
+    marginTop: spaces.sm,
+    marginLeft: spaces.lg,
+    marginBottom: spaces.sm,
   },
   card: {
-    margin: 16,
+    margin: spaces.lg,
   },
   belowTopCard: {
     marginTop: 0,
   },
   separator: {
-    marginLeft: 16,
-    marginRight: 16,
+    marginLeft: spaces.lg,
+    marginRight: spaces.lg,
   },
 });
 
