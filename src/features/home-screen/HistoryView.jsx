@@ -7,7 +7,7 @@ import { baseTheme } from '../theme';
 function HistoryView(props) {
   return (
     <Card style={[styles.container, props.style]}>
-      <Text style={styles.title}>History</Text>
+      <Text style={styles.title}>Recent</Text>
       <View>
         <HistoryRow />
         <HistoryRow />
