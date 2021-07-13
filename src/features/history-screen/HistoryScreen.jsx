@@ -61,7 +61,7 @@ function HistoryScreen() {
   );
 }
 
-const { spaces } = baseTheme;
+const { spaces, fonts } = baseTheme;
 
 const styles = StyleSheet.create({
   container: {
@@ -69,8 +69,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    fontFamily: 'Roboto_700Bold',
-    fontSize: 36,
+    ...fonts.lg,
     marginTop: spaces.sm,
     marginLeft: spaces.lg,
     marginBottom: spaces.sm,

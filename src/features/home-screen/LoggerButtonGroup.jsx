@@ -5,8 +5,6 @@ import SvgBeerCelebration from './svg/BeerCelebration';
 import SvgPassingBy from './svg/PassingBy';
 import { baseTheme } from '../theme';
 
-const { spaces } = baseTheme;
-
 function LoggerButtonGroup(props) {
   return (
     <View style={[styles.container, props.style]}>
@@ -39,6 +37,8 @@ function LoggerButtonGroup(props) {
   );
 }
 
+const { spaces, fonts } = baseTheme;
+
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
@@ -46,12 +46,11 @@ const styles = StyleSheet.create({
   },
   card: { flex: 1, height: 120 },
   buttonTitle: {
+    ...fonts.mdBold,
     position: 'absolute',
     left: 16,
     bottom: 16,
     zIndex: 1,
-    fontFamily: 'Roboto_700Bold',
-    fontSize: 24,
   },
 });
 

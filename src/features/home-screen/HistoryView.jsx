@@ -17,7 +17,7 @@ function HistoryView(props) {
   );
 }
 
-const { spaces } = baseTheme;
+const { spaces, fonts } = baseTheme;
 
 const styles = StyleSheet.create({
   container: {
@@ -25,9 +25,8 @@ const styles = StyleSheet.create({
     padding: spaces.lg,
   },
   title: {
+    ...fonts.lg,
     marginTop: -6,
-    fontSize: 36,
-    fontFamily: 'Roboto_700Bold',
   }
 })
 

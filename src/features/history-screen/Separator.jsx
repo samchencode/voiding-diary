@@ -25,7 +25,7 @@ function HistorySeparator(props) {
   );
 }
 
-const { spaces } = baseTheme;
+const { spaces, fonts } = baseTheme;
 
 const styles = StyleSheet.create({
   container: {
@@ -41,8 +41,7 @@ const styles = StyleSheet.create({
     marginRight: spaces.lg,
   },
   dateLabel: {
-    fontFamily: 'Roboto_300Light',
-    fontSize: 18,
+    ...fonts.sm,
   },
   line: {
     flex: 1,

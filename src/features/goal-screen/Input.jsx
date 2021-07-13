@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { baseTheme } from '../theme';
 
 function TimeInput() {
   return (
@@ -29,10 +30,11 @@ function IntakeInput() {
   );
 }
 
+const { fonts } = baseTheme;
+
 const styles = StyleSheet.create({
   input: {
-    fontSize: 24,
-    fontFamily: 'Roboto_700Bold',
+    ...fonts.mdBold,
     borderBottomWidth: 1,
     borderBottomColor: 'black',
     textAlign: 'center',

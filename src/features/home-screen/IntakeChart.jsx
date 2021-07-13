@@ -97,7 +97,7 @@ function IntakeChart(props) {
   );
 }
 
-const { spaces } = baseTheme;
+const { spaces, fonts } = baseTheme;
 
 const styles = StyleSheet.create({
   titleContainer: {
@@ -108,13 +108,10 @@ const styles = StyleSheet.create({
     marginBottom: -6,
   },
   title: {
-    fontWeight: 'bold',
-    fontSize: 36,
-    fontFamily: 'Roboto_700Bold',
+    ...fonts.lg,
   },
   subtitle: {
-    fontSize: 24,
-    fontFamily: 'Roboto_300Light',
+    ...fonts.md,
     paddingBottom: 3,
   },
 });

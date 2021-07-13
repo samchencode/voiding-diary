@@ -19,7 +19,7 @@ function Button(props) {
   );
 }
 
-const { spaces, br } = baseTheme;
+const { spaces, br, fonts } = baseTheme;
 
 const styles = StyleSheet.create({
   buttonContainer: {
@@ -32,8 +32,7 @@ const styles = StyleSheet.create({
     display: 'flex',
   },
   buttonLabel: {
-    fontSize: 24,
-    fontFamily: 'Roboto_700Bold',
+    ...fonts.mdBold,
     textAlign: 'center',
   },
 });

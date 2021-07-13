@@ -43,7 +43,7 @@ function GoalScreen() {
   );
 }
 
-const { spaces, br } = baseTheme;
+const { spaces, fonts } = baseTheme;
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
@@ -60,13 +60,11 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   title: {
+    ...fonts.lg,
     marginTop: -spaces.sm,
-    fontSize: 36,
-    fontFamily: 'Roboto_700Bold',
   },
   label: {
-    fontSize: 18,
-    fontFamily: 'Roboto_300Light',
+    ...fonts.sm,
   },
   inputGroup: {
     marginBottom: spaces.lg,

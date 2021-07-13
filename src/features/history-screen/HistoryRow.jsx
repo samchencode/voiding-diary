@@ -16,7 +16,7 @@ function HistoryRow() {
   );
 }
 
-const { spaces } = baseTheme;
+const { spaces, fonts } = baseTheme;
 
 const styles = StyleSheet.create({
   container: {
@@ -29,17 +29,14 @@ const styles = StyleSheet.create({
     marginRight: spaces.sm,
   },
   title: {
-    fontSize: 24,
-    fontFamily: 'Roboto_700Bold',
+    ...fonts.mdBold,
   },
   subtitle: {
-    fontSize: 18,
-    fontFamily: 'Roboto_300Light',
+    ...fonts.sm,
     paddingBottom: 2,
   },
   data: {
-    fontSize: 24,
-    fontFamily: 'Roboto_300Light',
+    ...fonts.md,
     flex: 1,
     textAlign: 'right',
   },
