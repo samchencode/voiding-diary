@@ -44,10 +44,20 @@ function HistoryCard(props) {
       onSwipeStateChange(false);
     },
     onForceOpenLeft: () => {
-      setImmediate(() => position.setValue(0));
+      setImmediate(() => Animated.timing(position, {
+        toValue: 0,
+        duration: 500,
+        delay: 500,
+        useNativeDriver: false,
+      }).start());
     },
     onForceOpenRight: () => {
-      setImmediate(() => position.setValue(0));
+      setImmediate(() => Animated.timing(position, {
+        toValue: 0,
+        duration: 500,
+        delay: 500,
+        useNativeDriver: false,
+      }).start());
     },
   });
 
