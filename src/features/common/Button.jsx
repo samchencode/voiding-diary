@@ -3,21 +3,30 @@ import { View, TouchableHighlight, Text, StyleSheet } from 'react-native';
 import { useTheme, baseTheme } from '../theme';
 
 function Button(props) {
-  const { title, onPress, style, underlayColor, backgroundColor, darkText } =
-    props;
+  const {
+    title,
+    onPress,
+    underlayColor,
+    backgroundColor,
+    darkText,
+    style,
+    contentContainerStyle,
+    titleStyle,
+  } = props;
   const { colors } = useTheme();
 
   return (
     <TouchableHighlight
       underlayColor={underlayColor}
-      style={[style, styles.buttonContainer]}
+      style={[styles.buttonContainer, style]}
       onPress={onPress}
     >
-      <View style={[styles.button, { backgroundColor }]}>
+      <View style={[styles.button, { backgroundColor }, contentContainerStyle]}>
         <Text
           style={[
             styles.buttonLabel,
             { color: darkText ? colors.dark : colors.light },
+            titleStyle,
           ]}
         >
           {title}
@@ -63,6 +72,7 @@ const styles = StyleSheet.create({
     paddingBottom: spaces.sm,
     borderRadius: br,
     display: 'flex',
+    justifyContent: 'center',
   },
   buttonLabel: {
     ...fonts.mdBold,

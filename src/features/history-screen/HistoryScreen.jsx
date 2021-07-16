@@ -3,9 +3,11 @@ import { SectionList, StyleSheet, Text } from 'react-native';
 import { useTheme, baseTheme } from '../theme';
 import StatusBar from '../status-bar';
 import HistoryCard from './HistoryCard';
+import AnimatedCard from './AnimatedCard';
 import Separator from './Separator';
 import d3 from '../../lib/d3';
 import data from './data';
+import Animated from 'react-native-reanimated';
 
 const parseDatetime = d3.timeParse('%Y-%m-%d %H:%M:%S');
 
@@ -45,25 +47,33 @@ function HistoryScreen() {
     setContentSize(e.contentSize);
   };
 
+  const [ swiping, setSwiping ] = useState(false);
+
   return (
-    <SectionList
-      style={[styles.container, { backgroundColor: colors.bg }]}
-      sections={DATA}
-      renderItem={({ item }) => (
-        <HistoryCard style={[styles.card, styles.belowTopCard]} />
-      )}
-      renderSectionHeader={({ section }) => (
-        <Separator style={styles.separator} datetime={section.datetime} />
-      )}
-      keyExtractor={(item) => '' + item.id}
-      onScroll={handleScroll}
-      ListHeaderComponent={() => (
-        <>
-          <StatusBar statusBarStyle="dark" color={colors.bg} />
-          <Text style={styles.title}>History</Text>
-        </>
-      )}
-    />
+    <>
+      <SectionList
+        scrollEnabled={swiping}
+        style={[styles.container, { backgroundColor: colors.bg }]}
+        sections={DATA}
+        renderItem={({ item }) => (
+          <HistoryCard 
+            style={[styles.card, styles.belowTopCard]}
+            onSwipeStateChange={(s) => setSwiping(s)}
+          />
+        )}
+        renderSectionHeader={({ section }) => (
+          <Separator style={styles.separator} datetime={section.datetime} />
+        )}
+        keyExtractor={(item) => '' + item.id}
+        onScroll={handleScroll}
+        ListHeaderComponent={() => (
+          <>
+            <StatusBar statusBarStyle="dark" color={colors.bg} />
+            <Text style={styles.title}>History</Text>
+          </>
+        )}
+      />
+    </>
   );
 }
 
