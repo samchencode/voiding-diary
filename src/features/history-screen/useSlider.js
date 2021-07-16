@@ -7,6 +7,7 @@ function useSlider({
   maxOpenDistance = 60,
   width = 400,
   onMove = () => {},
+  onFinish = () => {},
   onForceOpenLeft = () => {},
   onForceOpenRight = () => {},
 }) {
@@ -55,12 +56,16 @@ function useSlider({
             toValue: newPosition,
             useNativeDriver: false,
           }).start();
+
+          onFinish();
         },
         onPanResponderTerminate: () => {
           Animated.spring(aPosition.current, {
             toValue: 0,
             useNativeDriver: false,
           }).start();
+
+          onFinish();
         },
       }),
     []

@@ -1,5 +1,10 @@
-import React from 'react';
-import { StyleSheet, View, Animated, useWindowDimensions } from 'react-native';
+import React, { useRef } from 'react';
+import {
+  StyleSheet,
+  View,
+  Animated,
+  useWindowDimensions,
+} from 'react-native';
 import { Card, Button } from '../common';
 import HistoryRow from './HistoryRow';
 import { baseTheme } from '../theme';
@@ -19,18 +24,30 @@ const ButtonDanger = Animated.createAnimatedComponent(
 
 const BUTTON_VISIBLE_THRESHOLD = 40;
 const BUTTON_MAX_WIDTH = 250;
-const BUTTON_WIDTH = 60;
+const BUTTON_WIDTH = 70;
 const BUTTON_MARGIN = baseTheme.spaces.sm;
 
 function HistoryCard(props) {
+  const { onSwipeStateChange, id } = props;
+  const swiping = useRef(false);
+
   const { width } = useWindowDimensions();
 
   const [position, pr] = useSlider({
-    dragOpenThreshold: BUTTON_WIDTH,
+    dragOpenThreshold: BUTTON_WIDTH - 10,
     forceOpenThreshold: 120,
     maxOpenDistance: BUTTON_WIDTH + BUTTON_MARGIN,
     width: width,
-    onMove: () => {},
+    onMove: () => {
+      if (swiping.current === true) return;
+      swiping.current = true;
+      onSwipeStateChange(true);
+    },
+    onFinish: () => {
+      if (swiping.current === false) return;
+      swiping.current = false;
+      onSwipeStateChange(false);
+    },
     onForceOpenLeft: () => {},
     onForceOpenRight: () => {},
   });
@@ -51,7 +68,7 @@ function HistoryCard(props) {
       </Animated.View>
       <View style={styles.buttonGroup}>
         <ButtonSuccess
-          title="Hai 1"
+          title="Edit"
           style={[
             styles.button,
             {
@@ -73,7 +90,7 @@ function HistoryCard(props) {
           onPress={() => {}}
         />
         <ButtonDanger
-          title="Hai 2"
+          title="Delete"
           contentContainerStyle={styles.buttonContentContainer}
           style={[
             styles.button,
@@ -129,7 +146,15 @@ const styles = StyleSheet.create({
   buttonText: {
     ...fonts.sm,
     width: BUTTON_WIDTH,
-  }
+  },
 });
 
-export default HistoryCard;
+export default class extends React.Component {
+  shouldComponentUpdate() {
+    return false;
+  }
+
+  render() {
+    return <HistoryCard {...this.props} />;
+  }
+}

@@ -1,89 +1,69 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { SectionList, StyleSheet, Text } from 'react-native';
-import { useTheme, baseTheme } from '../theme';
+import ThemeContext, { baseTheme } from '../theme';
 import StatusBar from '../status-bar';
 import HistoryCard from './HistoryCard';
-import AnimatedCard from './AnimatedCard';
 import Separator from './Separator';
-import d3 from '../../lib/d3';
 import data from './data';
-import Animated from 'react-native-reanimated';
 
-const parseDatetime = d3.timeParse('%Y-%m-%d %H:%M:%S');
+const ListHeaderComponent = () => <Text style={styles.title}>History</Text>;
 
-const DATA = Object.values(
-  data
-    .map((d) => {
-      const datum = Object.assign({}, d);
-      datum.datetime = parseDatetime(d.datetime);
-      return datum;
-    })
-    .reduce((ag, v) => {
-      const makeDateStr = (dt) =>
-        dt.getDay() + ' ' + dt.getMonth() + ' ' + dt.getYear();
+class HistoryScreen extends React.Component {
+  constructor(...props) {
+    super(...props);
 
-      let arr;
-      if ((arr = ag[makeDateStr(v.datetime)]?.data)) {
-        arr.push(v);
-      } else {
-        ag[makeDateStr(v.datetime)] = {
-          datetime: v.datetime,
-          data: [v],
-        };
-      }
+    this.state = {
+      swiping: false,
+    };
+  }
 
-      return ag;
-    }, {})
-).sort((s1, s2) => s1.datetime < s2.datetime);
+  static contextType = ThemeContext;
 
-function HistoryScreen() {
-  const { colors } = useTheme();
+  onSwipeStateChange(swiping) {
+    this.setState({ swiping });
+  }
 
-  const [contentOffset, setContentOffset] = useState({ x: 0, y: 0 });
-  const [contentSize, setContentSize] = useState({ height: 0, width: 0 });
-
-  const handleScroll = ({ nativeEvent: e }) => {
-    setContentOffset(e.contentOffset);
-    setContentSize(e.contentSize);
-  };
-
-  const [ swiping, setSwiping ] = useState(false);
-
-  return (
-    <>
-      <SectionList
-        scrollEnabled={swiping}
-        style={[styles.container, { backgroundColor: colors.bg }]}
-        sections={DATA}
-        renderItem={({ item }) => (
-          <HistoryCard 
-            style={[styles.card, styles.belowTopCard]}
-            onSwipeStateChange={(s) => setSwiping(s)}
-          />
-        )}
-        renderSectionHeader={({ section }) => (
-          <Separator style={styles.separator} datetime={section.datetime} />
-        )}
-        keyExtractor={(item) => '' + item.id}
-        onScroll={handleScroll}
-        ListHeaderComponent={() => (
-          <>
-            <StatusBar statusBarStyle="dark" color={colors.bg} />
-            <Text style={styles.title}>History</Text>
-          </>
-        )}
+  renderItem({ item }) {
+    return (
+      <HistoryCard
+        style={[styles.card, styles.belowTopCard]}
+        onSwipeStateChange={this.onSwipeStateChange.bind(this)}
+        id={item.id}
       />
-    </>
-  );
+    );
+  }
+
+  renderSectionHeader({ section }) {
+    return <Separator style={styles.separator} datetime={section.datetime} />;
+  }
+
+  render() {
+    const { colors } = this.context;
+    const { swiping } = this.state;
+
+    return (
+      <>
+        <StatusBar statusBarStyle="light" color={colors.dark} />
+        <SectionList
+          scrollEnabled={!swiping}
+          stickySectionHeadersEnabled
+          style={[styles.container, { backgroundColor: colors.bg }]}
+          sections={data}
+          windowSize={5}
+          renderItem={this.renderItem.bind(this)}
+          renderSectionHeader={this.renderSectionHeader.bind(this)}
+          keyExtractor={(item) => '' + item.id}
+          ListHeaderComponent={ListHeaderComponent}
+        />
+      </>
+    );
+  }
 }
 
 const { spaces, fonts } = baseTheme;
 
 const styles = StyleSheet.create({
-  container: {
-    display: 'flex',
-    flex: 1,
-  },
+  container: {},
   title: {
     ...fonts.lg,
     marginTop: spaces.sm,
