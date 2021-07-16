@@ -19,15 +19,16 @@ const ButtonDanger = Animated.createAnimatedComponent(
 
 const BUTTON_VISIBLE_THRESHOLD = 40;
 const BUTTON_MAX_WIDTH = 250;
-const BUTTON_WIDTH = 60
+const BUTTON_WIDTH = 60;
+const BUTTON_MARGIN = baseTheme.spaces.sm;
 
 function HistoryCard(props) {
   const { width } = useWindowDimensions();
 
   const [position, pr] = useSlider({
-    dragOpenThreshold: 50,
+    dragOpenThreshold: BUTTON_WIDTH,
     forceOpenThreshold: 120,
-    maxOpenDistance: BUTTON_WIDTH,
+    maxOpenDistance: BUTTON_WIDTH + BUTTON_MARGIN,
     width: width,
     onMove: () => {},
     onForceOpenLeft: () => {},
@@ -61,8 +62,8 @@ function HistoryCard(props) {
                 extrapolate: 'clamp',
               }),
               width: position.interpolate({
-                inputRange: [0, BUTTON_MAX_WIDTH],
-                outputRange: [0, BUTTON_MAX_WIDTH],
+                inputRange: [BUTTON_MARGIN, BUTTON_MAX_WIDTH],
+                outputRange: [0, BUTTON_MAX_WIDTH - BUTTON_MARGIN],
                 extrapolate: 'clamp',
               }),
             },
@@ -84,8 +85,8 @@ function HistoryCard(props) {
                 extrapolate: 'clamp',
               }),
               width: position.interpolate({
-                inputRange: [-BUTTON_MAX_WIDTH, 0],
-                outputRange: [BUTTON_MAX_WIDTH, 0],
+                inputRange: [-BUTTON_MAX_WIDTH, -BUTTON_MARGIN],
+                outputRange: [BUTTON_MAX_WIDTH - BUTTON_MARGIN, 0],
                 extrapolate: 'clamp',
               }),
             },
