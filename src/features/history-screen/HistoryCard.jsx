@@ -1,10 +1,5 @@
 import React, { useRef } from 'react';
-import {
-  StyleSheet,
-  View,
-  Animated,
-  useWindowDimensions,
-} from 'react-native';
+import { StyleSheet, View, Animated, useWindowDimensions } from 'react-native';
 import { Card, Button } from '../common';
 import HistoryRow from './HistoryRow';
 import { baseTheme } from '../theme';
@@ -48,8 +43,12 @@ function HistoryCard(props) {
       swiping.current = false;
       onSwipeStateChange(false);
     },
-    onForceOpenLeft: () => {},
-    onForceOpenRight: () => {},
+    onForceOpenLeft: () => {
+      setImmediate(() => position.setValue(0));
+    },
+    onForceOpenRight: () => {
+      setImmediate(() => position.setValue(0));
+    },
   });
 
   return (
