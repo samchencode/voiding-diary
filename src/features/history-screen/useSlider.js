@@ -1,4 +1,4 @@
-import { useRef, useMemo } from 'react';
+import { useRef, useMemo, useEffect } from 'react';
 import { PanResponder, Animated } from 'react-native';
 
 function useSlider({
@@ -15,7 +15,9 @@ function useSlider({
 
   const aPosition = useRef(new Animated.Value(0));
   const position = useRef(0);
-  aPosition.current.addListener((v) => (position.current = v.value));
+  useEffect(() => {
+    aPosition.current.addListener((v) => (position.current = v.value));
+  }, []);
 
   const pr = useMemo(
     () =>
