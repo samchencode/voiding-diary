@@ -11,6 +11,8 @@ const APP_STATE = {
   INACTIVE: 'inactive',
 };
 
+const DESTROYED = 'destroyed';
+
 class BackgroundableTimer extends BaseTimer {
   _currentAppState = AppState.currentState;
 
@@ -44,6 +46,7 @@ class BackgroundableTimer extends BaseTimer {
 
   destroy() {
     AppState.removeEventListener('change', this._handleChangeAppState);
+    this.state = DESTROYED;
   }
 }
 
