@@ -13,7 +13,7 @@ class Timer {
   _onTickProcessId = null;
   _onEndProcessId = null;
   _remainingMilliseconds = 0;
-  _elapsedMilliseconds = 0;
+  _totalMilliseconds = 0;
   _lastTick = null;
 
   _findRemainingMilliseconds(seconds) {
@@ -30,6 +30,9 @@ class Timer {
     this._remainingMilliseconds = this._findRemainingMilliseconds(this.endTime);
     this.onTick({
       timeRemaining: new Date(this._remainingMilliseconds),
+      timeElapsed: new Date(
+        this._totalMilliseconds - this._remainingMilliseconds
+      ),
       dt,
     });
     this._lastTick = new Date();
@@ -41,8 +44,13 @@ class Timer {
     }
     if (!endTime && milliseconds < 0)
       throw new Error('timer.start needs endTime or milliseconds');
-    if (endTime) this.endTime = endTime;
-    if (milliseconds >= 0) this.endTime = new Date(Date.now() + milliseconds);
+    if (endTime) {
+      this.endTime = endTime;
+      this._totalMilliseconds = endTime - Date.now();
+    } else if (milliseconds >= 0) {
+      this.endTime = new Date(Date.now() + milliseconds);
+      this._totalMilliseconds = milliseconds;
+    }
 
     this._remainingMilliseconds = this._findRemainingMilliseconds(this.endTime);
     this._startTimeout(this._remainingMilliseconds);
@@ -84,7 +92,7 @@ class Timer {
     this._onEndProcessId = null;
     this.endTime = null;
     this.elapsedTime = null;
-    this._elapsedMilliseconds = 0;
+    this._totalMilliseconds = 0;
     this._remainingMilliseconds = 0;
     this._lastTick = null;
     this.state = BEFORE_START;

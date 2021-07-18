@@ -4,7 +4,8 @@ import { useTheme } from '../theme';
 import Svg, { G, Circle, Text, Path } from 'react-native-svg';
 import d3 from '../../lib/d3';
 
-function TimerView() {
+function TimerView(props) {
+  const { time } = props;
   const { width } = useWindowDimensions();
   const { colors } = useTheme();
 
@@ -33,7 +34,10 @@ function TimerView() {
     .innerRadius(radius - offsetInnerCircle - widthInnerCircle)
     .outerRadius(radius - offsetInnerCircle);
 
-  const data = pie([0.2, 0.8]);
+  const data = pie([
+    time.timeElapsed?.getSeconds() ?? 0,
+    time.timeRemaining?.getSeconds() ?? 1,
+  ]);
 
   return (
     <View
@@ -57,11 +61,7 @@ function TimerView() {
         justifyContent: 'center',
       }}
     >
-      <Svg
-        width={height}
-        height={height}
-        viewBox={`0 0 ${height} ${height}`}
-      >
+      <Svg width={height} height={height} viewBox={`0 0 ${height} ${height}`}>
         <G x={margin.left} y={margin.top}>
           <Circle
             r={radius}
@@ -75,32 +75,39 @@ function TimerView() {
             <Path d={arc(data[0])} stroke={colors.accent} strokeWidth={10} />
             <Path d={arc(data[1])} stroke={colors.light} strokeWidth={10} />
           </G>
-          <Text
-            stroke={colors.light}
-            fill={colors.light}
-            x={radius}
-            y={radius + 20}
-            textAnchor="middle"
-            fontSize={84}
-            fontWeight="bold"
-          >
-            0:00
-          </Text>
-          <Text
-            stroke={colors.light}
-            fill={colors.light}
-            x={radius}
-            y={radius + 60}
-            textAnchor="middle"
-            fontSize={24}
-            fontWeight={100}
-          >
-            Until Void
-          </Text>
+          {renderCountdownText(time.timeRemaining, radius, colors)}
         </G>
       </Svg>
     </View>
   );
 }
+
+const formatTime = d3.timeFormat('%M:%S');
+const renderCountdownText = (time, radius, colors) => (
+  <>
+    <Text
+      stroke={colors.light}
+      fill={colors.light}
+      x={radius}
+      y={radius + 20}
+      textAnchor="middle"
+      fontSize={72}
+      fontWeight="bold"
+    >
+      {formatTime(time)}
+    </Text>
+    <Text
+      stroke={colors.light}
+      fill={colors.light}
+      x={radius}
+      y={radius + 60}
+      textAnchor="middle"
+      fontSize={24}
+      fontWeight={100}
+    >
+      Until Void
+    </Text>
+  </>
+);
 
 export default TimerView;
