@@ -8,6 +8,7 @@ class Timer {
   onTick = () => {};
   onEnd = () => {};
   onPause = () => {};
+  onResume = () => {};
 
   _onTickProcessId = null;
   _onEndProcessId = null;
@@ -73,6 +74,7 @@ class Timer {
     if (this.state !== PAUSED)
       throw new Error('timer.resume when ' + this.state);
     this.start({ milliseconds: this._remainingMilliseconds });
+    this.onResume();
   }
 
   reset() {
@@ -98,6 +100,10 @@ class Timer {
 
   setOnPause(onPause) {
     this.onPause = onPause;
+  }
+
+  setOnResume(onResume) {
+    this.onResume = onResume;
   }
 }
 
