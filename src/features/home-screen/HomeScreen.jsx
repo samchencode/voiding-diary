@@ -6,7 +6,10 @@ import IntakeChart from './IntakeChart';
 import LoggerButtonGroup from './LoggerButtonGroup';
 import HistoryView from './HistoryView';
 import StatusBar from '../status-bar';
-import Timer, { scheduleLocalNotification } from '../timer';
+import Timer from '../timer';
+import { scheduleLocalNotification } from '../notification';
+
+const timer = new Timer();
 
 function HomeScreen({ navigation }) {
   const { colors } = useTheme();
@@ -16,11 +19,9 @@ function HomeScreen({ navigation }) {
   });
 
   useEffect(() => {
-    const timer = new Timer();
     timer.setOnTick(({ timeRemaining, timeElapsed }) =>
       setTime({ timeRemaining, timeElapsed })
     );
-    timer.start({ milliseconds: 60000 });
 
     return () => timer.destroy();
   }, []);
@@ -36,7 +37,14 @@ function HomeScreen({ navigation }) {
         <LoggerButtonGroup
           style={styles.item}
           onPressIntake={() => navigation.navigate('EditModal')}
-          onPressVoid={() => {}}
+          onPressVoid={() => {
+            timer.start({ milliseconds: 60000 });
+            scheduleLocalNotification({
+              title: 'Void Interval Reached',
+              body: 'Record a new void',
+              seconds: 60,
+            })
+          }}
         />
         <IntakeChart style={styles.item} />
         <HistoryView style={[styles.item, styles.lastItem]} />
