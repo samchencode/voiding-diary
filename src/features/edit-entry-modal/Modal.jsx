@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, TouchableWithoutFeedback, StyleSheet } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 import { baseTheme } from '../theme';
 import { Card } from '../common';
 
@@ -12,6 +13,7 @@ function Modal(props) {
         <View style={styles.back}></View>
       </TouchableWithoutFeedback>
       <Card style={styles.contentContainer}>{children}</Card>
+      <StatusBar style="light" />
     </View>
   );
 }
