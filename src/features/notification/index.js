@@ -1,1 +1,1 @@
-export { default as scheduleLocalNotification } from '../notification/scheduleLocalNotification.js';
+export { default as VoidNotification } from './VoidNotification';

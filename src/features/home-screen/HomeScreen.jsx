@@ -7,17 +7,14 @@ import LoggerButtonGroup from './LoggerButtonGroup';
 import HistoryView from './HistoryView';
 import StatusBar from '../status-bar';
 import Timer from '../timer';
-import { scheduleLocalNotification } from '../notification';
+import { VoidNotification } from '../notification';
 
 const timer = new Timer();
+const notification = new VoidNotification();
 
 const handleVoid = (seconds) => {
   timer.start({ milliseconds: seconds * 1000 });
-  scheduleLocalNotification({
-    title: 'Void Interval Reached',
-    body: 'Record a new void',
-    seconds,
-  });
+  notification.schedule({ seconds });
 };
 
 function HomeScreen({ navigation }) {
@@ -37,7 +34,12 @@ function HomeScreen({ navigation }) {
       setTime({ timeRemaining: null, timeElapsed: null, ticking: false });
     });
 
-    return () => timer.destroy();
+    notification.setNotificationInteractionListener(() => handleVoid(60));
+
+    return () => {
+      timer.destroy();
+      notification.destroy();
+    }
   }, []);
 
   return (
