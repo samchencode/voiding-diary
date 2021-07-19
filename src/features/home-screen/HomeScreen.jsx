@@ -11,17 +11,31 @@ import { scheduleLocalNotification } from '../notification';
 
 const timer = new Timer();
 
+const handleVoid = (seconds) => {
+  timer.start({ milliseconds: seconds * 1000 });
+  scheduleLocalNotification({
+    title: 'Void Interval Reached',
+    body: 'Record a new void',
+    seconds,
+  });
+};
+
 function HomeScreen({ navigation }) {
   const { colors } = useTheme();
   const [time, setTime] = useState({
     timeRemaining: null,
     timeElapsed: null,
+    ticking: false,
   });
 
   useEffect(() => {
     timer.setOnTick(({ timeRemaining, timeElapsed }) =>
-      setTime({ timeRemaining, timeElapsed })
+      setTime({ timeRemaining, timeElapsed, ticking: true })
     );
+
+    timer.setOnEnd(() => {
+      setTime({ timeRemaining: null, timeElapsed: null, ticking: false });
+    });
 
     return () => timer.destroy();
   }, []);
@@ -32,19 +46,12 @@ function HomeScreen({ navigation }) {
       contentContainerStyle={{ backgroundColor: colors.bg }}
     >
       <StatusBar color={colors.primary} statusBarStyle="light" elevated />
-      <TimerView time={time} />
+      <TimerView time={time} onPressVoid={() => handleVoid(60)} />
       <View style={styles.cardContainer}>
         <LoggerButtonGroup
           style={styles.item}
           onPressIntake={() => navigation.navigate('EditModal')}
-          onPressVoid={() => {
-            timer.start({ milliseconds: 60000 });
-            scheduleLocalNotification({
-              title: 'Void Interval Reached',
-              body: 'Record a new void',
-              seconds: 60,
-            })
-          }}
+          onPressVoid={() => handleVoid(60)}
         />
         <IntakeChart style={styles.item} />
         <HistoryView style={[styles.item, styles.lastItem]} />

@@ -1,11 +1,11 @@
 import React from 'react';
-import { View, useWindowDimensions } from 'react-native';
+import { View, useWindowDimensions, Animated, Easing } from 'react-native';
 import { useTheme } from '../theme';
 import Svg, { G, Circle, Text, Path } from 'react-native-svg';
 import d3 from '../../lib/d3';
 
 function TimerView(props) {
-  const { time } = props;
+  const { time, onPressVoid } = props;
   const { width } = useWindowDimensions();
   const { colors } = useTheme();
 
@@ -75,15 +75,70 @@ function TimerView(props) {
             <Path d={arc(data[0])} stroke={colors.accent} strokeWidth={10} />
             <Path d={arc(data[1])} stroke={colors.light} strokeWidth={10} />
           </G>
-          {renderCountdownText(time.timeRemaining, radius, colors)}
+          {time.ticking
+            ? renderCountdownText({ radius, colors, time: time.timeRemaining })
+            : renderVoidButton({
+                radius,
+                colors,
+                onPress: () => onPressVoid(),
+              })}
         </G>
       </Svg>
     </View>
   );
 }
 
+const AnimatedText = Animated.createAnimatedComponent(Text);
+const textOpacity = new Animated.Value(1);
+const textAnimation = Animated.sequence([
+  Animated.delay(1000),
+  Animated.timing(textOpacity, {
+    toValue: 0.2,
+    duration: 1000,
+    easing: Easing.linear,
+    useNativeDriver: true,
+  }),
+  Animated.timing(textOpacity, {
+    toValue: 1,
+    duration: 1000,
+    easing: Easing.linear,
+    useNativeDriver: true,
+  }),
+]);
+const renderVoidButton = ({ radius, colors, onPress }) => {
+  Animated.loop(textAnimation).start();
+
+  return (
+    <G x={radius} y={radius}>
+      <AnimatedText
+        stroke={colors.light}
+        fill={colors.light}
+        textAnchor="middle"
+        fontSize={56}
+        fontWeight="bold"
+        y={-10}
+        opacity={textOpacity}
+      >
+        Log
+      </AnimatedText>
+      <AnimatedText
+        stroke={colors.light}
+        fill={colors.light}
+        textAnchor="middle"
+        fontSize={56}
+        fontWeight="bold"
+        y={50}
+        opacity={textOpacity}
+      >
+        Void
+      </AnimatedText>
+      <Circle r={radius} onPress={onPress} />
+    </G>
+  );
+};
+
 const formatTime = d3.timeFormat('%M:%S');
-const renderCountdownText = (time, radius, colors) => (
+const renderCountdownText = ({ radius, colors, time }) => (
   <>
     <Text
       stroke={colors.light}
