@@ -23,7 +23,7 @@ const BUTTON_WIDTH = 70;
 const BUTTON_MARGIN = baseTheme.spaces.sm;
 
 function HistoryCard(props) {
-  const { onSwipeStateChange, id } = props;
+  const { onSwipeStateChange, title, subtitle, icon, rightText } = props;
   const swiping = useRef(false);
 
   const { width } = useWindowDimensions();
@@ -72,7 +72,7 @@ function HistoryCard(props) {
         {...pr.panHandlers}
       >
         <Card style={styles.card}>
-          <HistoryRow />
+          <HistoryRow title={title} subtitle={subtitle} icon={icon} rightText={rightText} />
         </Card>
       </Animated.View>
       <View style={styles.buttonGroup}>

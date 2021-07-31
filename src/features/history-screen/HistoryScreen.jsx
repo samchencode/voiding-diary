@@ -4,7 +4,17 @@ import ThemeContext, { baseTheme } from '../theme';
 import StatusBar from '../status-bar';
 import HistoryCard from './HistoryCard';
 import Separator from './Separator';
-import data from './data';
+import { connect } from 'react-redux';
+import { selectDays, selectLogs } from '../history';
+import { utils } from '../common';
+const { parseDate, formatTime, parseIso } = utils.date;
+
+const mapStateToProps = (state) => ({
+  logs: selectLogs(state),
+  days: selectDays(state),
+});
+
+const mapDispatchToProps = {};
 
 const ListHeaderComponent = () => <Text style={styles.title}>History</Text>;
 
@@ -24,22 +34,41 @@ class HistoryScreen extends React.Component {
   }
 
   renderItem({ item }) {
+    const isIntake = item.type === 'intake';
+    const iso = parseIso(item.datetime)
+    const time = formatTime(iso);
+
     return (
       <HistoryCard
         style={[styles.card, styles.belowTopCard]}
         onSwipeStateChange={this.onSwipeStateChange.bind(this)}
         id={item.id}
+        icon={isIntake ? 'cup' : 'water'}
+        title={item.label.substring(0,10) ?? (isIntake ? "Intake" : "Void")}
+        subtitle={item.volume + 'oz'}
+        rightText={time}
       />
     );
   }
 
   renderSectionHeader({ section }) {
-    return <Separator style={styles.separator} datetime={section.datetime} />;
+    const datetime = parseDate(section.id);
+
+    return <Separator style={styles.separator} datetime={datetime} />;
   }
 
   render() {
     const { colors } = this.context;
     const { swiping } = this.state;
+    const { days, logs } = this.props;
+
+    const data = Object.values(days.entities).map((d) => {
+      const sectionData = d.logs.map(l => logs.entities[l]);
+      return {
+        id: d.id,
+        data: sectionData,
+      };
+    });
 
     return (
       <>
@@ -82,4 +111,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HistoryScreen;
+export default connect(mapStateToProps, mapDispatchToProps)(HistoryScreen);
