@@ -23,7 +23,15 @@ const BUTTON_WIDTH = 70;
 const BUTTON_MARGIN = baseTheme.spaces.sm;
 
 function HistoryCard(props) {
-  const { onSwipeStateChange, title, subtitle, icon, rightText } = props;
+  const {
+    onSwipeStateChange,
+    title,
+    subtitle,
+    icon,
+    rightText,
+    onPressLeft,
+    onPressRight,
+  } = props;
   const swiping = useRef(false);
 
   const { width } = useWindowDimensions();
@@ -43,22 +51,8 @@ function HistoryCard(props) {
       swiping.current = false;
       onSwipeStateChange(false);
     },
-    onForceOpenLeft: () => {
-      setImmediate(() => Animated.timing(position, {
-        toValue: 0,
-        duration: 500,
-        delay: 500,
-        useNativeDriver: false,
-      }).start());
-    },
-    onForceOpenRight: () => {
-      setImmediate(() => Animated.timing(position, {
-        toValue: 0,
-        duration: 500,
-        delay: 500,
-        useNativeDriver: false,
-      }).start());
-    },
+    onForceOpenLeft: () => onPressLeft(),
+    onForceOpenRight: () => onPressRight(),
   });
 
   return (
@@ -72,7 +66,12 @@ function HistoryCard(props) {
         {...pr.panHandlers}
       >
         <Card style={styles.card}>
-          <HistoryRow title={title} subtitle={subtitle} icon={icon} rightText={rightText} />
+          <HistoryRow
+            title={title}
+            subtitle={subtitle}
+            icon={icon}
+            rightText={rightText}
+          />
         </Card>
       </Animated.View>
       <View style={styles.buttonGroup}>
@@ -96,7 +95,7 @@ function HistoryCard(props) {
           ]}
           contentContainerStyle={styles.buttonContentContainer}
           titleStyle={styles.buttonText}
-          onPress={() => {}}
+          onPress={() => onPressLeft()}
         />
         <ButtonDanger
           title="Delete"
@@ -118,7 +117,7 @@ function HistoryCard(props) {
             },
           ]}
           titleStyle={styles.buttonText}
-          onPress={() => {}}
+          onPress={() => onPressRight()}
         />
       </View>
     </View>

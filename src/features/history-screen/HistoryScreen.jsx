@@ -5,7 +5,7 @@ import StatusBar from '../status-bar';
 import HistoryCard from './HistoryCard';
 import Separator from './Separator';
 import { connect } from 'react-redux';
-import { selectDays, selectLogs } from '../history';
+import { selectDays, selectLogs, remove as removeLog } from '../history';
 import { utils } from '../common';
 const { parseDate, formatTime, parseIso } = utils.date;
 
@@ -14,7 +14,7 @@ const mapStateToProps = (state) => ({
   days: selectDays(state),
 });
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = { removeLog };
 
 const ListHeaderComponent = () => <Text style={styles.title}>History</Text>;
 
@@ -37,7 +37,7 @@ class HistoryScreen extends React.Component {
     const isIntake = item.type === 'intake';
     const iso = parseIso(item.datetime)
     const time = formatTime(iso);
-
+    console.log(item);
     return (
       <HistoryCard
         style={[styles.card, styles.belowTopCard]}
@@ -47,6 +47,7 @@ class HistoryScreen extends React.Component {
         title={item.label.substring(0,10) ?? (isIntake ? "Intake" : "Void")}
         subtitle={item.volume + 'oz'}
         rightText={time}
+        onPressRight={() => this.props.removeLog({ id: item.id })}
       />
     );
   }

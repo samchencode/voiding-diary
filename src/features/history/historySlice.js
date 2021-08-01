@@ -30,7 +30,7 @@ const historySlice = createSlice({
   name: 'history',
   initialState,
   reducers: {
-    add(state, { type, datetime, volume, label = null }) {
+    add(state, { payload: { type, datetime, volume, label = null } }) {
       const id = state.logs.ids.length;
       state.logs.entities[id] = { id, type, datetime, volume, label };
       state.logs.ids.push(id);
@@ -42,7 +42,10 @@ const historySlice = createSlice({
       }
       state.days.entities[date].logs.push(id);
     },
-    edit(state, { id, datetime = null, volume = null, label = null }) {
+    edit(
+      state,
+      { payload: { id, datetime = null, volume = null, label = null } }
+    ) {
       const edits = {
         ...(datetime && { datetime }),
         ...(volume && { volume }),
@@ -50,9 +53,10 @@ const historySlice = createSlice({
       };
       Object.assign(state.logs.entities[id], edits);
     },
-    remove(state, { id }) {
-      const datetime = state.logs.entities[id];
+    remove(state, { payload: { id } }) {
+      const { datetime } = state.logs.entities[id];
       const date = formatDate(parseIso(datetime));
+      console.log('ff', datetime, date);
       state.days.entities[date].logs = state.days.entities[date].logs.filter(
         (x) => x !== id
       );
