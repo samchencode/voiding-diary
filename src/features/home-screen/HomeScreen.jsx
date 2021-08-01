@@ -13,8 +13,21 @@ const timer = new Timer();
 const notification = new VoidNotification();
 
 const handleVoid = (seconds) => {
-  timer.start({ milliseconds: seconds * 1000 });
-  notification.schedule({ seconds });
+  const start = async () => {
+    timer.start({ milliseconds: seconds * 1000 });
+    await notification.schedule({ seconds });
+  };
+
+  const reset = async () => {
+    timer.reset();
+    await notification.cancel();
+  };
+
+  if (timer.state === Timer.BEFORE_START) {
+    start();
+  } else {
+    reset().then(start);
+  }
 };
 
 function HomeScreen({ navigation }) {
@@ -39,7 +52,7 @@ function HomeScreen({ navigation }) {
     return () => {
       timer.destroy();
       notification.destroy();
-    }
+    };
   }, []);
 
   return (

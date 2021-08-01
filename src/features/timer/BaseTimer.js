@@ -51,6 +51,9 @@ class Timer {
       this.endTime = new Date(Date.now() + milliseconds);
       this._totalMilliseconds = milliseconds;
     }
+    if (this.state !== BEFORE_START) {
+      throw new Error('timer.start while in state: ' + this.state)
+    }
 
     this._remainingMilliseconds = this._findRemainingMilliseconds(this.endTime);
     this._startTimeout(this._remainingMilliseconds);
@@ -115,9 +118,10 @@ class Timer {
   }
 }
 
-export default Timer;
-export const TIMER_STATE = {
+Object.assign(Timer, {
   BEFORE_START,
-  PAUSED,
   TICKING,
-};
+  PAUSED,
+})
+
+export default Timer;
