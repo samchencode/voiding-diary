@@ -5,13 +5,12 @@ import StatusBar from '../status-bar';
 import HistoryCard from './HistoryCard';
 import Separator from './Separator';
 import { connect } from 'react-redux';
-import { selectDays, selectLogs, remove as removeLog } from '../history';
+import { selectSectionListData, remove as removeLog } from '../history';
 import { utils } from '../common';
 const { parseDate, formatTime, parseIso } = utils.date;
 
 const mapStateToProps = (state) => ({
-  logs: selectLogs(state),
-  days: selectDays(state),
+  data: selectSectionListData(state)
 });
 
 const mapDispatchToProps = { removeLog };
@@ -37,7 +36,7 @@ class HistoryScreen extends React.Component {
     const isIntake = item.type === 'intake';
     const iso = parseIso(item.datetime)
     const time = formatTime(iso);
-    console.log(item);
+    
     return (
       <HistoryCard
         style={[styles.card, styles.belowTopCard]}
@@ -61,15 +60,7 @@ class HistoryScreen extends React.Component {
   render() {
     const { colors } = this.context;
     const { swiping } = this.state;
-    const { days, logs } = this.props;
-
-    const data = Object.values(days.entities).map((d) => {
-      const sectionData = d.logs.map(l => logs.entities[l]);
-      return {
-        id: d.id,
-        data: sectionData,
-      };
-    });
+    const { data } = this.props;
 
     return (
       <>
