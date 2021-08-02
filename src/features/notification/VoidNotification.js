@@ -16,15 +16,18 @@ class VoidNotification {
       }),
     });
 
-    Notifications.setNotificationCategoryAsync(VoidNotification.CATEGORY_IDENTIFIER, [
-      {
-        identifier: VoidNotification.ACTION_IDENTIFIER,
-        buttonTitle: VoidNotification.BUTTON_TITLE,
-        options: {
-          opensAppToForeground: true,
+    Notifications.setNotificationCategoryAsync(
+      VoidNotification.CATEGORY_IDENTIFIER,
+      [
+        {
+          identifier: VoidNotification.ACTION_IDENTIFIER,
+          buttonTitle: VoidNotification.BUTTON_TITLE,
+          options: {
+            opensAppToForeground: true,
+          },
         },
-      },
-    ]);
+      ]
+    );
   }
 
   notificationIdentifier = null;
@@ -62,6 +65,17 @@ class VoidNotification {
     );
 
     return this.subscription;
+  }
+
+  async dismiss() {
+    if (!this.notificationIdentifier) return;
+    await Notifications.dismissNotificationAsync(this.notificationIdentifer);
+    this.notificationIdentifier = null;
+  }
+
+  async dismissAll() {
+    await Notifications.dismissAllNotificationsAsync();
+    this.notificationIdentifier = null;
   }
 
   removeNotificationInteractionListener() {

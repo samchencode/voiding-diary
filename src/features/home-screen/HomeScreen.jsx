@@ -14,6 +14,7 @@ const timer = new Timer();
 const notification = new VoidNotification();
 
 const handleVoid = (seconds) => {
+  notification.dismissAll();
   const start = async () => {
     timer.start({ milliseconds: seconds * 1000 });
     await notification.schedule({ seconds });
@@ -33,7 +34,7 @@ const handleVoid = (seconds) => {
 
 function HomeScreen({ navigation }) {
   const { colors } = useTheme();
-  const time = useTimer({timer, handleVoid, notification});
+  const time = useTimer({ timer, handleVoid, notification });
 
   return (
     <ScrollView
