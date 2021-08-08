@@ -1,5 +1,8 @@
 import React from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
+import { utils } from '../common'
+import { add } from '../history';
 import { useTheme, baseTheme } from '../theme';
 import TimerView from './TimerView';
 import IntakeChart from './IntakeChart';
@@ -10,10 +13,12 @@ import useTimer from './useTimer';
 import Timer from '../timer';
 import { VoidNotification } from '../notification';
 
+const { formatIso } = utils.date;
+
 const timer = new Timer();
 const notification = new VoidNotification();
 
-const handleVoid = (seconds) => {
+const toggleVoidTimerAndNotification = (seconds) => {
   notification.dismissAll();
   const start = async () => {
     timer.start({ milliseconds: seconds * 1000 });
@@ -35,6 +40,18 @@ const handleVoid = (seconds) => {
 function HomeScreen({ navigation }) {
   const { colors } = useTheme();
   const time = useTimer({ timer, handleVoid, notification });
+
+  const dispatch = useDispatch();
+
+  const handleVoid = (s) => {
+    toggleVoidTimerAndNotification(s);
+    dispatch(
+      add({
+        type: 'void',
+        datetime: formatIso(new Date()),
+      })
+    );
+  };
 
   return (
     <ScrollView

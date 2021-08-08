@@ -8,7 +8,7 @@ function HistoryRow(props) {
   const {
     icon = 'cup',
     title = "Intake",
-    subtitle = '12oz',
+    subtitle,
     rightText = '08:31 AM',
   } = props;
   const { colors } = useTheme();

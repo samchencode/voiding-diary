@@ -43,8 +43,8 @@ class HistoryScreen extends React.Component {
         onSwipeStateChange={this.onSwipeStateChange.bind(this)}
         id={item.id}
         icon={isIntake ? 'cup' : 'water'}
-        title={item.label.substring(0,10) ?? (isIntake ? "Intake" : "Void")}
-        subtitle={item.volume + 'oz'}
+        title={item.label?.substring(0,10) ?? (isIntake ? "Intake" : "Void")}
+        subtitle={item.volume && item.volume + 'oz'}
         rightText={time}
         onPressRight={() => this.props.removeLog({ id: item.id })}
       />
