@@ -1,5 +1,5 @@
 import { AppState, LogBox } from 'react-native';
-import BaseTimer, { TIMER_STATE } from './BaseTimer';
+import BaseTimer from './BaseTimer';
 
 // Dismiss long timer warning
 // https://github.com/facebook/react-native/issues/12981
@@ -27,14 +27,14 @@ class BackgroundableTimer extends BaseTimer {
       (newAppState === APP_STATE.BACKGROUND ||
         newAppState === APP_STATE.INACTIVE) &&
       this._currentAppState === APP_STATE.ACTIVE &&
-      this.state === TIMER_STATE.TICKING
+      this.state === BaseTimer.TICKING
     ) {
       this._pauseTimeout();
     } else if (
       newAppState === APP_STATE.ACTIVE &&
       (this._currentAppState === APP_STATE.INACTIVE ||
         this._currentAppState === APP_STATE.BACKGROUND) &&
-      this.state === TIMER_STATE.TICKING
+      this.state === BaseTimer.TICKING
     ) {
       this._remainingMilliseconds = this._findRemainingMilliseconds(
         this.endTime
