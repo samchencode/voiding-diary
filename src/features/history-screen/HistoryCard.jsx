@@ -25,9 +25,9 @@ const BUTTON_MARGIN = baseTheme.spaces.sm;
 function HistoryCard(props) {
   const {
     onSwipeStateChange,
-    title,
-    subtitle,
-    icon,
+    type,
+    label,
+    volume,
     rightText,
     onPressLeft,
     onPressRight,
@@ -67,9 +67,9 @@ function HistoryCard(props) {
       >
         <Card style={styles.card}>
           <HistoryRow
-            title={title}
-            subtitle={subtitle}
-            icon={icon}
+            type={type}
+            label={label}
+            volume={volume}
             rightText={rightText}
           />
         </Card>

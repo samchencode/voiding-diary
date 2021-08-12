@@ -2,16 +2,15 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useTheme, baseTheme } from '../theme';
-import { utils } from '../common';
 
 function HistoryRow(props) {
-  const {
-    icon = 'cup',
-    title = "Intake",
-    subtitle,
-    rightText = '08:31 AM',
-  } = props;
+  const { type, volume, rightText, label } = props;
   const { colors } = useTheme();
+
+  const isIntake = type === 'intake';
+  const icon = isIntake ? 'cup' : 'water';
+  const title = label ?? (isIntake ? 'Intake' : 'Void');
+  const subtitle = volume && volume + 'oz';
 
   return (
     <View style={styles.container}>
@@ -21,9 +20,7 @@ function HistoryRow(props) {
         color={colors.accent}
         style={styles.icon}
       />
-      <Text style={styles.title}>
-        {title}
-      </Text>
+      <Text style={styles.title}>{title}</Text>
       <Text style={styles.subtitle}>{subtitle}</Text>
       <Text style={styles.data}>{rightText}</Text>
     </View>

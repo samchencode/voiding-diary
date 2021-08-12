@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { selectSectionListData, remove as removeLog } from '../history';
 import { utils } from '../common';
 const { parseDate, formatTime, parseIso } = utils.date;
+const { trimWithEllipsis } = utils.string;
 
 const mapStateToProps = (state) => ({
   data: selectSectionListData(state)
@@ -42,9 +43,9 @@ class HistoryScreen extends React.Component {
         style={[styles.card, styles.belowTopCard]}
         onSwipeStateChange={this.onSwipeStateChange.bind(this)}
         id={item.id}
-        icon={isIntake ? 'cup' : 'water'}
-        title={item.label?.substring(0,10) ?? (isIntake ? "Intake" : "Void")}
-        subtitle={item.volume && item.volume + 'oz'}
+        type={item.type}
+        label={item.label && trimWithEllipsis(item.label, 10)}
+        volume={item.volume}
         rightText={time}
         onPressRight={() => this.props.removeLog({ id: item.id })}
       />
