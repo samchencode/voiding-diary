@@ -56,7 +56,6 @@ const historySlice = createSlice({
     remove(state, { payload: { id } }) {
       const { datetime } = state.logs.entities[id];
       const date = formatDate(parseIso(datetime));
-      console.log('ff', datetime, date);
       state.days.entities[date].logs = state.days.entities[date].logs.filter(
         (x) => x !== id
       );
