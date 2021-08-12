@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -9,10 +9,41 @@ import {
 import { useTheme, baseTheme } from '../theme';
 import { Button } from '../common';
 import Modal from './Modal';
+import OpacityButton from './OpacityButton';
+import { utils } from '../common';
+
+const { isNumber } = utils.string;
 
 function EditEntryModal(props) {
   const { navigation } = props;
   const { colors } = useTheme();
+
+  const [label, setLabel] = useState('');
+  const [volume, setVolume] = useState(8);
+  const [usingVolumeInput, setUsingVolumeInput] = useState(false);
+  const volumeInput = useRef(null);
+
+  const handleInputVolume = (s) => {
+    setUsingVolumeInput(true);
+    if (isNumber(s)) setVolume(+s);
+  };
+
+  const handlePressVolume = (value) => {
+    volumeInput.current.blur();
+    setUsingVolumeInput(false);
+    setVolume(value);
+  };
+
+  const buttonFocusStyle = {
+    color: colors.light,
+    backgroundColor: colors.primary,
+  };
+
+  const buttonUnfocusStyle = {
+    color: colors.primary,
+  };
+
+  const shouldFocusVolumeButton = (v) => !usingVolumeInput && volume === v;
 
   return (
     <Modal onDismiss={() => navigation.goBack()}>
@@ -22,27 +53,42 @@ function EditEntryModal(props) {
         <TextInput
           style={[styles.input, styles.inputText]}
           placeholder="Name"
+          value={label}
+          onChangeText={setLabel}
         />
       </View>
       <Text style={styles.label}>Amount</Text>
       <View style={[styles.inputGroup, styles.amountInputGroup]}>
-        <TouchableOpacity>
-          <Text style={[styles.inputText, { color: colors.primary }]}>8oz</Text>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Text style={[styles.inputText, { color: colors.primary }]}>
-            12oz
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Text style={[styles.inputText, { color: colors.primary }]}>
-            16oz
-          </Text>
-        </TouchableOpacity>
+        <OpacityButton
+          title="8oz"
+          style={
+            shouldFocusVolumeButton(8) ? buttonFocusStyle : buttonUnfocusStyle
+          }
+          onPress={() => handlePressVolume(8)}
+        />
+        <OpacityButton
+          title="12oz"
+          style={
+            shouldFocusVolumeButton(12) ? buttonFocusStyle : buttonUnfocusStyle
+          }
+          onPress={() => handlePressVolume(12)}
+        />
+        <OpacityButton
+          title="16oz"
+          style={
+            shouldFocusVolumeButton(16) ? buttonFocusStyle : buttonUnfocusStyle
+          }
+          onPress={() => handlePressVolume(16)}
+        />
         <TextInput
-          style={[styles.input, styles.inputText]}
+          style={[styles.input, styles.inputText, { width: 72 }]}
+          textAlign="center"
+          multiline={false}
           placeholder="other"
           keyboardType="numeric"
+          value={usingVolumeInput ? '' + volume : ''}
+          onChangeText={handleInputVolume}
+          ref={volumeInput}
         />
       </View>
       <View style={styles.buttonGroup}>
@@ -75,13 +121,9 @@ const { spaces, fonts, br } = baseTheme;
 const styles = StyleSheet.create({
   title: { ...fonts.lg },
   label: { ...fonts.sm },
-  input: {
-    borderBottomWidth: 1,
-  },
+  input: { borderBottomWidth: 1 },
   inputText: { ...fonts.mdBold },
-  inputGroup: {
-    marginBottom: spaces.lg,
-  },
+  inputGroup: { marginBottom: spaces.lg },
   amountInputGroup: {
     display: 'flex',
     flexDirection: 'row',
@@ -92,9 +134,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
   },
-  button: {
-    width: 100,
-  },
+  button: { width: 100 },
   outlineButton: {
     ...fonts.mdBold,
     textAlign: 'center',
