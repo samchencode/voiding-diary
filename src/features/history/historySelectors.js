@@ -36,5 +36,5 @@ export const selectTodaysTotalIntake = createSelector(
 );
 
 export const selectLastThreeLogs = createSelector(selectLogs, (logs) =>
-  logs.ids.slice(-3).map((id) => logs.entities[id])
+  logs.ids.slice(-3).map((id) => logs.entities[id]).reverse()
 );
