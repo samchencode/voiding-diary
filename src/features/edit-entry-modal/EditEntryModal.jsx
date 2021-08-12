@@ -11,8 +11,11 @@ import { Button } from '../common';
 import Modal from './Modal';
 import OpacityButton from './OpacityButton';
 import { utils } from '../common';
+import { useDispatch } from 'react-redux';
+import { add } from '../history';
 
 const { isNumber } = utils.string;
+const { formatIso } = utils.date;
 
 function EditEntryModal(props) {
   const { navigation } = props;
@@ -22,6 +25,11 @@ function EditEntryModal(props) {
   const [volume, setVolume] = useState(8);
   const [usingVolumeInput, setUsingVolumeInput] = useState(false);
   const volumeInput = useRef(null);
+  const resetState = () => {
+    setLabel('');
+    setVolume(8);
+    setUsingVolumeInput(false);
+  };
 
   const handleInputVolume = (s) => {
     setUsingVolumeInput(true);
@@ -44,6 +52,20 @@ function EditEntryModal(props) {
   };
 
   const shouldFocusVolumeButton = (v) => !usingVolumeInput && volume === v;
+
+  const dispatch = useDispatch();
+  const handleSubmit = () => {
+    dispatch(
+      add({
+        type: 'intake',
+        datetime: formatIso(new Date()),
+        label,
+        volume,
+      })
+    );
+    resetState();
+    navigation.goBack();
+  };
 
   return (
     <Modal onDismiss={() => navigation.goBack()}>
@@ -108,7 +130,7 @@ function EditEntryModal(props) {
         </TouchableOpacity>
         <Button.Success
           title="Save"
-          onPress={() => {}}
+          onPress={() => handleSubmit()}
           style={[styles.button]}
         />
       </View>
