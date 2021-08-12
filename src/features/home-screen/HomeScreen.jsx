@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { utils } from '../common'
-import { add } from '../history';
+import { utils } from '../common';
+import { add, selectTodaysTotalIntake, selectLastThreeLogs } from '../history';
 import { useTheme, baseTheme } from '../theme';
 import TimerView from './TimerView';
 import IntakeChart from './IntakeChart';
@@ -53,6 +53,9 @@ function HomeScreen({ navigation }) {
     );
   };
 
+  const totalIntake = useSelector(selectTodaysTotalIntake);
+  const recentLogs = useSelector(selectLastThreeLogs);
+
   return (
     <ScrollView
       style={[styles.scrollContainer, { backgroundColor: colors.primary }]}
@@ -66,8 +69,8 @@ function HomeScreen({ navigation }) {
           onPressIntake={() => navigation.navigate('EditModal')}
           onPressVoid={() => handleVoid(60)}
         />
-        <IntakeChart style={styles.item} />
-        <HistoryView style={[styles.item, styles.lastItem]} />
+        <IntakeChart style={styles.item} intake={totalIntake} goal={32} />
+        <HistoryView style={[styles.item, styles.lastItem]} logs={recentLogs} />
       </View>
     </ScrollView>
   );

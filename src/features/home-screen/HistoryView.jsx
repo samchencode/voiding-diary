@@ -5,13 +5,15 @@ import { HistoryRow } from '../history-screen';
 import { baseTheme } from '../theme';
 
 function HistoryView(props) {
+  const { logs } = props;
+
   return (
     <Card style={[styles.container, props.style]}>
       <Text style={styles.title}>Recent</Text>
       <View>
-        <HistoryRow />
-        <HistoryRow />
-        <HistoryRow />
+        {logs.map((l) => (
+          <HistoryRow key={l.id} />
+        ))}
       </View>
     </Card>
   );
@@ -27,7 +29,7 @@ const styles = StyleSheet.create({
   title: {
     ...fonts.lg,
     marginTop: -6,
-  }
-})
+  },
+});
 
 export default HistoryView;

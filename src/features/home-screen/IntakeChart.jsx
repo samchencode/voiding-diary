@@ -7,8 +7,8 @@ import d3 from '../../lib/d3';
 
 function IntakeChart(props) {
   const data = {
-    goal: 32,
-    intake: 40,
+    goal: props.goal,
+    intake: props.intake,
   };
 
   const [width, setWidth] = useState(0);
@@ -42,7 +42,7 @@ function IntakeChart(props) {
       ]}
     >
       <View style={styles.titleContainer}>
-        <Text style={styles.title}>20oz</Text>
+        <Text style={styles.title}>{data.intake}oz</Text>
         <Text style={styles.subtitle}>Intake</Text>
       </View>
       <Svg
