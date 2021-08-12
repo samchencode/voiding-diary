@@ -28,7 +28,9 @@ export const selectTodaysTotalIntake = createSelector(
     if (!logIds) return 0;
 
     const logEntities = logIds.map((id) => logs.entities[id]);
-    const intakeVolumes = logEntities.map((log) => log.volume);
+    const intakeVolumes = logEntities
+      .filter((l) => l.type === 'intake')
+      .map((log) => log.volume);
     return intakeVolumes.reduce((a, b) => a + b, 0);
   }
 );
