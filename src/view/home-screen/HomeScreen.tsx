@@ -1,12 +1,9 @@
-import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 
-const ComponentFactory = (foo: string) => () => {
+const ComponentFactory = () => () => {
   return (
     <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <Text>{foo}</Text>
-      <StatusBar style="auto" />
+      <Text>Hello from HomeScreen!</Text>
     </View>
   );
 }
