@@ -12,6 +12,7 @@
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
+    "project": ["./tsconfig.json"],
     "ecmaFeatures": {
       "jsx": true
     },
@@ -32,6 +33,13 @@
       }
     ],
     "no-duplicate-imports": "off",
-    "@typescript-eslint/no-duplicate-imports": ["error"]
+    "@typescript-eslint/no-duplicate-imports": ["error"],
+    "@typescript-eslint/consistent-type-imports": [
+      "error",
+      {
+        "prefer": "type-imports"
+      }
+    ],
+    "import/prefer-default-export": "off"
   }
 }
