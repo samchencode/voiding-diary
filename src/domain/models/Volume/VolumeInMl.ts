@@ -16,6 +16,10 @@ class VolumeInMl implements Volume {
     return this.ml;
   }
 
+  valueOf() {
+    return this.getValue();
+  }
+
   toString() {
     return `${this.ml} mL`;
   }

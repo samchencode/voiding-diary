@@ -7,6 +7,10 @@ class UnknownVolume implements Volume {
     return isUnknown;
   }
 
+  valueOf(): number {
+    return -1;
+  }
+
   toString() {
     return '';
   }

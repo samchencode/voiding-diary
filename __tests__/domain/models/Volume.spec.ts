@@ -43,5 +43,17 @@ describe('Volume', () => {
       const unk = new UnknownVolume();
       expect(vol.is(unk)).toBe(false);
     });
+
+    it('should convert unknown to -1 on valueOf', () => {
+      const vol = new UnknownVolume();
+      expect(+vol).toBe(-1);
+      expect(Number(vol)).toBe(-1);
+    });
+
+    it('should convert volume to number of milliliters', () => {
+      const vol = new VolumeInMl(8);
+      expect(+vol).toBe(8);
+      expect(Number(vol)).toBe(8);
+    });
   });
 });
