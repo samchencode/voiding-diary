@@ -1,5 +1,5 @@
 import { DateAndTime } from '@/domain/models/DateAndTime';
-import { IntakeRecord } from '@/domain/models/IntakeRecord';
+import { IntakeRecord } from '@/domain/models/Record';
 import { VolumeInMl } from '@/domain/models/Volume';
 
 describe('IntakeRecord', () => {

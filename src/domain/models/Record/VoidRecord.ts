@@ -1,35 +1,26 @@
 import type { DateAndTime } from '@/domain/models/DateAndTime';
+import { Record } from '@/domain/models/Record/Record';
 import type { Volume } from '@/domain/models/Volume';
 
-class IntakeRecord {
-  private dateAndTime: DateAndTime;
-
+class VoidRecord extends Record {
   private urineVolume: Volume;
 
   constructor(dateAndTime: DateAndTime, urineVolume: Volume) {
-    this.dateAndTime = dateAndTime;
+    super(dateAndTime);
     this.urineVolume = urineVolume;
   }
 
-  getDate() {
-    return this.dateAndTime.getDateString();
-  }
-
-  getTime() {
-    return this.dateAndTime.getTimeString();
-  }
-
-  getIntakeVolumeInMl() {
+  getUrineVolumeInMl() {
     return this.urineVolume.toString();
   }
 
-  is(otherRecord: IntakeRecord) {
+  is(otherRecord: VoidRecord) {
     const hasSameDate = this.getDate() === otherRecord.getDate();
     const hasSameTime = this.getTime() === otherRecord.getTime();
     const hasSameVolume =
-      this.getIntakeVolumeInMl() === otherRecord.getIntakeVolumeInMl();
+      this.getUrineVolumeInMl() === otherRecord.getUrineVolumeInMl();
     return hasSameDate && hasSameTime && hasSameVolume;
   }
 }
 
-export { IntakeRecord };
+export { VoidRecord };

@@ -1,5 +1,5 @@
 import { DateAndTime } from '@/domain/models/DateAndTime';
-import { VoidRecord } from '@/domain/models/VoidRecord';
+import { VoidRecord } from '@/domain/models/Record';
 import { VolumeInMl } from '@/domain/models/Volume';
 
 describe('VoidRecord', () => {
