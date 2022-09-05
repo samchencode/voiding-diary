@@ -26,6 +26,11 @@ describe('Volume', () => {
       const vol = fromNumericValue(7);
       expect(vol.is(new VolumeInMl(7))).toBe(true);
     });
+
+    it('should throw error if negative', () => {
+      const boom = () => new VolumeInMl(-1);
+      expect(boom).toThrowError('negative');
+    });
   });
 
   describe('behavior', () => {

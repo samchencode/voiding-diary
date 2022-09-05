@@ -1,9 +1,11 @@
+import { NegativeVolumeError } from '@/domain/models/Volume/NegativeVolumeError';
 import type { Volume } from '@/domain/models/Volume/Volume';
 
 class VolumeInMl implements Volume {
   private ml: number;
 
   constructor(milliliters: number) {
+    if (milliliters < 0) throw new NegativeVolumeError(milliliters);
     this.ml = milliliters;
   }
 
