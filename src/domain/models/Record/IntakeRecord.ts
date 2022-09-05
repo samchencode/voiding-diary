@@ -10,15 +10,15 @@ class IntakeRecord extends Record {
     this.urineVolume = urineVolume;
   }
 
-  getIntakeVolumeInMl() {
+  getIntakeVolumeString() {
     return this.urineVolume.toString();
   }
 
   is(otherRecord: IntakeRecord) {
-    const hasSameDate = this.getDate() === otherRecord.getDate();
-    const hasSameTime = this.getTime() === otherRecord.getTime();
+    const hasSameDate = this.getDateString() === otherRecord.getDateString();
+    const hasSameTime = this.getTimeString() === otherRecord.getTimeString();
     const hasSameVolume =
-      this.getIntakeVolumeInMl() === otherRecord.getIntakeVolumeInMl();
+      this.getIntakeVolumeString() === otherRecord.getIntakeVolumeString();
     return hasSameDate && hasSameTime && hasSameVolume;
   }
 }

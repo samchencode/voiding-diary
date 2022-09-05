@@ -7,11 +7,11 @@ abstract class Record {
     this.dateAndTime = dateAndTime;
   }
 
-  getDate() {
+  getDateString() {
     return this.dateAndTime.getDateString();
   }
 
-  getTime() {
+  getTimeString() {
     return this.dateAndTime.getTimeString();
   }
 }

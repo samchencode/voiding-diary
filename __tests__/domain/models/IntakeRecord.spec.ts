@@ -19,15 +19,15 @@ describe('IntakeRecord', () => {
 
       const intakeRecord1 = new IntakeRecord(datetime1, urineVolume);
 
-      expect(intakeRecord1.getTime()).toBe('12:00 AM');
-      expect(intakeRecord1.getDate()).toBe('Jan 1, 1970');
+      expect(intakeRecord1.getTimeString()).toBe('12:00 AM');
+      expect(intakeRecord1.getDateString()).toBe('Jan 1, 1970');
 
       const datetime2 = new DateAndTime(new Date(1662318939966));
 
       const intakeRecord2 = new IntakeRecord(datetime2, urineVolume);
 
-      expect(intakeRecord2.getTime()).toBe('7:15 PM');
-      expect(intakeRecord2.getDate()).toBe('Sep 4, 2022');
+      expect(intakeRecord2.getTimeString()).toBe('7:15 PM');
+      expect(intakeRecord2.getDateString()).toBe('Sep 4, 2022');
     });
 
     it('should get the volume intake', () => {
@@ -36,6 +36,7 @@ describe('IntakeRecord', () => {
 
       const intakeRecord = new IntakeRecord(datetime, urineVolume);
 
+      expect(intakeRecord.getIntakeVolumeString()).toBe('8 mL');
     });
 
     it('should equal other record with same intake and datetime', () => {

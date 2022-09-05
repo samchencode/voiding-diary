@@ -21,15 +21,15 @@ describe('VoidRecord', () => {
 
       const voidRecord1 = new VoidRecord(datetime1, urineVolume);
 
-      expect(voidRecord1.getTime()).toBe('12:00 AM');
-      expect(voidRecord1.getDate()).toBe('Jan 1, 1970');
+      expect(voidRecord1.getTimeString()).toBe('12:00 AM');
+      expect(voidRecord1.getDateString()).toBe('Jan 1, 1970');
 
       const datetime2 = new DateAndTime(new Date(1662318939966));
 
       const voidRecord2 = new VoidRecord(datetime2, urineVolume);
 
-      expect(voidRecord2.getTime()).toBe('7:15 PM');
-      expect(voidRecord2.getDate()).toBe('Sep 4, 2022');
+      expect(voidRecord2.getTimeString()).toBe('7:15 PM');
+      expect(voidRecord2.getDateString()).toBe('Sep 4, 2022');
     });
 
     it('should get the volume voided', () => {
@@ -38,7 +38,7 @@ describe('VoidRecord', () => {
 
       const voidRecord = new VoidRecord(datetime, urineVolume);
 
-      expect(voidRecord.getUrineVolumeInMl()).toBe('8 mL');
+      expect(voidRecord.getUrineVolumeString()).toBe('8 mL');
     });
   });
 

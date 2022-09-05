@@ -10,15 +10,15 @@ class VoidRecord extends Record {
     this.urineVolume = urineVolume;
   }
 
-  getUrineVolumeInMl() {
+  getUrineVolumeString() {
     return this.urineVolume.toString();
   }
 
   is(otherRecord: VoidRecord) {
-    const hasSameDate = this.getDate() === otherRecord.getDate();
-    const hasSameTime = this.getTime() === otherRecord.getTime();
+    const hasSameDate = this.getDateString() === otherRecord.getDateString();
+    const hasSameTime = this.getTimeString() === otherRecord.getTimeString();
     const hasSameVolume =
-      this.getUrineVolumeInMl() === otherRecord.getUrineVolumeInMl();
+      this.getUrineVolumeString() === otherRecord.getUrineVolumeString();
     return hasSameDate && hasSameTime && hasSameVolume;
   }
 }
