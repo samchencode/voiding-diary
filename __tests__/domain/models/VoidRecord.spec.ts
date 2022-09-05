@@ -2,7 +2,7 @@ import { DateAndTime } from '@/domain/models/DateAndTime';
 import { VoidRecord } from '@/domain/models/VoidRecord';
 import { VolumeInMl } from '@/domain/models/Volume';
 
-describe('Record', () => {
+describe('VoidRecord', () => {
   describe('Instantiation', () => {
     it('should create new void record', () => {
       const datetime = new DateAndTime(new Date(0));
