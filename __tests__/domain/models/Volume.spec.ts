@@ -1,5 +1,9 @@
 import type { Volume } from '@/domain/models/Volume';
-import { VolumeInMl, UnknownVolume } from '@/domain/models/Volume';
+import {
+  fromNumericValue,
+  VolumeInMl,
+  UnknownVolume,
+} from '@/domain/models/Volume';
 
 describe('Volume', () => {
   describe('Instantiation', () => {
@@ -11,6 +15,16 @@ describe('Volume', () => {
     it('should create new mL volume value object', () => {
       const create = () => new VolumeInMl(0);
       expect(create).not.toThrowError();
+    });
+
+    it('should create unknown volume from -1', () => {
+      const vol = fromNumericValue(-1);
+      expect(vol.is(new UnknownVolume())).toBe(true);
+    });
+
+    it('should create volume in ml from positive number', () => {
+      const vol = fromNumericValue(7);
+      expect(vol.is(new VolumeInMl(7))).toBe(true);
     });
   });
 
