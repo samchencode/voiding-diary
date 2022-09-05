@@ -1,6 +1,6 @@
 import { DateAndTime } from '@/domain/models/DateAndTime';
 import { IntakeRecord } from '@/domain/models/Record';
-import { VolumeInMl } from '@/domain/models/Volume';
+import { UnknownVolume, VolumeInMl } from '@/domain/models/Volume';
 
 describe('IntakeRecord', () => {
   describe('Instantiation', () => {
@@ -57,6 +57,34 @@ describe('IntakeRecord', () => {
       const intakeVolume4 = new VolumeInMl(0);
       const intake4 = new IntakeRecord(datetime4, intakeVolume4);
       expect(intake1.is(intake4)).toBe(false);
+    });
+
+    it('should serialize into a record object for storage', () => {
+      const datetime1 = new DateAndTime(new Date(0));
+      const intakeVolume1 = new VolumeInMl(2);
+      const serialized1 = new IntakeRecord(
+        datetime1,
+        intakeVolume1
+      ).serialize();
+      const expected1 = {
+        type: 'intake',
+        volumeMl: 2,
+        timestamp: 0,
+      };
+      expect(serialized1).toEqual(expected1);
+
+      const datetime2 = new DateAndTime(new Date(1000000));
+      const intakeVolume2 = new UnknownVolume();
+      const serialized2 = new IntakeRecord(
+        datetime2,
+        intakeVolume2
+      ).serialize();
+      const expected2 = {
+        type: 'intake',
+        volumeMl: -1,
+        timestamp: 1000000,
+      };
+      expect(serialized2).toEqual(expected2);
     });
   });
 });

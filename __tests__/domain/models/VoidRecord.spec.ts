@@ -1,6 +1,6 @@
 import { DateAndTime } from '@/domain/models/DateAndTime';
 import { VoidRecord } from '@/domain/models/Record';
-import { VolumeInMl } from '@/domain/models/Volume';
+import { UnknownVolume, VolumeInMl } from '@/domain/models/Volume';
 
 describe('VoidRecord', () => {
   describe('Instantiation', () => {
@@ -60,5 +60,27 @@ describe('VoidRecord', () => {
     const urineVolume4 = new VolumeInMl(0);
     const void4 = new VoidRecord(datetime4, urineVolume4);
     expect(void1.is(void4)).toBe(false);
+  });
+
+  it('should serialize into a record object for storage', () => {
+    const datetime1 = new DateAndTime(new Date(0));
+    const voidVolume1 = new VolumeInMl(2);
+    const serialized1 = new VoidRecord(datetime1, voidVolume1).serialize();
+    const expected1 = {
+      type: 'void',
+      volumeMl: 2,
+      timestamp: 0,
+    };
+    expect(serialized1).toEqual(expected1);
+
+    const datetime2 = new DateAndTime(new Date(1000000));
+    const voidVolume2 = new UnknownVolume();
+    const serialized2 = new VoidRecord(datetime2, voidVolume2).serialize();
+    const expected2 = {
+      type: 'void',
+      volumeMl: -1,
+      timestamp: 1000000,
+    };
+    expect(serialized2).toEqual(expected2);
   });
 });

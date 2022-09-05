@@ -1,9 +1,13 @@
 import type { DateAndTime } from '@/domain/models/DateAndTime';
 import { Record } from '@/domain/models/Record/Record';
+import type { RowSerializedRecord } from '@/domain/models/Record/RowSerializedRecord';
+import { RowSerializer } from '@/domain/models/Record/RowSerializer';
 import type { Volume } from '@/domain/models/Volume';
 
 class VoidRecord extends Record {
   private urineVolume: Volume;
+
+  static readonly type = 'void';
 
   constructor(dateAndTime: DateAndTime, urineVolume: Volume) {
     super(dateAndTime);
@@ -20,6 +24,14 @@ class VoidRecord extends Record {
     const hasSameVolume =
       this.getUrineVolumeString() === otherRecord.getUrineVolumeString();
     return hasSameDate && hasSameTime && hasSameVolume;
+  }
+
+  serialize(): RowSerializedRecord {
+    return RowSerializer.serialize(
+      VoidRecord.type,
+      this.dateAndTime,
+      this.urineVolume
+    );
   }
 }
 

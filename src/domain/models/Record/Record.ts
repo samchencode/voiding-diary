@@ -1,7 +1,8 @@
 import type { DateAndTime } from '@/domain/models/DateAndTime';
+import type { RowSerializedRecord } from '@/domain/models/Record/RowSerializedRecord';
 
 abstract class Record {
-  private dateAndTime: DateAndTime;
+  protected dateAndTime: DateAndTime;
 
   constructor(dateAndTime: DateAndTime) {
     this.dateAndTime = dateAndTime;
@@ -14,6 +15,8 @@ abstract class Record {
   getTimeString() {
     return this.dateAndTime.getTimeString();
   }
+
+  abstract serialize(): RowSerializedRecord;
 }
 
 export { Record };
