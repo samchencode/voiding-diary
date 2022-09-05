@@ -8,7 +8,7 @@ describe('<HomeScreen />', () => {
   it('has 1 child', () => {
     const tree = renderer.create(<HomeScreen />).toJSON();
 
-    // @ts-ignore
+    // @ts-expect-error shouldnt be null
     expect(tree.children.length).toBe(1);
   });
 
