@@ -1,7 +1,11 @@
+import { LessThanOneMinuteError } from '@/domain/models/TimeInMins/LessThanOneMinuteError';
+import { NegativeTimeError } from '@/domain/models/TimeInMins/NegativeTimeError';
+
 class TimeInMins {
   minutes: number;
 
   constructor(minutes: number) {
+    if (minutes < 1) throw new LessThanOneMinuteError(minutes);
     this.minutes = minutes;
   }
 
@@ -31,6 +35,8 @@ class TimeInMins {
   }
 
   static fromHoursAndMinutes(hours: number, minutes: number) {
+    if (hours < 0) throw new NegativeTimeError('hours', hours);
+    if (minutes < 0) throw new NegativeTimeError('minutes', minutes);
     const totalMinutes = hours * 60 + minutes;
     return new TimeInMins(totalMinutes);
   }

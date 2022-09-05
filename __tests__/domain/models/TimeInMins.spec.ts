@@ -20,9 +20,9 @@ describe('TimeInMins', () => {
       expect(time1.getHours()).toBe(3);
       expect(time1.getMinutesWithinHour()).toBe(2);
 
-      const time2 = new TimeInMins(0);
+      const time2 = new TimeInMins(1);
       expect(time2.getHours()).toBe(0);
-      expect(time2.getMinutesWithinHour()).toBe(0);
+      expect(time2.getMinutesWithinHour()).toBe(1);
 
       const time3 = TimeInMins.fromHoursAndMinutes(3, 2);
       expect(time3.getMinutesTotal()).toBe(182);
@@ -42,12 +42,28 @@ describe('TimeInMins', () => {
     });
 
     it('should be equal with same number of minutes', () => {
-      const time1 = new TimeInMins(0);
-      const time2 = new TimeInMins(0);
+      const time1 = new TimeInMins(1);
+      const time2 = new TimeInMins(1);
       expect(time1.is(time2)).toBe(true);
 
-      const time3 = new TimeInMins(1);
+      const time3 = new TimeInMins(2);
       expect(time1.is(time3)).toBe(false);
+    });
+
+    it('should throw error if minutes < 1', () => {
+      const boom = () => new TimeInMins(0);
+      expect(boom).toThrowError('0');
+    });
+
+    it('should throw error if given negative hours or minutes', () => {
+      const boom1 = () => TimeInMins.fromHoursAndMinutes(-1, 0);
+      expect(boom1).toThrowError('hours');
+
+      const boom2 = () => TimeInMins.fromHoursAndMinutes(0, -1);
+      expect(boom2).toThrowError('minutes');
+
+      const noBoom = () => TimeInMins.fromHoursAndMinutes(0, 1);
+      expect(noBoom).not.toThrowError();
     });
   });
 });
