@@ -1,13 +1,13 @@
 import { DateAndTime } from '@/domain/models/DateAndTime';
 import type { Record } from '@/domain/models/Record';
 import { IntakeRecord, VoidRecord } from '@/domain/models/Record';
-import { VolumeInMl } from '@/domain/models/Volume';
+import { fromNumericValue } from '@/domain/models/Volume';
 import type { RecordRepository } from '@/domain/ports/RecordRepository';
 import { mockData } from '@/infrastructure/persistence/fake/mockData';
 
 const mockDataToObject = (v: typeof mockData[0]) => {
   const dateAndTime = new DateAndTime(new Date(v.timestamp));
-  const volume = new VolumeInMl(v.volumeMl);
+  const volume = fromNumericValue(v.volumeMl);
   if (v.type === 'void') return new VoidRecord(dateAndTime, volume);
   if (v.type === 'intake') return new IntakeRecord(dateAndTime, volume);
   throw Error('Unknown record type');
