@@ -24,5 +24,24 @@ describe('Volume', () => {
       const vol: Volume = new VolumeInMl(2);
       expect(vol.toString()).toBe('2 mL');
     });
+
+    it('should be same as another object with equal volume', () => {
+      const vol1 = new VolumeInMl(1);
+      const vol2 = new VolumeInMl(1);
+      expect(vol1.is(vol2)).toBe(true);
+
+      const vol3 = new UnknownVolume();
+      const vol4 = new UnknownVolume();
+      expect(vol3.is(vol4)).toBe(true);
+
+      const vol5 = new VolumeInMl(2);
+      expect(vol1.is(vol5)).toBe(false);
+    });
+
+    it('should not be equal to unknown if its known', () => {
+      const vol = new VolumeInMl(2);
+      const unk = new UnknownVolume();
+      expect(vol.is(unk)).toBe(false);
+    });
   });
 });
