@@ -36,7 +36,26 @@ describe('IntakeRecord', () => {
 
       const intakeRecord = new IntakeRecord(datetime, urineVolume);
 
-      expect(intakeRecord.getIntakeVolumeInMl()).toBe('8 mL');
+    });
+
+    it('should equal other record with same intake and datetime', () => {
+      const datetime1 = new DateAndTime(new Date(0));
+      const intakeVolume1 = new VolumeInMl(2);
+      const intake1 = new IntakeRecord(datetime1, intakeVolume1);
+      const datetime2 = new DateAndTime(new Date(0));
+      const intakeVolume2 = new VolumeInMl(2);
+      const intake2 = new IntakeRecord(datetime2, intakeVolume2);
+      expect(intake1.is(intake2)).toBe(true);
+
+      const datetime3 = new DateAndTime(new Date(3600000));
+      const intakeVolume3 = new VolumeInMl(2);
+      const intake3 = new IntakeRecord(datetime3, intakeVolume3);
+      expect(intake1.is(intake3)).toBe(false);
+
+      const datetime4 = new DateAndTime(new Date(0));
+      const intakeVolume4 = new VolumeInMl(0);
+      const intake4 = new IntakeRecord(datetime4, intakeVolume4);
+      expect(intake1.is(intake4)).toBe(false);
     });
   });
 });
