@@ -3,14 +3,13 @@ import { StyleSheet, View } from 'react-native';
 import { theme } from '@/view/theme';
 import { StatusBar } from '@/view/status-bar';
 import {
-  IntakeRecordRow,
-  VoidRecordRow,
   RecordCard,
   RecordSectionHeader,
   ViewRecordVisitor,
 } from '@/view/record-screen/components';
 import type { GetAllRecordsAction } from '@/application/GetAllRecordsAction';
 import type { Record } from '@/domain/models/Record';
+import { d3 } from '@/vendor/d3';
 
 export function factory(getAllRecordsAction: GetAllRecordsAction) {
   return function RecordScreen() {
@@ -20,8 +19,11 @@ export function factory(getAllRecordsAction: GetAllRecordsAction) {
       getAllRecordsAction.execute().then((v) => setRecords(v));
     }, []);
 
+    const byDate = d3.group(records, (r) => r.getDateString());
+    const [firstByDate] = records.length > 0 ? byDate.values() : [[]];
+
     const visitor = new ViewRecordVisitor();
-    records.forEach((r) => r.acceptVisitor(visitor));
+    firstByDate.forEach((r) => r.acceptVisitor(visitor));
     const cards = visitor
       .getRecordRows()
       .map(([r, k]) => (
@@ -31,14 +33,8 @@ export function factory(getAllRecordsAction: GetAllRecordsAction) {
     return (
       <View style={styles.container}>
         <StatusBar statusBarStyle="dark" color="transparent" />
-        <RecordSectionHeader date="Sept 9th 2022" />
-        <RecordCard
-          recordRow={<IntakeRecordRow volume="8oz" time="7:00 PM" />}
-          style={styles.card}
-        />
-        <RecordCard
-          recordRow={<VoidRecordRow volume="8oz" time="7:15 PM" />}
-          style={styles.card}
+        <RecordSectionHeader
+          date={records.length > 0 ? byDate.keys().next().value : 'Waiting...'}
         />
         {records.length > 0 && cards}
       </View>
