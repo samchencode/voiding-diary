@@ -1,5 +1,5 @@
 import { DateAndTime } from '@/domain/models/DateAndTime';
-import { IntakeRecord } from '@/domain/models/Record';
+import { fromRecordType, IntakeRecord } from '@/domain/models/Record';
 import { UnknownVolume, VolumeInMl } from '@/domain/models/Volume';
 
 describe('IntakeRecord', () => {
@@ -9,6 +9,14 @@ describe('IntakeRecord', () => {
       const intakeVolume = new VolumeInMl(2);
       const create = () => new IntakeRecord(datetime, intakeVolume);
       expect(create).not.toThrowError();
+    });
+
+    it('should create providing record type by string', () => {
+      const datetime = new DateAndTime(new Date(0));
+      const intakeVolume = new VolumeInMl(8);
+
+      const intakeRecord = fromRecordType('intake', datetime, intakeVolume);
+      expect(intakeRecord).toBeInstanceOf(IntakeRecord);
     });
   });
 

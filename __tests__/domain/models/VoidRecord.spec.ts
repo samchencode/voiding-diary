@@ -1,5 +1,5 @@
 import { DateAndTime } from '@/domain/models/DateAndTime';
-import { VoidRecord } from '@/domain/models/Record';
+import { fromRecordType, VoidRecord } from '@/domain/models/Record';
 import { UnknownVolume, VolumeInMl } from '@/domain/models/Volume';
 
 describe('VoidRecord', () => {
@@ -11,6 +11,14 @@ describe('VoidRecord', () => {
       const create = () => new VoidRecord(datetime, urineVolume);
 
       expect(create).not.toThrowError();
+    });
+
+    it('should create providing record type by string', () => {
+      const datetime = new DateAndTime(new Date(0));
+      const urineVolume = new VolumeInMl(8);
+
+      const voidRecord = fromRecordType('void', datetime, urineVolume);
+      expect(voidRecord).toBeInstanceOf(VoidRecord);
     });
   });
 
