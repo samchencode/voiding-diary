@@ -6,7 +6,11 @@ import type {
   VoidRecord,
   Record,
 } from '@/domain/models/Record';
-import { IntakeRecordRow, RecordCard } from '@/view/record-screen/components';
+import {
+  IntakeRecordRow,
+  RecordCard,
+  VoidRecordRow,
+} from '@/view/record-screen/components';
 
 type FilledRecordCardProps = {
   style?: StyleProp<ViewStyle>;
@@ -39,7 +43,7 @@ class ViewRecordVisitor implements RecordVisitor {
   visitVoidRecord(r: VoidRecord): void {
     this.key = makeKey(r);
     this.rowElement = (
-      <IntakeRecordRow
+      <VoidRecordRow
         key={this.key}
         volume={r.getUrineVolumeString()}
         time={r.getTimeString()}
