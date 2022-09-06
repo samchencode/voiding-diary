@@ -6,7 +6,7 @@ export function factory() {
   return function HomeScreen() {
     return (
       <View style={styles.container}>
-        <Text>Hello from HomeScreen!</Text>
+        <Text style={theme.fonts.lg}>Hello from HomeScreen!</Text>
       </View>
     );
   };
