@@ -33,16 +33,15 @@ Row.defaultProps = {
 };
 
 type RecordRowProps = {
-  label: string;
   volume?: string;
   time: string;
 };
 
-function IntakeRecordRow({ label, volume, time }: RecordRowProps) {
+function IntakeRecordRow({ volume, time }: RecordRowProps) {
   return (
     <Row
       iconName="glass-whiskey"
-      title={label}
+      title="Intake"
       subtitle={volume}
       rightText={time}
     />
@@ -51,9 +50,9 @@ function IntakeRecordRow({ label, volume, time }: RecordRowProps) {
 
 IntakeRecordRow.defaultProps = { volume: '' };
 
-function VoidRecordRow({ label, volume, time }: RecordRowProps) {
+function VoidRecordRow({ volume, time }: RecordRowProps) {
   return (
-    <Row iconName="toilet" title={label} subtitle={volume} rightText={time} />
+    <Row iconName="toilet" title="Void" subtitle={volume} rightText={time} />
   );
 }
 
