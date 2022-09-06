@@ -1,4 +1,5 @@
 import type { DateAndTime } from '@/domain/models/DateAndTime';
+import type { RecordVisitor } from '@/domain/models/Record/RecordVisitor';
 import type { RowSerializedRecord } from '@/domain/models/Record/RowSerializedRecord';
 
 abstract class Record {
@@ -16,6 +17,7 @@ abstract class Record {
     return this.dateAndTime.getTimeString();
   }
 
+  abstract acceptVisitor(visitor: RecordVisitor): void;
   abstract serialize(): RowSerializedRecord;
 }
 

@@ -6,3 +6,4 @@ export type {
   RowSerializedRecord,
   RecordType,
 } from '@/domain/models/Record/RowSerializedRecord';
+export type { RecordVisitor } from '@/domain/models/Record/RecordVisitor';

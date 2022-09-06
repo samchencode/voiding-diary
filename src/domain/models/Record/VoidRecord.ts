@@ -1,5 +1,6 @@
 import type { DateAndTime } from '@/domain/models/DateAndTime';
 import { Record } from '@/domain/models/Record/Record';
+import type { RecordVisitor } from '@/domain/models/Record/RecordVisitor';
 import type { RowSerializedRecord } from '@/domain/models/Record/RowSerializedRecord';
 import { RowSerializer } from '@/domain/models/Record/RowSerializer';
 import type { Volume } from '@/domain/models/Volume';
@@ -32,6 +33,10 @@ class VoidRecord extends Record {
       this.dateAndTime,
       this.urineVolume
     );
+  }
+
+  acceptVisitor(visitor: RecordVisitor): void {
+    visitor.visitVoidRecord(this);
   }
 }
 
