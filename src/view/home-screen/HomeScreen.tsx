@@ -1,11 +1,14 @@
+import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-const ComponentFactory = () => () => {
-  return (
-    <View style={styles.container}>
-      <Text>Hello from HomeScreen!</Text>
-    </View>
-  );
+function ComponentFactory() {
+  return function HomeScreen() {
+    return (
+      <View style={styles.container}>
+        <Text>Hello from HomeScreen!</Text>
+      </View>
+    );
+  };
 }
 
 const styles = StyleSheet.create({
