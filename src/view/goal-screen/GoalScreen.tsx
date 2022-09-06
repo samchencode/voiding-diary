@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { TargetSvg } from '@/view/goal-screen/TargetSvg';
+import { theme } from '@/view/theme';
 
 export function factory() {
   return function GoalScreen() {
@@ -19,7 +20,7 @@ export function factory() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: theme.colors.bg,
     alignItems: 'center',
     justifyContent: 'center',
   },
