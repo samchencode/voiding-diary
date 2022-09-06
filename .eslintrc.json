@@ -1,17 +1,16 @@
 {
   "env": {
-    "es2021": true,
-    "react-native/react-native": true
+    "es2021": true
   },
   "extends": [
+    "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:react/recommended",
     "airbnb",
     "airbnb/hooks",
     "airbnb-typescript",
-    "prettier",
-    "prettier/react"
+    "prettier"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -54,6 +53,7 @@
         "jsx": "never"
       }
     ],
-    "class-methods-use-this": "warn"
+    "class-methods-use-this": "warn",
+    "import/no-default-export": "error"
   }
 }
