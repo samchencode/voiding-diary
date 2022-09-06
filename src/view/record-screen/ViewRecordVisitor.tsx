@@ -75,6 +75,10 @@ class ViewRecordVisitor implements RecordVisitor {
   makeCardAndKey(): [(p: FilledRecordCardProps) => JSX.Element, string] {
     return [this.makeCard(), this.getKey()];
   }
+
+  static makeKey(r: Record) {
+    return makeKey(r);
+  }
 }
 
 export { ViewRecordVisitor };
