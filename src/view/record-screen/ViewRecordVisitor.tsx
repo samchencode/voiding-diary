@@ -1,11 +1,16 @@
 import React from 'react';
+import type { StyleProp, ViewStyle } from 'react-native';
 import type {
   IntakeRecord,
   RecordVisitor,
   VoidRecord,
   Record,
 } from '@/domain/models/Record';
-import { IntakeRecordRow } from '@/view/record-screen/components';
+import { IntakeRecordRow, RecordCard } from '@/view/record-screen/components';
+
+type FilledRecordCardProps = {
+  style?: StyleProp<ViewStyle>;
+};
 
 function makeKey(r: Record) {
   return Object.values(r.serialize()).join(',');
@@ -42,7 +47,7 @@ class ViewRecordVisitor implements RecordVisitor {
     );
   }
 
-  getElement() {
+  getRow() {
     if (!this.rowElement) throw Error();
     return this.rowElement;
   }
@@ -52,11 +57,23 @@ class ViewRecordVisitor implements RecordVisitor {
     return this.key;
   }
 
-  getElementAndKey() {
-    return {
-      element: this.getElement(),
-      key: this.getKey(),
+  makeCard() {
+    const row = this.getRow();
+    const key = this.getKey();
+
+    function FilledRecordCard({ style }: FilledRecordCardProps) {
+      return <RecordCard recordRow={row} style={style} key={key} />;
+    }
+
+    FilledRecordCard.defaultProps = {
+      style: {},
     };
+
+    return FilledRecordCard;
+  }
+
+  makeCardAndKey(): [(p: FilledRecordCardProps) => JSX.Element, string] {
+    return [this.makeCard(), this.getKey()];
   }
 }
 

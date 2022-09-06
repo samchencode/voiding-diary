@@ -3,10 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { d3 } from '@/vendor/d3';
 import { theme } from '@/view/theme';
 import { StatusBar } from '@/view/status-bar';
-import {
-  RecordCard,
-  RecordSectionHeader,
-} from '@/view/record-screen/components';
+import { RecordSectionHeader } from '@/view/record-screen/components';
 import type { GetAllRecordsAction } from '@/application/GetAllRecordsAction';
 import type { Record } from '@/domain/models/Record';
 import { ViewRecordVisitor } from '@/view/record-screen/ViewRecordVisitor';
@@ -23,10 +20,8 @@ export function factory(getAllRecordsAction: GetAllRecordsAction) {
     const [firstByDate] = records.length > 0 ? byDate.values() : [[]];
 
     const cards = firstByDate
-      .map((r) => new ViewRecordVisitor(r).getElementAndKey())
-      .map(({ element, key }) => (
-        <RecordCard recordRow={element} style={styles.card} key={key} />
-      ));
+      .map((r) => new ViewRecordVisitor(r).makeCardAndKey())
+      .map(([Card, key]) => <Card style={styles.card} key={key} />);
 
     return (
       <View style={styles.container}>
