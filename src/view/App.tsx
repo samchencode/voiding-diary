@@ -1,9 +1,9 @@
 import React from 'react';
-import type { Type as HomeScreen } from '@/view/home-screen';
+import type { Type as Router } from '@/view/Router';
 
-export function factory(HomeScreen: HomeScreen) {
+export function factory(Router: Router) {
   return function App() {
-    return <HomeScreen />;
+    return <Router />;
   };
 }
 
