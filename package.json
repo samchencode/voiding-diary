@@ -8,7 +8,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "test": "cross-env TZ=Europe/Greenwich jest --forceExit"
+    "test": "cross-env TZ=Europe/Greenwich jest"
   },
   "dependencies": {
     "didi": "^8.0.0",
