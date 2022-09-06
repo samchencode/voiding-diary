@@ -7,6 +7,9 @@ const colors = {
   bg: '#E2E9F3',
   primary: '#5074B1',
   accent: '#5CC2EA',
+  get surface() {
+    return this.light;
+  },
 };
 
 const fonts = {
