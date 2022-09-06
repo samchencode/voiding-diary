@@ -1,12 +1,13 @@
 import type { DateAndTime } from '@/domain/models/DateAndTime';
-import type { RowSerializedRecord } from '@/domain/models/Record/RowSerializedRecord';
+import type {
+  RowSerializedRecord,
+  RecordType,
+} from '@/domain/models/Record/RowSerializedRecord';
 import type { Volume } from '@/domain/models/Volume';
-
-type Type = RowSerializedRecord['type'];
 
 class RowSerializer {
   static serialize(
-    type: Type,
+    type: RecordType,
     dateAndTime: DateAndTime,
     volume: Volume
   ): RowSerializedRecord {
