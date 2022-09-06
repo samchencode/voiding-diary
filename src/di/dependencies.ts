@@ -1,7 +1,7 @@
 import App from '@/view/App';
 import HomeScreen from '@/view/home-screen';
 
-export default {
+export const module = {
   // VALUES
   foo: ['value', 'foo'],
 
