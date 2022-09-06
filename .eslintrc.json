@@ -54,6 +54,7 @@
       }
     ],
     "class-methods-use-this": "warn",
-    "import/no-default-export": "error"
+    "import/no-default-export": "error",
+    "import/exports-last": "error"
   }
 }
