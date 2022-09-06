@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { theme } from '@/view/theme';
 import { StatusBar } from '@/view/status-bar';
@@ -8,9 +8,17 @@ import {
   RecordCard,
   RecordSectionHeader,
 } from '@/view/record-screen/components';
+import type { GetAllRecordsAction } from '@/application/GetAllRecordsAction';
+import type { Record } from '@/domain/models/Record';
 
-export function factory() {
+export function factory(getAllRecordsAction: GetAllRecordsAction) {
   return function RecordScreen() {
+    const [records, setRecords] = useState<Record[]>([]);
+
+    useEffect(() => {
+      getAllRecordsAction.execute().then((v) => setRecords(v));
+    }, []);
+
     return (
       <View style={styles.container}>
         <StatusBar statusBarStyle="dark" color="transparent" />
@@ -27,6 +35,18 @@ export function factory() {
           }
           style={styles.card}
         />
+        {records.length > 0 && (
+          <RecordCard
+            recordRow={
+              <IntakeRecordRow
+                label="Intake"
+                volume="8oz"
+                time={records[0].getTimeString()}
+              />
+            }
+            style={styles.card}
+          />
+        )}
       </View>
     );
   };
