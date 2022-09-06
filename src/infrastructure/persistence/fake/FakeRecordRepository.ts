@@ -12,14 +12,14 @@ const mockDataToObject = (v: typeof mockData[0]) => {
 };
 
 class FakeRecordRepository implements RecordRepository {
-  // eslint-disable-next-line class-methods-use-this
+  mockData = mockData.slice();
+
   async getAll(): Promise<Record[]> {
-    return mockData.map(mockDataToObject);
+    return this.mockData.map(mockDataToObject);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   async getByDateInterval(startDate: Date, endDate: Date): Promise<Record[]> {
-    return mockData
+    return this.mockData
       .filter(
         (v) =>
           v.timestamp >= startDate.getTime() && v.timestamp <= endDate.getTime()
@@ -27,14 +27,12 @@ class FakeRecordRepository implements RecordRepository {
       .map(mockDataToObject);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   async getByLimitAndOffset(limit: number, offset: number): Promise<Record[]> {
-    return mockData.slice(offset, offset + limit).map(mockDataToObject);
+    return this.mockData.slice(offset, offset + limit).map(mockDataToObject);
   }
 
-  // eslint-disable-next-line class-methods-use-this
-  save(): Promise<void> {
-    throw new Error('Method not implemented.');
+  async save(record: Record): Promise<void> {
+    this.mockData.unshift(record.serialize());
   }
 }
 
