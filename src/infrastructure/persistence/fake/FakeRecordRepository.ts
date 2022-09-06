@@ -1,6 +1,6 @@
 import { DateAndTime } from '@/domain/models/DateAndTime';
-import type { Record } from '@/domain/models/Record';
-import { IntakeRecord, VoidRecord } from '@/domain/models/Record';
+import type { Record, RecordType } from '@/domain/models/Record';
+import { fromRecordType } from '@/domain/models/Record';
 import { fromNumericValue } from '@/domain/models/Volume';
 import type { RecordRepository } from '@/domain/ports/RecordRepository';
 import { mockData } from '@/infrastructure/persistence/fake/mockData';
@@ -8,9 +8,7 @@ import { mockData } from '@/infrastructure/persistence/fake/mockData';
 const mockDataToObject = (v: typeof mockData[0]) => {
   const dateAndTime = new DateAndTime(new Date(v.timestamp));
   const volume = fromNumericValue(v.volumeMl);
-  if (v.type === 'void') return new VoidRecord(dateAndTime, volume);
-  if (v.type === 'intake') return new IntakeRecord(dateAndTime, volume);
-  throw Error('Unknown record type');
+  return fromRecordType(v.type as RecordType, dateAndTime, volume);
 };
 
 class FakeRecordRepository implements RecordRepository {
