@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
+import type { InternMap } from 'd3-array';
 import { d3 } from '@/vendor/d3';
 import { theme } from '@/view/theme';
 import { StatusBar } from '@/view/status-bar';
@@ -10,26 +11,29 @@ import { ViewRecordVisitor } from '@/view/record-screen/ViewRecordVisitor';
 
 export function factory(getAllRecordsAction: GetAllRecordsAction) {
   return function RecordScreen() {
-    const [records, setRecords] = useState<Record[]>([]);
+    type Date = string;
+    type RecordsByDate = InternMap<Date, Record[]>;
+    const [records, setRecords] = useState<RecordsByDate>(new Map());
 
     useEffect(() => {
-      getAllRecordsAction.execute().then((v) => setRecords(v));
+      getAllRecordsAction
+        .execute()
+        .then((res) => d3.group(res, (r) => r.getDateString()))
+        .then((v) => setRecords(v));
     }, []);
 
-    const byDate = d3.group(records, (r) => r.getDateString());
-    const [firstByDate] = records.length > 0 ? byDate.values() : [[]];
+    const makeCardsForSection = (recordsForSection: Record[]) =>
+      recordsForSection
+        .map((r) => new ViewRecordVisitor(r).makeCardAndKey())
+        .map(([Card, key]) => <Card style={styles.card} key={key} />);
 
-    const cards = firstByDate
-      .map((r) => new ViewRecordVisitor(r).makeCardAndKey())
-      .map(([Card, key]) => <Card style={styles.card} key={key} />);
+    const cards = Array.from(records.values()).flatMap(makeCardsForSection);
 
     return (
       <View style={styles.container}>
         <StatusBar statusBarStyle="dark" color="transparent" />
-        <RecordSectionHeader
-          date={records.length > 0 ? byDate.keys().next().value : 'Waiting...'}
-        />
-        {records.length > 0 && cards}
+        <RecordSectionHeader date="Placeholder" />
+        {records.size > 0 && cards}
       </View>
     );
   };
