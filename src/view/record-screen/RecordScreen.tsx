@@ -4,12 +4,14 @@ import { theme } from '@/view/theme';
 import { StatusBar } from '@/view/status-bar';
 import { IntakeRecordRow, VoidRecordRow } from '@/view/record-screen/RecordRow';
 import { RecordCard } from '@/view/record-screen/RecordCard';
+import { RecordSectionHeader } from '@/view/record-screen/SectionHeader';
 
 export function factory() {
   return function RecordScreen() {
     return (
       <View style={styles.container}>
         <StatusBar statusBarStyle="dark" color="transparent" />
+        <RecordSectionHeader date="Sept 9th 2022" />
         <RecordCard
           recordRow={
             <IntakeRecordRow label="Example" volume="8oz" time="7:00 PM" />
