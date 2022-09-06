@@ -2,9 +2,12 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { theme } from '@/view/theme';
 import { StatusBar } from '@/view/status-bar';
-import { IntakeRecordRow, VoidRecordRow } from '@/view/record-screen/RecordRow';
-import { RecordCard } from '@/view/record-screen/RecordCard';
-import { RecordSectionHeader } from '@/view/record-screen/SectionHeader';
+import {
+  IntakeRecordRow,
+  VoidRecordRow,
+  RecordCard,
+  RecordSectionHeader,
+} from '@/view/record-screen/components';
 
 export function factory() {
   return function RecordScreen() {
