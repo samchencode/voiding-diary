@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { d3 } from '@/vendor/d3';
 import { theme } from '@/view/theme';
 import { StatusBar } from '@/view/status-bar';
 import {
   RecordCard,
   RecordSectionHeader,
-  ViewRecordVisitor,
 } from '@/view/record-screen/components';
 import type { GetAllRecordsAction } from '@/application/GetAllRecordsAction';
 import type { Record } from '@/domain/models/Record';
-import { d3 } from '@/vendor/d3';
+import { ViewRecordVisitor } from '@/view/record-screen/ViewRecordVisitor';
 
 export function factory(getAllRecordsAction: GetAllRecordsAction) {
   return function RecordScreen() {
@@ -22,12 +22,10 @@ export function factory(getAllRecordsAction: GetAllRecordsAction) {
     const byDate = d3.group(records, (r) => r.getDateString());
     const [firstByDate] = records.length > 0 ? byDate.values() : [[]];
 
-    const visitor = new ViewRecordVisitor();
-    firstByDate.forEach((r) => r.acceptVisitor(visitor));
-    const cards = visitor
-      .getRecordRows()
-      .map(([r, k]) => (
-        <RecordCard recordRow={r} style={styles.card} key={k} />
+    const cards = firstByDate
+      .map((r) => new ViewRecordVisitor(r).getElementAndKey())
+      .map(({ element, key }) => (
+        <RecordCard recordRow={element} style={styles.card} key={key} />
       ));
 
     return (
