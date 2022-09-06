@@ -18,7 +18,7 @@ function NumericInput({ style, placeholder }: NumericInputProps) {
   );
 }
 
-export function TimeInput() {
+function TimeInput() {
   return (
     <View style={styles.inputContainer}>
       <NumericInput style={styles.timeInputField} placeholder="hh" />
@@ -28,7 +28,7 @@ export function TimeInput() {
   );
 }
 
-export function IntakeInput() {
+function IntakeInput() {
   return (
     <View style={styles.inputContainer}>
       <NumericInput style={styles.intakeInputField} placeholder="32" />
@@ -63,3 +63,5 @@ const styles = StyleSheet.create({
     ...theme.fonts.mdBold,
   },
 });
+
+export { TimeInput, IntakeInput };

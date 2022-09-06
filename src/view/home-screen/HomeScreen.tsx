@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { theme } from '@/view/theme';
 
-export function factory() {
+function factory() {
   return function HomeScreen() {
     return (
       <View style={styles.container}>
@@ -22,3 +22,4 @@ const styles = StyleSheet.create({
 });
 
 export type Type = ReturnType<typeof factory>;
+export { factory };

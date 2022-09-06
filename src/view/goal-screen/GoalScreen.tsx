@@ -12,7 +12,7 @@ import { Card, Button } from '@/view/components';
 import { IntakeInput, TimeInput } from '@/view/goal-screen/components';
 import { StatusBar } from '@/view/status-bar';
 
-export function factory() {
+function factory() {
   return function GoalScreen() {
     const { width } = useWindowDimensions();
     const svgWidth = Math.min(width, 400);
@@ -77,3 +77,4 @@ const styles = StyleSheet.create({
 });
 
 export type Type = ReturnType<typeof factory>;
+export { factory };

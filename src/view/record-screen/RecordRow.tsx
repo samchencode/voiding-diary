@@ -38,7 +38,7 @@ type RecordRowProps = {
   time: string;
 };
 
-export function IntakeRecordRow({ label, volume, time }: RecordRowProps) {
+function IntakeRecordRow({ label, volume, time }: RecordRowProps) {
   return (
     <Row
       iconName="glass-whiskey"
@@ -51,7 +51,7 @@ export function IntakeRecordRow({ label, volume, time }: RecordRowProps) {
 
 IntakeRecordRow.defaultProps = { volume: '' };
 
-export function VoidRecordRow({ label, volume, time }: RecordRowProps) {
+function VoidRecordRow({ label, volume, time }: RecordRowProps) {
   return (
     <Row iconName="toilet" title={label} subtitle={volume} rightText={time} />
   );
@@ -84,3 +84,5 @@ export const styles = StyleSheet.create({
     textAlign: 'right',
   },
 });
+
+export { IntakeRecordRow, VoidRecordRow };

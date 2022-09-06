@@ -9,7 +9,7 @@ type RecordCardProps = {
   style?: StyleProp<ViewStyle>;
 };
 
-export function RecordCard({ recordRow, style }: RecordCardProps) {
+function RecordCard({ recordRow, style }: RecordCardProps) {
   return <Card style={[styles.card, style]}>{recordRow}</Card>;
 }
 
@@ -22,3 +22,5 @@ const styles = StyleSheet.create({
     padding: theme.spaces.xs,
   },
 });
+
+export { RecordCard };

@@ -9,7 +9,7 @@ type CardProps = {
   onLayout?: (e: LayoutChangeEvent) => void;
 };
 
-export function Card({ children, style, onLayout }: CardProps) {
+function Card({ children, style, onLayout }: CardProps) {
   return (
     <View style={[styles.card, style]} onLayout={onLayout}>
       {children}
@@ -34,3 +34,5 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
   },
 });
+
+export { Card };
