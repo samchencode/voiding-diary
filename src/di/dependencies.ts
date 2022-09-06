@@ -1,4 +1,4 @@
-import { factory as App } from '@/view/App';
+import { factory as App } from '@/view/app';
 import { factory as Router } from '@/view/router';
 import { factory as HomeScreen } from '@/view/home-screen';
 import { factory as GoalScreen } from '@/view/goal-screen';
