@@ -1,5 +1,5 @@
-import App from '@/view/App';
-import HomeScreen from '@/view/home-screen';
+import { factory as App } from '@/view/App';
+import { factory as HomeScreen } from '@/view/home-screen';
 
 export const module = {
   // VALUES

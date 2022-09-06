@@ -3,8 +3,6 @@
     "react-native/react-native": true
   },
   "rules": {
-    // allow exporting components as default
-    "import/no-default-export": "off",
     // prevent eslint to complain about the "styles" variable being used before it was defined
     "@typescript-eslint/no-use-before-define": [
       "error",

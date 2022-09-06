@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-function ComponentFactory() {
+export function factory() {
   return function HomeScreen() {
     return (
       <View style={styles.container}>
@@ -20,7 +20,4 @@ const styles = StyleSheet.create({
   },
 });
 
-type Type = ReturnType<typeof ComponentFactory>;
-
-export default ComponentFactory;
-export type { Type };
+export type Type = ReturnType<typeof factory>;
