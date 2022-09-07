@@ -21,7 +21,7 @@ function StatusBar({ color, statusBarStyle, elevated }: StatusBarProps) {
         style={{
           backgroundColor: color,
           height: Constants.statusBarHeight,
-          ...(elevated && { elevation: 5 }),
+          ...(elevated && { elevation: 1, zIndex: 1 }),
         }}
       />
       {isFocused ? <StatusBarControl style={statusBarStyle} /> : null}
