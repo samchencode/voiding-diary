@@ -13,7 +13,7 @@ function ListHeaderComponent() {
     <View>
       <StatusBar statusBarStyle="dark" color="transparent" />
       <ParkSvg width={svgWidth} height={svgHeight} style={styles.svg} />
-      <Text style={styles.title}>History</Text>
+      <Text style={styles.title}>Records</Text>
     </View>
   );
 }
@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
   title: {
     ...theme.fonts.lg,
     marginBottom: theme.spaces.sm,
+    textAlign: 'right',
   },
 });
 

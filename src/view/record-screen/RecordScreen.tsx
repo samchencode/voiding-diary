@@ -31,6 +31,7 @@ export function factory(getAllRecordsAction: GetAllRecordsAction) {
     return (
       <View style={styles.container}>
         <SectionList
+          style={styles.list}
           sections={sections}
           renderItem={({ item }) => {
             const Card = new ViewRecordVisitor(item).makeCard();
@@ -51,6 +52,8 @@ export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: theme.colors.bg,
+  },
+  list: {
     paddingLeft: theme.spaces.lg,
     paddingRight: theme.spaces.lg,
   },
