@@ -9,7 +9,7 @@ import {
 } from '@/view/record-screen/components';
 import type { GetAllRecordsAction } from '@/application/GetAllRecordsAction';
 import type { Record } from '@/domain/models/Record';
-import { ViewRecordVisitor } from '@/view/record-screen/ViewRecordVisitor';
+import { ViewRecordVisitor } from '@/view/lib';
 
 export function factory(getAllRecordsAction: GetAllRecordsAction) {
   return function RecordScreen() {
