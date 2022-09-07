@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, useWindowDimensions, StyleSheet } from 'react-native';
 import { theme } from '@/view/theme';
 import { StatusBar } from '@/view/status-bar';
-import { ParkSvg } from '@/view/record-screen/ParkSvg';
+import { ParkSvg } from '@/view/record-screen/svg';
 
 function ListHeaderComponent() {
   const { width } = useWindowDimensions();

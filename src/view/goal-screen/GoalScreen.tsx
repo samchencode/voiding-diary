@@ -6,7 +6,7 @@ import {
   ScrollView,
   useWindowDimensions,
 } from 'react-native';
-import { TargetSvg } from '@/view/goal-screen/TargetSvg';
+import { TargetSvg } from '@/view/goal-screen/svg';
 import { theme } from '@/view/theme';
 import { Card, Button } from '@/view/components';
 import { IntakeInput, TimeInput } from '@/view/goal-screen/components';
