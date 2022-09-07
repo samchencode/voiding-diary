@@ -1,7 +1,11 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { theme } from '@/view/theme';
-import { LoggerButtonGroup, Timer } from '@/view/home-screen/components';
+import {
+  IntakeChart,
+  LoggerButtonGroup,
+  Timer,
+} from '@/view/home-screen/components';
 import { StatusBar } from '@/view/status-bar';
 
 function factory() {
@@ -27,6 +31,7 @@ function factory() {
             onPressIntake={() => alert('pressed intake')}
             onPressVoid={() => alert('pressed void')}
           />
+          <IntakeChart style={styles.item} goal={32} intake={8} />
         </View>
       </View>
     );
@@ -39,6 +44,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.bg,
   },
   cardContainer: {
+    marginTop: theme.spaces.lg,
     marginLeft: theme.spaces.lg,
     marginRight: theme.spaces.lg,
   },
