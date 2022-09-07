@@ -6,11 +6,8 @@ import type {
   VoidRecord,
   Record,
 } from '@/domain/models/Record';
-import {
-  IntakeRecordRow,
-  RecordCard,
-  VoidRecordRow,
-} from '@/view/record-screen/components';
+import { RecordCard } from '@/view/record-screen/components';
+import { VoidRecordRow, IntakeRecordRow } from '@/view/components';
 
 type FilledRecordCardProps = {
   style?: StyleProp<ViewStyle>;
