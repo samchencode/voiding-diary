@@ -1,6 +1,6 @@
 import type { Record, RowSerializedRecord } from '@/domain/models/Record';
 import type { RecordRepository } from '@/domain/ports/RecordRepository';
-import { hydrateRowSerializedRecord } from '@/infrastructure/persistence/expo-sqlite/hydrateRecord';
+import { hydrateRowSerializedRecord } from '@/domain/services/hydrateRecord';
 import type { WebSQLDatabase, SQLTransaction, SQLResultSet } from 'expo-sqlite';
 
 class ExpoSqliteRecordRepository implements RecordRepository {
