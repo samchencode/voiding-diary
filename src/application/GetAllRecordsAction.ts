@@ -2,7 +2,7 @@ import type { Record } from '@/domain/models/Record';
 import type { RecordRepository } from '@/domain/ports/RecordRepository';
 
 class GetAllRecordsAction {
-  repo: RecordRepository;
+  private repo: RecordRepository;
 
   constructor(recordRepository: RecordRepository) {
     this.repo = recordRepository;

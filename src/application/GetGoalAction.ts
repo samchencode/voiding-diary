@@ -1,7 +1,7 @@
 import type { GoalRepository } from '@/domain/ports/GoalRepository';
 
 class GetGoalAction {
-  repo: GoalRepository;
+  private repo: GoalRepository;
 
   constructor(goalRepository: GoalRepository) {
     this.repo = goalRepository;
