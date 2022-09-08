@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import type { ViewStyle, StyleProp } from 'react-native';
 import { TextInput, StyleSheet } from 'react-native';
 import { theme } from '@/view/theme';
@@ -8,6 +8,7 @@ import {
   validateIntegerString,
   valueToString,
 } from '@/view/goal-screen/components/Input/util';
+import { FocusContext } from '@/view/goal-screen/components/Input/FocusContext';
 
 type NumericInputProps = {
   style: StyleProp<ViewStyle>;
@@ -39,12 +40,27 @@ function IntegerInput({
     return undefined;
   };
 
-  const pad = () => {
-    if (fieldValue === '') return;
-    if (shouldPadZeroes && fieldValue.length < maxDigits) {
+  const { hasFocus, setHasFocus } = useContext(FocusContext);
+
+  const handleBlur = () => {
+    if (fieldValue === '') {
+      onChangeNumber(0);
+    } else if (shouldPadZeroes && fieldValue.length < maxDigits) {
       setFieldValue(padZero(fieldValue, maxDigits));
     }
   };
+
+  const handleFocus = () => {
+    setHasFocus(true);
+  };
+
+  const input = useRef<TextInput>(null);
+
+  useEffect(() => {
+    if (!hasFocus && input.current) {
+      input.current.blur();
+    }
+  }, [hasFocus]);
 
   return (
     <TextInput
@@ -53,8 +69,10 @@ function IntegerInput({
       placeholder={placeholder}
       value={resolveFieldValue(shouldPadZeroes, maxDigits, fieldValue, value)}
       onChangeText={validateAndRunCallback}
-      onBlur={pad}
+      onBlur={handleBlur}
+      onFocus={handleFocus}
       maxLength={maxDigits}
+      ref={input}
     />
   );
 }

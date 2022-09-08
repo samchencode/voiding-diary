@@ -9,38 +9,52 @@ import {
 import { TargetSvg } from '@/view/goal-screen/svg';
 import { theme } from '@/view/theme';
 import { Card, Button } from '@/view/components';
-import { IntakeInput, TimeInput } from '@/view/goal-screen/components';
+import {
+  IntakeInput,
+  TimeInput,
+  InputRoot,
+} from '@/view/goal-screen/components';
 import { StatusBar } from '@/view/status-bar';
 
 function factory() {
   return function GoalScreen() {
-    const { width } = useWindowDimensions();
+    const { width, height } = useWindowDimensions();
     const svgWidth = Math.min(width, 400);
     const svgHeight = (svgWidth * 2) / 3;
+
+    const inputRoot = React.useRef<InputRoot>(null);
+
+    const handlePress = () => {
+      if (inputRoot.current) inputRoot.current.blur();
+    };
 
     return (
       <ScrollView
         style={styles.container}
         contentContainerStyle={styles.contentContainer}
       >
-        <StatusBar statusBarStyle="dark" color="transparent" />
-        <TargetSvg width={svgWidth} height={svgHeight} style={styles.svg} />
-        <Card style={styles.card}>
-          <Text style={styles.title}>Set Goals</Text>
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>AM Void Interval</Text>
-            <TimeInput />
+        <InputRoot ref={inputRoot}>
+          <View style={{ minHeight: height }}>
+            <StatusBar statusBarStyle="dark" color="transparent" />
+            <TargetSvg width={svgWidth} height={svgHeight} style={styles.svg} />
+            <Card style={styles.card}>
+              <Text style={styles.title}>Set Goals</Text>
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>AM Void Interval</Text>
+                <TimeInput />
+              </View>
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>PM Void Interval</Text>
+                <TimeInput />
+              </View>
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Daily Intake</Text>
+                <IntakeInput />
+              </View>
+              <Button.Success title="Set" onPress={handlePress} />
+            </Card>
           </View>
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>PM Void Interval</Text>
-            <TimeInput />
-          </View>
-          <View style={styles.inputGroup}>
-            <Text style={styles.label}>Daily Intake</Text>
-            <IntakeInput />
-          </View>
-          <Button.Success title="Set" onPress={() => {}} />
-        </Card>
+        </InputRoot>
       </ScrollView>
     );
   };
