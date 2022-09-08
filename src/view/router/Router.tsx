@@ -5,6 +5,7 @@ import type { Type as HomeScreen } from '@/view/home-screen';
 import type { Type as GoalScreen } from '@/view/goal-screen';
 import type { Type as RecordScreen } from '@/view/record-screen';
 import { makeIcon } from '@/view/router/makeIcon';
+import { theme } from '@/view/theme';
 
 const Tab = createBottomTabNavigator();
 
@@ -22,7 +23,11 @@ export function factory(
       <NavigationContainer>
         <Tab.Navigator
           initialRouteName="Home"
-          screenOptions={{ headerShown: false }}
+          screenOptions={{
+            headerShown: false,
+            tabBarActiveTintColor: theme.colors.primary,
+            tabBarInactiveTintColor: theme.colors.gray,
+          }}
         >
           <Tab.Screen
             name="Goal"
