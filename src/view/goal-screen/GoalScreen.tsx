@@ -15,8 +15,10 @@ import {
   InputRoot,
 } from '@/view/goal-screen/components';
 import { StatusBar } from '@/view/status-bar';
+import type { GetGoalAction } from '@/application/GetGoalAction';
+import { useGoal } from '@/view/goal-screen/useGoal';
 
-function factory() {
+function factory(getGoalAction: GetGoalAction) {
   return function GoalScreen() {
     const { width, height } = useWindowDimensions();
     const svgWidth = Math.min(width, 400);
@@ -27,6 +29,14 @@ function factory() {
     const handlePress = () => {
       if (inputRoot.current) inputRoot.current.blur();
     };
+
+    const [
+      [amInterval, setAmInterval],
+      [pmInterval, setPmInterval],
+      [volume, setVolume],
+    ] = useGoal(getGoalAction);
+
+    // Remember to validate for undef before implementing saveGoalAction
 
     return (
       <ScrollView
@@ -41,15 +51,15 @@ function factory() {
               <Text style={styles.title}>Set Goals</Text>
               <View style={styles.inputGroup}>
                 <Text style={styles.label}>AM Void Interval</Text>
-                <TimeInput />
+                <TimeInput value={amInterval} onChangeValue={setAmInterval} />
               </View>
               <View style={styles.inputGroup}>
                 <Text style={styles.label}>PM Void Interval</Text>
-                <TimeInput />
+                <TimeInput value={pmInterval} onChangeValue={setPmInterval} />
               </View>
               <View style={styles.inputGroup}>
                 <Text style={styles.label}>Daily Intake</Text>
-                <IntakeInput />
+                <IntakeInput value={volume} onChangeNumber={setVolume} />
               </View>
               <Button.Success title="Set" onPress={handlePress} />
             </Card>

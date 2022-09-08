@@ -4,14 +4,18 @@ import { factory as HomeScreen } from '@/view/home-screen';
 import { factory as GoalScreen } from '@/view/goal-screen';
 import { factory as RecordScreen } from '@/view/record-screen';
 import { GetAllRecordsAction } from '@/application/GetAllRecordsAction';
+import { GetGoalAction } from '@/application/GetGoalAction';
 import { FakeRecordRepository } from '@/infrastructure/persistence/fake/FakeRecordRepository';
+import { FakeGoalRepository } from '@/infrastructure/persistence/fake/FakeGoalRepository';
 
 export const module = {
   // APPLICATION SERVICES
   getAllRecordsAction: ['type', GetAllRecordsAction],
+  getGoalAction: ['type', GetGoalAction],
 
   // INFRASTRUCTURE
   recordRepository: ['type', FakeRecordRepository],
+  goalRepository: ['type', FakeGoalRepository],
 
   // VALUES
   foo: ['value', 'foo'],

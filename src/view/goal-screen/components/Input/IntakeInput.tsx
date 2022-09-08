@@ -3,14 +3,20 @@ import { View, Text, StyleSheet } from 'react-native';
 import { theme } from '@/view/theme';
 import { IntegerInput } from '@/view/goal-screen/components/Input/IntegerInput';
 
-function IntakeInput() {
+type IntakeTypeProps = {
+  value: number | undefined;
+  onChangeNumber: (n: number) => void;
+};
+
+function IntakeInput({ value, onChangeNumber }: IntakeTypeProps) {
   return (
     <View style={styles.inputContainer}>
       <IntegerInput
+        value={value}
         style={styles.intakeInputField}
         placeholder="32"
         maxDigits={4}
-        onChangeNumber={() => {}}
+        onChangeNumber={onChangeNumber}
       />
       <Text style={styles.intakeUnits}> oz</Text>
     </View>

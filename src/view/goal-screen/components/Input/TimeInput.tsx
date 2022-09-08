@@ -3,23 +3,35 @@ import { View, Text, StyleSheet } from 'react-native';
 import { theme } from '@/view/theme';
 import { IntegerInput } from '@/view/goal-screen/components/Input/IntegerInput';
 
-function TimeInput() {
+type HhSs = [number | undefined, number | undefined];
+
+type TimeInputProps = {
+  value: HhSs;
+  onChangeValue: (v: HhSs) => void;
+};
+
+function TimeInput({ value, onChangeValue }: TimeInputProps) {
+  const handleChangeHh = (n: number) => onChangeValue([value[0], n]);
+  const handleChangeSs = (n: number) => onChangeValue([n, value[1]]);
+
   return (
     <View style={styles.inputContainer}>
       <IntegerInput
+        value={value[0]}
         style={styles.timeInputField}
         placeholder="hh"
         maxDigits={2}
         shouldPadZeroes
-        onChangeNumber={() => {}}
+        onChangeNumber={handleChangeHh}
       />
       <Text style={[styles.input, styles.timeInputColon]}>:</Text>
       <IntegerInput
+        value={value[1]}
         style={styles.timeInputField}
         placeholder="mm"
         maxDigits={2}
         shouldPadZeroes
-        onChangeNumber={() => {}}
+        onChangeNumber={handleChangeSs}
       />
     </View>
   );
