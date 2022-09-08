@@ -61,7 +61,11 @@ function factory(getGoalAction: GetGoalAction) {
                 <Text style={styles.label}>Daily Intake</Text>
                 <IntakeInput value={volume} onChangeNumber={setVolume} />
               </View>
-              <Button.Success title="Set" onPress={handlePress} />
+              <Button
+                title="Set"
+                onPress={handlePress}
+                backgroundColor={theme.colors.accent}
+              />
             </Card>
           </View>
         </InputRoot>
