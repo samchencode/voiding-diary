@@ -26,7 +26,8 @@ describe('GetGoalAction', () => {
         am: new TimeInMins(180),
         pm: new TimeInMins(240),
       });
-      const repo = new FakeGoalRepository(goal);
+      const repo = new FakeGoalRepository();
+      repo.fakeValue = goal;
       const action = new GetGoalAction(repo);
       const result = await action.execute();
       expect(result.is(goal)).toBe(true);

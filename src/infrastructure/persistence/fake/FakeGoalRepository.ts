@@ -5,10 +5,6 @@ import { GoalNotFoundError } from '@/infrastructure/persistence/fake/GoalNotFoun
 class FakeGoalRepository implements GoalRepository {
   fakeValue?: Goal;
 
-  constructor(goal?: Goal) {
-    this.fakeValue = goal;
-  }
-
   async get(): Promise<Goal> {
     if (!this.fakeValue) throw new GoalNotFoundError();
     return this.fakeValue;
