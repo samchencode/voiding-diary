@@ -10,19 +10,25 @@ import {
 } from '@/view/record-screen/components';
 import type { GetAllRecordsAction } from '@/application/GetAllRecordsAction';
 import type { Record } from '@/domain/models/Record';
-import { ViewRecordVisitor } from '@/view/lib';
+import { RecordsStaleObservable, ViewRecordVisitor } from '@/view/lib';
 
 export function factory(getAllRecordsAction: GetAllRecordsAction) {
+  const getAndGroupRecords = async () =>
+    getAllRecordsAction
+      .execute()
+      .then((res) => d3.group(res, (r) => r.getDateString()));
+
   return function RecordScreen() {
     type Date = string;
     type RecordsByDate = InternMap<Date, Record[]>;
     const [records, setRecords] = useState<RecordsByDate>(new Map());
 
+    RecordsStaleObservable.subscribe(() => {
+      getAndGroupRecords().then((v) => setRecords(v));
+    });
+
     useEffect(() => {
-      getAllRecordsAction
-        .execute()
-        .then((res) => d3.group(res, (r) => r.getDateString()))
-        .then((v) => setRecords(v));
+      getAndGroupRecords().then((v) => setRecords(v));
     }, []);
 
     const sections = Array.from(records).map(([title, data]) => ({

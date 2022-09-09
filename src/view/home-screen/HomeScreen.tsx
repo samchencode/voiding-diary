@@ -12,21 +12,27 @@ import { StatusBar } from '@/view/status-bar';
 import type { SaveRecordAction } from '@/application/SaveRecordAction';
 import { DateAndTime } from '@/domain/models/DateAndTime';
 import { VolumeInMl } from '@/domain/models/Volume';
+import type { Record } from '@/domain/models/Record';
 import { IntakeRecord, VoidRecord } from '@/domain/models/Record';
+import { RecordsStaleObservable } from '@/view/lib';
+
+const makeIntake = () => {
+  const datetime = new DateAndTime(new Date());
+  const volume = new VolumeInMl(30);
+  return new IntakeRecord(datetime, volume);
+};
+
+const makeVoid = () => {
+  const datetime = new DateAndTime(new Date());
+  const volume = new VolumeInMl(30);
+  return new VoidRecord(datetime, volume);
+};
 
 function factory(saveRecordAction: SaveRecordAction) {
-  async function handleNewIntakeRecord() {
-    const datetime = new DateAndTime(new Date());
-    const volume = new VolumeInMl(30);
-    const record = new IntakeRecord(datetime, volume);
-    return saveRecordAction.execute(record);
-  }
-
-  async function handleNewVoidRecord() {
-    const datetime = new DateAndTime(new Date());
-    const volume = new VolumeInMl(30);
-    const record = new VoidRecord(datetime, volume);
-    return saveRecordAction.execute(record);
+  async function handleNewRecord(makeRecord: () => Record) {
+    const record = makeRecord();
+    await saveRecordAction.execute(record);
+    RecordsStaleObservable.notifyAll();
   }
 
   return function HomeScreen() {
@@ -48,15 +54,15 @@ function factory(saveRecordAction: SaveRecordAction) {
             elevated
           />
           <Timer
-            onPress={() => handleNewVoidRecord()}
+            onPress={() => handleNewRecord(makeVoid)}
             timeElapsedMs={timeElapsed}
             timeRemainingMs={timeRemaining}
           />
           <View style={styles.cardContainer}>
             <LoggerButtonGroup
               style={styles.item}
-              onPressIntake={() => handleNewIntakeRecord()}
-              onPressVoid={() => handleNewVoidRecord()}
+              onPressIntake={() => handleNewRecord(makeIntake)}
+              onPressVoid={() => handleNewRecord(makeVoid)}
             />
             <IntakeChart style={styles.item} goal={32} intake={8} />
             <RecentRecordList
