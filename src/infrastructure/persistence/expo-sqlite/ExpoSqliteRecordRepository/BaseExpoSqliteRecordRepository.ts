@@ -85,7 +85,7 @@ class BaseExpoSqliteRecordRepository implements RecordRepository {
   async save(record: Record): Promise<void> {
     const serialized = record.serialize();
     await this.executeSqlAndHydrate(
-      'INSERT INTO records (type, volumeMl, timestamp) VALUES (?,?,?);',
+      "INSERT INTO records (type, volumeMl, timestamp) VALUES ('?',?,?);",
       [serialized.type, serialized.volumeMl, serialized.timestamp]
     );
   }
