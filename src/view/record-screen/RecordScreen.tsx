@@ -23,12 +23,11 @@ export function factory(getAllRecordsAction: GetAllRecordsAction) {
     type RecordsByDate = InternMap<Date, Record[]>;
     const [records, setRecords] = useState<RecordsByDate>(new Map());
 
-    RecordsStaleObservable.subscribe(() => {
-      getAndGroupRecords().then((v) => setRecords(v));
-    });
-
     useEffect(() => {
       getAndGroupRecords().then((v) => setRecords(v));
+      RecordsStaleObservable.subscribe(() => {
+        getAndGroupRecords().then((v) => setRecords(v));
+      });
     }, []);
 
     const sections = Array.from(records).map(([title, data]) => ({
