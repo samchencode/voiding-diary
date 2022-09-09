@@ -46,7 +46,12 @@ function factory(getGoalAction: GetGoalAction) {
         <InputRoot ref={inputRoot}>
           <View style={{ minHeight: height }}>
             <StatusBar statusBarStyle="dark" color="transparent" />
-            <TargetSvg width={svgWidth} height={svgHeight} style={styles.svg} />
+            <TargetSvg
+              width={svgWidth}
+              height={svgHeight}
+              style={styles.svg}
+              themeColor={theme.colors.primary}
+            />
             <Card style={styles.card}>
               <Text style={styles.title}>Set Goals</Text>
               <View style={styles.inputGroup}>

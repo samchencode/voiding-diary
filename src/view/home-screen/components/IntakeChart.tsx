@@ -57,7 +57,7 @@ function IntakeChart({ goal, intake, style }: IntakeChartProps) {
           rx={barHeight / 2}
           width={scaleX(data.intake)}
           height={barHeight}
-          fill={theme.colors.accent}
+          fill={theme.colors.primary}
         />
         <Line
           x1={scaleX(data.goal)}

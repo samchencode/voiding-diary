@@ -12,7 +12,12 @@ function ListHeaderComponent() {
   return (
     <View>
       <StatusBar statusBarStyle="dark" color="transparent" />
-      <ParkSvg width={svgWidth} height={svgHeight} style={styles.svg} />
+      <ParkSvg
+        width={svgWidth}
+        height={svgHeight}
+        style={styles.svg}
+        themeColor={theme.colors.primary}
+      />
       <Text style={styles.title}>Records</Text>
     </View>
   );
