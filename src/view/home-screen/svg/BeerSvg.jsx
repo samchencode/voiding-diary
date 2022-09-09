@@ -11,6 +11,7 @@ function BeerSvg({ themeColor = '#5CC2EA', ...rest }) {
       width={841.547}
       height={739}
       viewBox="0 0 841.547 739"
+      pointerEvents="none"
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...rest}
     >

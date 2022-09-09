@@ -23,6 +23,7 @@ function PassingBySvg({ themeColor = '#5CC2EA', ...rest }) {
       viewBox="0 0 662.59 772.47"
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...rest}
+      pointerEvents="none"
     >
       <Defs>
         <LinearGradient
