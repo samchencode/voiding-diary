@@ -5,11 +5,11 @@ import { factory as GoalScreen } from '@/view/goal-screen';
 import { factory as RecordScreen } from '@/view/record-screen';
 import { GetAllRecordsAction } from '@/application/GetAllRecordsAction';
 import { GetGoalAction } from '@/application/GetGoalAction';
-import { FakeRecordRepository } from '@/infrastructure/persistence/fake/FakeRecordRepository';
 import { FakeGoalRepository } from '@/infrastructure/persistence/fake/FakeGoalRepository';
 import { expoSqliteDatabaseFactory } from '@/infrastructure/persistence/expo-sqlite/expoSqliteDatabaseFactory';
 import { SaveRecordAction } from '@/application/SaveRecordAction';
 import { GetTodaysRecordsAction } from '@/application/GetTodaysRecordsAction';
+import { ExpoSqliteRecordRepository } from '@/infrastructure/persistence/expo-sqlite/ExpoSqliteRecordRepository';
 
 export const module = {
   // APPLICATION SERVICES
@@ -19,7 +19,7 @@ export const module = {
   getGoalAction: ['type', GetGoalAction],
 
   // INFRASTRUCTURE
-  recordRepository: ['type', FakeRecordRepository],
+  recordRepository: ['type', ExpoSqliteRecordRepository],
   goalRepository: ['type', FakeGoalRepository],
 
   expoSqliteDatabase: ['factory', expoSqliteDatabaseFactory],
