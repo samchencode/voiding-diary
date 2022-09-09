@@ -18,7 +18,7 @@ function RecentRecordList({ records, style }: RecentRecordListProps) {
 
   return (
     <Card style={[styles.container, style]}>
-      <Text style={styles.title}>Recent</Text>
+      <Text style={styles.title}>Today</Text>
       {!isEmpty ? <View>{rows}</View> : <RecordListEmptyComponent />}
     </Card>
   );
