@@ -18,7 +18,7 @@ class FakeRecordRepository implements RecordRepository {
         .filter(
           (v) =>
             v.timestamp >= startDate.getTime() &&
-            v.timestamp <= endDate.getTime()
+            v.timestamp < endDate.getTime()
         )
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
