@@ -43,15 +43,14 @@ class BaseExpoSqliteRecordRepository implements RecordRepository {
   }
 
   async createTable() {
-    const sql = `
-    CREATE TABLE IF NOT EXISTS records (
-      type TEXT, 
-      volumeMl INTEGER,
-      timestamp INTEGER,
-      PRIMARY KEY(type, volumeMl, timestamp) 
-    );`;
-
-    await this.executeSql(sql);
+    await this.executeSql(
+      `CREATE TABLE IF NOT EXISTS records (
+        type TEXT, 
+        volumeMl INTEGER,
+        timestamp INTEGER,
+        PRIMARY KEY(type, volumeMl, timestamp) 
+      );`
+    );
   }
 
   async dropTable() {
