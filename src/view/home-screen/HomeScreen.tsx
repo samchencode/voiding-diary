@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, ScrollView, View } from 'react-native';
 import { theme } from '@/view/theme';
 import {
@@ -15,6 +15,7 @@ import { VolumeInMl } from '@/domain/models/Volume';
 import type { Record } from '@/domain/models/Record';
 import { IntakeRecord, VoidRecord } from '@/domain/models/Record';
 import { RecordsStaleObservable } from '@/view/lib';
+import type { GetTodaysRecordsAction } from '@/application/GetTodaysRecordsAction';
 
 const makeIntake = () => {
   const datetime = new DateAndTime(new Date());
@@ -28,7 +29,10 @@ const makeVoid = () => {
   return new VoidRecord(datetime, volume);
 };
 
-function factory(saveRecordAction: SaveRecordAction) {
+function factory(
+  getTodaysRecordsAction: GetTodaysRecordsAction,
+  saveRecordAction: SaveRecordAction
+) {
   async function handleNewRecord(makeRecord: () => Record) {
     const record = makeRecord();
     await saveRecordAction.execute(record);
@@ -38,6 +42,14 @@ function factory(saveRecordAction: SaveRecordAction) {
   return function HomeScreen() {
     const timeElapsed = 0;
     const timeRemaining = 0;
+
+    const [records, setRecords] = useState<Record[]>([]);
+    useEffect(() => {
+      getTodaysRecordsAction.execute().then((r) => setRecords(r));
+      RecordsStaleObservable.subscribe(() => {
+        getTodaysRecordsAction.execute().then((r) => setRecords(r));
+      });
+    }, []);
 
     return (
       <SplitColorBackground
@@ -67,7 +79,7 @@ function factory(saveRecordAction: SaveRecordAction) {
             <IntakeChart style={styles.item} goal={32} intake={8} />
             <RecentRecordList
               style={[styles.item, styles.lastItem]}
-              records={[]}
+              records={records}
             />
           </View>
         </ScrollView>

@@ -9,10 +9,12 @@ import { FakeRecordRepository } from '@/infrastructure/persistence/fake/FakeReco
 import { FakeGoalRepository } from '@/infrastructure/persistence/fake/FakeGoalRepository';
 import { expoSqliteDatabaseFactory } from '@/infrastructure/persistence/expo-sqlite/expoSqliteDatabaseFactory';
 import { SaveRecordAction } from '@/application/SaveRecordAction';
+import { GetTodaysRecordsAction } from '@/application/GetTodaysRecordsAction';
 
 export const module = {
   // APPLICATION SERVICES
   getAllRecordsAction: ['type', GetAllRecordsAction],
+  getTodaysRecordsAction: ['type', GetTodaysRecordsAction],
   saveRecordAction: ['type', SaveRecordAction],
   getGoalAction: ['type', GetGoalAction],
 
