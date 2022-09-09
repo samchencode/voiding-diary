@@ -16,6 +16,8 @@ import type { Record } from '@/domain/models/Record';
 import { IntakeRecord, VoidRecord } from '@/domain/models/Record';
 import { RecordsStaleObservable } from '@/view/lib';
 import type { GetTodaysRecordsAction } from '@/application/GetTodaysRecordsAction';
+import { Button, Card } from '@/view/components';
+import type { WebSQLDatabase } from 'expo-sqlite';
 
 const makeIntake = () => {
   const datetime = new DateAndTime(new Date());
@@ -31,12 +33,18 @@ const makeVoid = () => {
 
 function factory(
   getTodaysRecordsAction: GetTodaysRecordsAction,
-  saveRecordAction: SaveRecordAction
+  saveRecordAction: SaveRecordAction,
+  expoSqliteDatabase: WebSQLDatabase
 ) {
   async function handleNewRecord(makeRecord: () => Record) {
     const record = makeRecord();
     await saveRecordAction.execute(record);
     RecordsStaleObservable.notifyAll();
+  }
+
+  function handleResetDb() {
+    // @ts-expect-error for debug only
+    expoSqliteDatabase.deleteDb();
   }
 
   return function HomeScreen() {
@@ -77,10 +85,13 @@ function factory(
               onPressVoid={() => handleNewRecord(makeVoid)}
             />
             <IntakeChart style={styles.item} goal={32} intake={8} />
-            <RecentRecordList
-              style={[styles.item, styles.lastItem]}
-              records={records}
-            />
+            <RecentRecordList style={styles.item} records={records} />
+            <Card style={[styles.item, styles.lastItem]}>
+              <Button.Danger
+                title="Reset Database"
+                onPress={() => handleResetDb()}
+              />
+            </Card>
           </View>
         </ScrollView>
       </SplitColorBackground>
