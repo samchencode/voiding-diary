@@ -6,6 +6,7 @@ import { theme } from '@/view/theme';
 import {
   RecordSectionHeader,
   ListHeaderComponent,
+  ListEmptyComponent,
 } from '@/view/record-screen/components';
 import type { GetAllRecordsAction } from '@/application/GetAllRecordsAction';
 import type { Record } from '@/domain/models/Record';
@@ -28,10 +29,15 @@ export function factory(getAllRecordsAction: GetAllRecordsAction) {
       title,
       data,
     }));
+
+    const contentContainerStyle =
+      sections.length === 0 ? styles.emptyListContainer : {};
+
     return (
       <View style={styles.container}>
         <SectionList
           style={styles.list}
+          contentContainerStyle={contentContainerStyle}
           sections={sections}
           renderItem={({ item }) => {
             const Card = new ViewRecordVisitor(item).makeCard();
@@ -42,6 +48,7 @@ export function factory(getAllRecordsAction: GetAllRecordsAction) {
           )}
           keyExtractor={(item) => ViewRecordVisitor.makeKey(item)}
           ListHeaderComponent={ListHeaderComponent}
+          ListEmptyComponent={ListEmptyComponent}
         />
       </View>
     );
@@ -53,6 +60,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.colors.bg,
   },
+  emptyListContainer: { flex: 1 },
   list: {
     paddingLeft: theme.spaces.lg,
     paddingRight: theme.spaces.lg,
