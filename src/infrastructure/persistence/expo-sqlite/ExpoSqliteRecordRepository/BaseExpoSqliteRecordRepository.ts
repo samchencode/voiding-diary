@@ -60,14 +60,16 @@ class BaseExpoSqliteRecordRepository implements RecordRepository {
 
   async getAll(): Promise<Record[]> {
     return this.executeSqlAndHydrate(
-      'SELECT type, volumeMl, timestamp FROM records;'
+      `SELECT type, volumeMl, timestamp FROM records
+      ORDER BY timestamp DESC;`
     );
   }
 
   async getByDateInterval(startDate: Date, endDate: Date): Promise<Record[]> {
     return this.executeSqlAndHydrate(
       `SELECT type, volumeMl, timestamp FROM records
-      WHERE timestamp > ? AND timestamp < ?;`,
+      WHERE timestamp > ? AND timestamp < ?
+      ORDER BY timestamp DESC;`,
       [startDate.getTime(), endDate.getTime()]
     );
   }
@@ -75,6 +77,7 @@ class BaseExpoSqliteRecordRepository implements RecordRepository {
   async getByLimitAndOffset(limit: number, offset: number): Promise<Record[]> {
     return this.executeSqlAndHydrate(
       `SELECT type, volumeMl, timestamp FROM records
+      ORDER BY timestamp DESC
       LIMIT ? OFFSET ?;`,
       [limit, offset]
     );
