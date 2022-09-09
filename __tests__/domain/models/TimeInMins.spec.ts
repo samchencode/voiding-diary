@@ -11,6 +11,11 @@ describe('TimeInMins', () => {
       const time = TimeInMins.fromHoursAndMinutes(5, 2);
       expect(time).toBeInstanceOf(TimeInMins);
     });
+
+    it('should throw error if given inappropriate number of minutes', () => {
+      const boom = () => TimeInMins.fromHoursAndMinutes(5, 60);
+      expect(boom).toThrowError('60');
+    });
   });
 
   describe('Behavior', () => {

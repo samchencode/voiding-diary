@@ -1,5 +1,6 @@
 import { LessThanOneMinuteError } from '@/domain/models/TimeInMins/LessThanOneMinuteError';
 import { NegativeTimeError } from '@/domain/models/TimeInMins/NegativeTimeError';
+import { TooManyMinutesError } from '@/domain/models/TimeInMins/TooManyMinutesError';
 
 class TimeInMins {
   minutes: number;
@@ -37,6 +38,7 @@ class TimeInMins {
   static fromHoursAndMinutes(hours: number, minutes: number) {
     if (hours < 0) throw new NegativeTimeError('hours', hours);
     if (minutes < 0) throw new NegativeTimeError('minutes', minutes);
+    if (minutes >= 60) throw new TooManyMinutesError(minutes);
     const totalMinutes = hours * 60 + minutes;
     return new TimeInMins(totalMinutes);
   }
