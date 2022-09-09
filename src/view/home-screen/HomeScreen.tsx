@@ -9,8 +9,26 @@ import {
   SplitColorBackground,
 } from '@/view/home-screen/components';
 import { StatusBar } from '@/view/status-bar';
+import type { SaveRecordAction } from '@/application/SaveRecordAction';
+import { DateAndTime } from '@/domain/models/DateAndTime';
+import { VolumeInMl } from '@/domain/models/Volume';
+import { IntakeRecord, VoidRecord } from '@/domain/models/Record';
 
-function factory() {
+function factory(saveRecordAction: SaveRecordAction) {
+  async function handleNewIntakeRecord() {
+    const datetime = new DateAndTime(new Date());
+    const volume = new VolumeInMl(30);
+    const record = new IntakeRecord(datetime, volume);
+    return saveRecordAction.execute(record);
+  }
+
+  async function handleNewVoidRecord() {
+    const datetime = new DateAndTime(new Date());
+    const volume = new VolumeInMl(30);
+    const record = new VoidRecord(datetime, volume);
+    return saveRecordAction.execute(record);
+  }
+
   return function HomeScreen() {
     const timeElapsed = 0;
     const timeRemaining = 0;
@@ -30,15 +48,15 @@ function factory() {
             elevated
           />
           <Timer
-            onPress={() => alert('pressed timer')}
+            onPress={() => handleNewVoidRecord()}
             timeElapsedMs={timeElapsed}
             timeRemainingMs={timeRemaining}
           />
           <View style={styles.cardContainer}>
             <LoggerButtonGroup
               style={styles.item}
-              onPressIntake={() => alert('pressed intake')}
-              onPressVoid={() => alert('pressed void')}
+              onPressIntake={() => handleNewIntakeRecord()}
+              onPressVoid={() => handleNewVoidRecord()}
             />
             <IntakeChart style={styles.item} goal={32} intake={8} />
             <RecentRecordList
