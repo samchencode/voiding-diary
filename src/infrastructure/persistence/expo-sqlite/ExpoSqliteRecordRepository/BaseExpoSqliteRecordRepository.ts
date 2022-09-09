@@ -38,7 +38,6 @@ class BaseExpoSqliteRecordRepository implements RecordRepository {
     const {
       rows: { _array: rows },
     } = await this.executeSql<RowSerializedRecord>(sqlStatement, args);
-    rows.shift(); // remove title row
     return rows.map(hydrateRowSerializedRecord);
   }
 
