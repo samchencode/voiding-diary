@@ -23,16 +23,16 @@ describe('IntakeRecord', () => {
   describe('Behavior', () => {
     it('should get date of intake', () => {
       const datetime1 = new DateAndTime(new Date(0));
-      const urineVolume = new VolumeInMl(8);
+      const intakeVolume = new VolumeInMl(8);
 
-      const intakeRecord1 = new IntakeRecord(datetime1, urineVolume);
+      const intakeRecord1 = new IntakeRecord(datetime1, intakeVolume);
 
       expect(intakeRecord1.getTimeString()).toBe('12:00 AM');
       expect(intakeRecord1.getDateString()).toBe('Jan 1, 1970');
 
       const datetime2 = new DateAndTime(new Date(1662318939966));
 
-      const intakeRecord2 = new IntakeRecord(datetime2, urineVolume);
+      const intakeRecord2 = new IntakeRecord(datetime2, intakeVolume);
 
       expect(intakeRecord2.getTimeString()).toBe('7:15 PM');
       expect(intakeRecord2.getDateString()).toBe('Sep 4, 2022');
