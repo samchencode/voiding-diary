@@ -48,7 +48,7 @@ class BaseExpoSqliteRecordRepository implements RecordRepository {
         type TEXT, 
         volumeMl INTEGER,
         timestamp INTEGER,
-        PRIMARY KEY(type, volumeMl, timestamp) 
+        PRIMARY KEY(timestamp, type, volumeMl) 
       );`
     );
   }
