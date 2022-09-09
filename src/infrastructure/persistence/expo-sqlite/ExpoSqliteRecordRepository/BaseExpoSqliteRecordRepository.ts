@@ -3,21 +3,14 @@ import type { RecordRepository } from '@/domain/ports/RecordRepository';
 import { hydrateRowSerializedRecord } from '@/domain/services/hydrateRecord';
 import type { WebSQLDatabase, SQLTransaction, SQLResultSet } from 'expo-sqlite';
 
-class ExpoSqliteRecordRepository implements RecordRepository {
+class BaseExpoSqliteRecordRepository implements RecordRepository {
   private db: WebSQLDatabase;
-
-  private ready: Promise<void>;
 
   constructor(expoSqliteDatabase: WebSQLDatabase) {
     this.db = expoSqliteDatabase;
-
-    this.ready = new Promise((s) => {
-      this.createTable().then(() => s());
-    });
   }
 
   private async transaction() {
-    await this.ready;
     return new Promise<SQLTransaction>((s, f) => {
       this.db.transaction(s, f);
     });
@@ -96,4 +89,4 @@ class ExpoSqliteRecordRepository implements RecordRepository {
   }
 }
 
-export { ExpoSqliteRecordRepository };
+export { BaseExpoSqliteRecordRepository };
