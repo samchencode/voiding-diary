@@ -5,6 +5,7 @@ import { Card } from '@/view/components';
 import { ViewRecordVisitor } from '@/view/lib';
 import { theme } from '@/view/theme';
 import type { Record } from '@/domain/models/Record';
+import { RecordListEmptyComponent } from '@/view/home-screen/components/RecentRecordList/RecordListEmptyComponent';
 
 type RecentRecordListProps = {
   records: Record[];
@@ -13,11 +14,12 @@ type RecentRecordListProps = {
 
 function RecentRecordList({ records, style }: RecentRecordListProps) {
   const rows = records.map((r) => new ViewRecordVisitor(r).getRow());
+  const isEmpty = rows.length === 0;
 
   return (
     <Card style={[styles.container, style]}>
       <Text style={styles.title}>Recent</Text>
-      <View>{rows}</View>
+      {!isEmpty ? <View>{rows}</View> : <RecordListEmptyComponent />}
     </Card>
   );
 }
