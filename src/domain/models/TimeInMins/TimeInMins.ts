@@ -15,8 +15,8 @@ class TimeInMins {
       n >= 10 ? `${n}` : `0${n}`;
 
     const h = this.getHours();
-    const ss = padZeroToMakeTwoDigitNum(this.getMinutesWithinHour());
-    return `${h}:${ss}`;
+    const mm = padZeroToMakeTwoDigitNum(this.getMinutesWithinHour());
+    return `${h}:${mm}`;
   }
 
   getHours() {

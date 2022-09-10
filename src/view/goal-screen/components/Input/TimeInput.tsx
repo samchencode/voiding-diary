@@ -3,18 +3,18 @@ import { View, Text, StyleSheet } from 'react-native';
 import { theme } from '@/view/theme';
 import { IntegerInput } from '@/view/goal-screen/components/Input/IntegerInput';
 
-type HhSs = [number | undefined, number | undefined];
+type HhMm = [number | undefined, number | undefined];
 
 type TimeInputProps = {
-  value: HhSs;
-  onChangeValue: (v: HhSs) => void;
+  value: HhMm;
+  onChangeValue: (v: HhMm) => void;
 };
 
 const MAX_MINS = 59;
 
 function TimeInput({ value, onChangeValue }: TimeInputProps) {
   const handleChangeHh = (n: number) => onChangeValue([n, value[1]]);
-  const handleChangeSs = (n: number) =>
+  const handleChangeMm = (n: number) =>
     onChangeValue([value[0], Math.min(n, MAX_MINS)]);
 
   return (
@@ -34,7 +34,7 @@ function TimeInput({ value, onChangeValue }: TimeInputProps) {
         placeholder="mm"
         maxDigits={2}
         shouldPadZeroes
-        onChangeNumber={handleChangeSs}
+        onChangeNumber={handleChangeMm}
       />
     </View>
   );

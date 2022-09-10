@@ -4,19 +4,19 @@ import { GoalNotFoundError } from '@/infrastructure/persistence/fake/GoalNotFoun
 import { useState } from 'react';
 
 type NumOrUndef = number | undefined;
-type HhSs = [NumOrUndef, NumOrUndef];
+type HhMm = [NumOrUndef, NumOrUndef];
 type Action<S> = Dispatch<SetStateAction<S>>;
 type UseStateReturnType<S> = [S, Action<S>];
 
 function useGoal(
   getGoalAction: GetGoalAction
 ): [
-  UseStateReturnType<HhSs>,
-  UseStateReturnType<HhSs>,
+  UseStateReturnType<HhMm>,
+  UseStateReturnType<HhMm>,
   UseStateReturnType<number | undefined>
 ] {
-  const [amInterval, setAmInterval] = useState<HhSs>([undefined, undefined]);
-  const [pmInterval, setPmInterval] = useState<HhSs>([undefined, undefined]);
+  const [amInterval, setAmInterval] = useState<HhMm>([undefined, undefined]);
+  const [pmInterval, setPmInterval] = useState<HhMm>([undefined, undefined]);
   const [volume, setVolume] = useState<NumOrUndef>(undefined);
 
   getGoalAction
