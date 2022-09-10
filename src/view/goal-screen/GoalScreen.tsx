@@ -20,6 +20,8 @@ function factory(getGoalAction: GetGoalAction) {
     const inputRoot = React.useRef<InputRoot>(null);
 
     const handlePress = () => {
+      // if any input has focus, make sure it is blurred
+      // onBlur if input is '', it sets value to 0 so its not the prev value
       if (inputRoot.current) inputRoot.current.blur();
     };
 
