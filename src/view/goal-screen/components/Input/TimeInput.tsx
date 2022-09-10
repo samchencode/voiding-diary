@@ -11,8 +11,8 @@ type TimeInputProps = {
 };
 
 function TimeInput({ value, onChangeValue }: TimeInputProps) {
-  const handleChangeHh = (n: number) => onChangeValue([value[0], n]);
-  const handleChangeSs = (n: number) => onChangeValue([n, value[1]]);
+  const handleChangeHh = (n: number) => onChangeValue([n, value[1]]);
+  const handleChangeSs = (n: number) => onChangeValue([value[0], n]);
 
   return (
     <View style={styles.inputContainer}>
