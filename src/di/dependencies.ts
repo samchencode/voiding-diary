@@ -5,12 +5,12 @@ import { factory as GoalScreen } from '@/view/goal-screen';
 import { factory as RecordScreen } from '@/view/record-screen';
 import { GetAllRecordsAction } from '@/application/GetAllRecordsAction';
 import { GetGoalAction } from '@/application/GetGoalAction';
-import { FakeGoalRepository } from '@/infrastructure/persistence/fake/FakeGoalRepository';
 import { expoSqliteDatabaseFactory } from '@/infrastructure/persistence/expo-sqlite/expoSqliteDatabaseFactory';
 import { SaveRecordAction } from '@/application/SaveRecordAction';
 import { GetTodaysRecordsAction } from '@/application/GetTodaysRecordsAction';
 import { ExpoSqliteRecordRepository } from '@/infrastructure/persistence/expo-sqlite/ExpoSqliteRecordRepository';
 import { SetGoalAction } from '@/application/SetGoalAction';
+import { AsyncStorageGoalRepository } from '@/infrastructure/persistence/async-storage/AsyncStorageGoalRepository';
 
 export const module = {
   // APPLICATION SERVICES
@@ -22,7 +22,7 @@ export const module = {
 
   // INFRASTRUCTURE
   recordRepository: ['type', ExpoSqliteRecordRepository],
-  goalRepository: ['type', FakeGoalRepository],
+  goalRepository: ['type', AsyncStorageGoalRepository],
 
   expoSqliteDatabase: ['factory', expoSqliteDatabaseFactory],
 
@@ -35,4 +35,10 @@ export const module = {
   HomeScreen: ['factory', HomeScreen],
   GoalScreen: ['factory', GoalScreen],
   RecordScreen: ['factory', RecordScreen],
+
+  // DEBUG
+  asyncStorageGoalRepository: [
+    'factory',
+    (goalRepository: AsyncStorageGoalRepository) => goalRepository,
+  ],
 };

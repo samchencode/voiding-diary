@@ -1,6 +1,6 @@
 import type { Goal } from '@/domain/models/Goal';
 import type { GoalRepository } from '@/domain/ports/GoalRepository';
-import { GoalNotFoundError } from '@/infrastructure/persistence/fake/GoalNotFoundError';
+import { GoalNotFoundError } from '@/domain/ports/GoalRepository';
 
 class FakeGoalRepository implements GoalRepository {
   fakeValue?: Goal;

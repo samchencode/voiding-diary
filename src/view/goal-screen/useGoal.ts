@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import type { SetStateAction, Dispatch } from 'react';
 import type { GetGoalAction } from '@/application/GetGoalAction';
-import { GoalNotFoundError } from '@/infrastructure/persistence/fake/GoalNotFoundError';
+import { GoalNotFoundError } from '@/domain/ports/GoalRepository';
 import type { Goal } from '@/domain/models/Goal';
 import type { HhMmOrUndef, NumOrUndef } from '@/view/goal-screen/types';
 

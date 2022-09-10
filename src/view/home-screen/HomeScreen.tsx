@@ -18,6 +18,7 @@ import { RecordsStaleObservable } from '@/view/lib';
 import type { GetTodaysRecordsAction } from '@/application/GetTodaysRecordsAction';
 import { Button, Card } from '@/view/components';
 import type { WebSQLDatabase } from 'expo-sqlite';
+import type { AsyncStorageGoalRepository } from '@/infrastructure/persistence/async-storage/AsyncStorageGoalRepository';
 
 const makeIntake = () => {
   const datetime = new DateAndTime(new Date());
@@ -34,7 +35,8 @@ const makeVoid = () => {
 function factory(
   getTodaysRecordsAction: GetTodaysRecordsAction,
   saveRecordAction: SaveRecordAction,
-  expoSqliteDatabase: WebSQLDatabase
+  expoSqliteDatabase: WebSQLDatabase,
+  asyncStorageGoalRepository: AsyncStorageGoalRepository
 ) {
   async function handleNewRecord(makeRecord: () => Record) {
     const record = makeRecord();
@@ -45,6 +47,7 @@ function factory(
   function handleResetDb() {
     // @ts-expect-error for debug only
     expoSqliteDatabase.deleteDb();
+    asyncStorageGoalRepository.reset();
   }
 
   return function HomeScreen() {
