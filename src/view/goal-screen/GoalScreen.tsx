@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  useWindowDimensions,
-} from 'react-native';
-import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import Constants from 'expo-constants';
+import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import { TargetSvg } from '@/view/goal-screen/svg';
 import { theme } from '@/view/theme';
 import { Card, Button } from '@/view/components';
@@ -19,12 +11,11 @@ import {
 import { StatusBar } from '@/view/status-bar';
 import type { GetGoalAction } from '@/application/GetGoalAction';
 import { useGoal } from '@/view/goal-screen/useGoal';
+import { useDimensions } from '@/view/goal-screen/useDimensions';
 
 function factory(getGoalAction: GetGoalAction) {
   return function GoalScreen() {
-    const { width, height } = useWindowDimensions();
-    const tabBarHeight = useBottomTabBarHeight();
-    const { statusBarHeight } = Constants;
+    const { width, height, tabBarHeight, statusBarHeight } = useDimensions();
 
     const inputRoot = React.useRef<InputRoot>(null);
 
