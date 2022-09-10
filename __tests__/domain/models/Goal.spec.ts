@@ -50,5 +50,19 @@ describe('Goal', () => {
         true
       );
     });
+
+    it('should serialize to object of primitives', () => {
+      const targetIntakeVolume = new VolumeInMl(200);
+      const targetVoidInterval = {
+        am: new TimeInMins(60),
+        pm: new TimeInMins(180),
+      };
+      const goal = new Goal(targetIntakeVolume, targetVoidInterval);
+      expect(goal.serialize()).toEqual({
+        amTargetVoidIntervalInMins: 60,
+        pmTargetVoidIntervalInMins: 180,
+        targetIntakeInMl: 200,
+      });
+    });
   });
 });

@@ -1,3 +1,4 @@
+import { Serializer } from '@/domain/models/Goal/Serializer';
 import type { TimeInMins } from '@/domain/models/TimeInMins';
 import type { VolumeInMl } from '@/domain/models/Volume';
 
@@ -29,6 +30,10 @@ class Goal {
 
   getPmTargetVoidInterval() {
     return this.targetVoidIntervals.pm;
+  }
+
+  serialize() {
+    return Serializer.serialize(this);
   }
 
   is(v: Goal) {
