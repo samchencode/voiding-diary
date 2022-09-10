@@ -5,7 +5,7 @@ import { fromNumericValue } from '@/domain/models/Volume';
 
 const hydrateRowSerializedRecord = (r: RowSerializedRecord) => {
   const dateAndTime = new DateAndTime(new Date(r.timestamp));
-  const volume = fromNumericValue(r.volumeMl);
+  const volume = fromNumericValue(r.volumeOz);
   return fromRecordType(r.type as RecordType, dateAndTime, volume);
 };
 

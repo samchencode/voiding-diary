@@ -45,9 +45,9 @@ class BaseExpoSqliteRecordRepository implements RecordRepository {
     await this.executeSql(
       `CREATE TABLE IF NOT EXISTS records (
         type TEXT, 
-        volumeMl INTEGER,
+        volumeOz INTEGER,
         timestamp INTEGER,
-        PRIMARY KEY(timestamp, type, volumeMl) 
+        PRIMARY KEY(timestamp, type, volumeOz) 
       );`
     );
   }
@@ -58,14 +58,14 @@ class BaseExpoSqliteRecordRepository implements RecordRepository {
 
   async getAll(): Promise<Record[]> {
     return this.executeSqlAndHydrate(
-      `SELECT type, volumeMl, timestamp FROM records
+      `SELECT type, volumeOz, timestamp FROM records
       ORDER BY timestamp DESC;`
     );
   }
 
   async getByDateInterval(startDate: Date, endDate: Date): Promise<Record[]> {
     return this.executeSqlAndHydrate(
-      `SELECT type, volumeMl, timestamp FROM records
+      `SELECT type, volumeOz, timestamp FROM records
       WHERE timestamp > ? AND timestamp < ?
       ORDER BY timestamp DESC;`,
       [startDate.getTime(), endDate.getTime()]
@@ -74,7 +74,7 @@ class BaseExpoSqliteRecordRepository implements RecordRepository {
 
   async getByLimitAndOffset(limit: number, offset: number): Promise<Record[]> {
     return this.executeSqlAndHydrate(
-      `SELECT type, volumeMl, timestamp FROM records
+      `SELECT type, volumeOz, timestamp FROM records
       ORDER BY timestamp DESC
       LIMIT ? OFFSET ?;`,
       [limit, offset]
@@ -84,8 +84,8 @@ class BaseExpoSqliteRecordRepository implements RecordRepository {
   async save(record: Record): Promise<void> {
     const serialized = record.serialize();
     await this.executeSqlAndHydrate(
-      'INSERT INTO records (type, volumeMl, timestamp) VALUES (?,?,?);',
-      [serialized.type, serialized.volumeMl, serialized.timestamp]
+      'INSERT INTO records (type, volumeOz, timestamp) VALUES (?,?,?);',
+      [serialized.type, serialized.volumeOz, serialized.timestamp]
     );
   }
 }

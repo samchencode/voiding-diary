@@ -1,7 +1,7 @@
 interface SerializedGoal {
   amTargetVoidIntervalInMins: number;
   pmTargetVoidIntervalInMins: number;
-  targetIntakeInMl: number;
+  targetIntakeInOz: number;
 }
 
 export type { SerializedGoal };

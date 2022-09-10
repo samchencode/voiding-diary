@@ -19,12 +19,12 @@ describe('GetAllRecordsAction', () => {
       expect(records[0].serialize()).toEqual({
         timestamp: 1662262790000,
         type: 'intake',
-        volumeMl: 866,
+        volumeOz: 866,
       });
       expect(records[999].serialize()).toEqual({
         timestamp: 1609485765000,
         type: 'void',
-        volumeMl: 352,
+        volumeOz: 352,
       });
     });
   });

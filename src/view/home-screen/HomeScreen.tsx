@@ -11,7 +11,7 @@ import {
 import { StatusBar } from '@/view/status-bar';
 import type { SaveRecordAction } from '@/application/SaveRecordAction';
 import { DateAndTime } from '@/domain/models/DateAndTime';
-import { VolumeInMl } from '@/domain/models/Volume';
+import { VolumeInOz } from '@/domain/models/Volume';
 import type { Record } from '@/domain/models/Record';
 import { IntakeRecord, VoidRecord } from '@/domain/models/Record';
 import { RecordsStaleObservable } from '@/view/lib';
@@ -21,13 +21,13 @@ import type { WebSQLDatabase } from 'expo-sqlite';
 
 const makeIntake = () => {
   const datetime = new DateAndTime(new Date());
-  const volume = new VolumeInMl(30);
+  const volume = new VolumeInOz(30);
   return new IntakeRecord(datetime, volume);
 };
 
 const makeVoid = () => {
   const datetime = new DateAndTime(new Date());
-  const volume = new VolumeInMl(30);
+  const volume = new VolumeInOz(30);
   return new VoidRecord(datetime, volume);
 };
 

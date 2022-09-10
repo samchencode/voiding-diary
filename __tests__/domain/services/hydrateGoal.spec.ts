@@ -1,6 +1,6 @@
 import { Goal } from '@/domain/models/Goal';
 import { TimeInMins } from '@/domain/models/TimeInMins';
-import { VolumeInMl } from '@/domain/models/Volume';
+import { VolumeInOz } from '@/domain/models/Volume';
 import { hydrateGoal } from '@/domain/services/hydrateGoal';
 
 describe('hydrateGoal', () => {
@@ -8,10 +8,10 @@ describe('hydrateGoal', () => {
     const serialized = {
       amTargetVoidIntervalInMins: 60,
       pmTargetVoidIntervalInMins: 180,
-      targetIntakeInMl: 200,
+      targetIntakeInOz: 200,
     };
 
-    const targetIntakeVolume = new VolumeInMl(200);
+    const targetIntakeVolume = new VolumeInOz(200);
     const targetVoidInterval = {
       am: new TimeInMins(60),
       pm: new TimeInMins(180),

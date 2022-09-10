@@ -6,7 +6,7 @@ class Serializer {
     const am = goal.getAmTargetVoidInterval();
     const pm = goal.getPmTargetVoidInterval();
     return {
-      targetIntakeInMl: goal.getTargetIntake().getValue(),
+      targetIntakeInOz: goal.getTargetIntake().getValue(),
       amTargetVoidIntervalInMins: am.getMinutesTotal(),
       pmTargetVoidIntervalInMins: pm.getMinutesTotal(),
     };

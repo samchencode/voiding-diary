@@ -1,7 +1,7 @@
 import { GetGoalAction } from '@/application/GetGoalAction';
 import { Goal } from '@/domain/models/Goal';
 import { TimeInMins } from '@/domain/models/TimeInMins';
-import { VolumeInMl } from '@/domain/models/Volume';
+import { VolumeInOz } from '@/domain/models/Volume';
 import { FakeGoalRepository } from '@/infrastructure/persistence/fake/FakeGoalRepository';
 
 describe('GetGoalAction', () => {
@@ -22,7 +22,7 @@ describe('GetGoalAction', () => {
     });
 
     it('should get goal if it exists', async () => {
-      const goal = new Goal(new VolumeInMl(32), {
+      const goal = new Goal(new VolumeInOz(32), {
         am: new TimeInMins(180),
         pm: new TimeInMins(240),
       });

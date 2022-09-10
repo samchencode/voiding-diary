@@ -1,7 +1,7 @@
 import { SetGoalAction } from '@/application/SetGoalAction';
 import { Goal } from '@/domain/models/Goal';
 import { TimeInMins } from '@/domain/models/TimeInMins';
-import { VolumeInMl } from '@/domain/models/Volume';
+import { VolumeInOz } from '@/domain/models/Volume';
 import { FakeGoalRepository } from '@/infrastructure/persistence/fake/FakeGoalRepository';
 
 describe('SaveGoalAction', () => {
@@ -15,7 +15,7 @@ describe('SaveGoalAction', () => {
 
   describe('Behavior', () => {
     it('should save goal to repo', () => {
-      const goal = new Goal(new VolumeInMl(32), {
+      const goal = new Goal(new VolumeInOz(32), {
         am: new TimeInMins(180),
         pm: new TimeInMins(240),
       });

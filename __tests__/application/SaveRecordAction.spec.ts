@@ -1,7 +1,7 @@
 import { SaveRecordAction } from '@/application/SaveRecordAction';
 import { DateAndTime } from '@/domain/models/DateAndTime';
 import { IntakeRecord, VoidRecord } from '@/domain/models/Record';
-import { VolumeInMl } from '@/domain/models/Volume';
+import { VolumeInOz } from '@/domain/models/Volume';
 import { FakeRecordRepository } from '@/infrastructure/persistence/fake/FakeRecordRepository';
 
 describe('SaveRecordAction', () => {
@@ -16,11 +16,11 @@ describe('SaveRecordAction', () => {
   describe('Behavior', () => {
     it('should save a record', () => {
       const datetime1 = new DateAndTime(new Date(100000));
-      const intakeVolume = new VolumeInMl(48);
+      const intakeVolume = new VolumeInOz(48);
       const record1 = new IntakeRecord(datetime1, intakeVolume);
 
       const datetime2 = new DateAndTime(new Date(1234220));
-      const urineVolume = new VolumeInMl(8);
+      const urineVolume = new VolumeInOz(8);
       const record2 = new VoidRecord(datetime2, urineVolume);
 
       const repo = new FakeRecordRepository();

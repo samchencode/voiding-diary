@@ -1,11 +1,11 @@
 import { Goal } from '@/domain/models/Goal';
 import { TimeInMins } from '@/domain/models/TimeInMins';
-import { VolumeInMl } from '@/domain/models/Volume';
+import { VolumeInOz } from '@/domain/models/Volume';
 
 describe('Goal', () => {
   describe('Instantiation', () => {
     it('should create a goal', () => {
-      const targetIntakeVolume = new VolumeInMl(200);
+      const targetIntakeVolume = new VolumeInOz(200);
       const targetVoidInterval = {
         am: new TimeInMins(60),
         pm: new TimeInMins(180),
@@ -17,12 +17,12 @@ describe('Goal', () => {
 
   describe('Behavior', () => {
     it('should be identical with same intake and intervals', () => {
-      const targetIntakeVolume1 = new VolumeInMl(200);
+      const targetIntakeVolume1 = new VolumeInOz(200);
       const targetVoidInterval1 = {
         am: new TimeInMins(60),
         pm: new TimeInMins(180),
       };
-      const targetIntakeVolume2 = new VolumeInMl(200);
+      const targetIntakeVolume2 = new VolumeInOz(200);
       const targetVoidInterval2 = {
         am: new TimeInMins(60),
         pm: new TimeInMins(180),
@@ -35,7 +35,7 @@ describe('Goal', () => {
     });
 
     it('should retrieve intake and intervals', () => {
-      const targetIntakeVolume = new VolumeInMl(200);
+      const targetIntakeVolume = new VolumeInOz(200);
       const targetVoidInterval = {
         am: new TimeInMins(60),
         pm: new TimeInMins(180),
@@ -52,7 +52,7 @@ describe('Goal', () => {
     });
 
     it('should serialize to object of primitives', () => {
-      const targetIntakeVolume = new VolumeInMl(200);
+      const targetIntakeVolume = new VolumeInOz(200);
       const targetVoidInterval = {
         am: new TimeInMins(60),
         pm: new TimeInMins(180),
@@ -61,7 +61,7 @@ describe('Goal', () => {
       expect(goal.serialize()).toEqual({
         amTargetVoidIntervalInMins: 60,
         pmTargetVoidIntervalInMins: 180,
-        targetIntakeInMl: 200,
+        targetIntakeInOz: 200,
       });
     });
   });

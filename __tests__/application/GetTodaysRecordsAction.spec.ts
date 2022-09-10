@@ -25,12 +25,12 @@ describe('GetTodaysRecordsAction', () => {
       const expected = [
         {
           type: 'intake',
-          volumeMl: 866,
+          volumeOz: 866,
           timestamp: 1662262790000,
         },
         {
           type: 'void',
-          volumeMl: 491,
+          volumeOz: 491,
           timestamp: 1662250687000,
         },
       ];
