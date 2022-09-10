@@ -22,6 +22,7 @@ describe('@/view/goal-screen/components/Input/util', () => {
     it('should pad zeroes to make string desired length', () => {
       expect(padZero('4', 4)).toBe('0004');
       expect(padZero('1', 2)).toBe('01');
+      expect(padZero('', 2)).toBe('00');
     });
   });
 
