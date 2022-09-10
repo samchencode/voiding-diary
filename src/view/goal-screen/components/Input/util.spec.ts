@@ -1,4 +1,5 @@
 import {
+  areSameValue,
   padZero,
   resolveFieldValue,
   validateIntegerString,
@@ -46,5 +47,17 @@ describe('@/view/goal-screen/components/Input/util', () => {
       expect(resolve('1', 0)).toBe('00');
       expect(resolve('01', 1)).toBe('01');
     });
+  });
+
+  describe('areSameValue', () => {
+    const compare = areSameValue.bind(null, true, 2);
+    expect(compare('11', 11)).toBe(true);
+    expect(compare('1', 1)).toBe(true);
+    expect(compare('01', 1)).toBe(true);
+    expect(compare('0', 0)).toBe(true);
+    expect(compare('', 0)).toBe(false);
+    expect(compare('', 1)).toBe(false);
+    expect(compare('1', 0)).toBe(false);
+    expect(compare('2', 1)).toBe(false);
   });
 });

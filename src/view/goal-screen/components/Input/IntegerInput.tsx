@@ -3,6 +3,7 @@ import type { ViewStyle, StyleProp } from 'react-native';
 import { TextInput, StyleSheet } from 'react-native';
 import { theme } from '@/view/theme';
 import {
+  areSameValue,
   padZero,
   resolveFieldValue,
   validateIntegerString,
@@ -62,6 +63,17 @@ function IntegerInput({
       input.current.blur();
     }
   }, [hasFocus]);
+
+  useEffect(() => {
+    if (hasFocus) return;
+    if (typeof value === 'undefined') {
+      setFieldValue('');
+      return;
+    }
+    if (!areSameValue(shouldPadZeroes, maxDigits, fieldValue, value)) {
+      setFieldValue(valueToString(shouldPadZeroes, maxDigits, value));
+    }
+  }, [fieldValue, hasFocus, maxDigits, shouldPadZeroes, value]);
 
   return (
     <TextInput

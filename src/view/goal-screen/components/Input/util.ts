@@ -10,6 +10,25 @@ const valueToString = (
 ) =>
   shouldPadZeroes ? padZero(value.toString(), maxDigits) : value.toString();
 
+const areSameValue = (
+  shouldPadZeroes: boolean,
+  maxDigits: number,
+  internalFieldValue: string,
+  propsValue: number
+) => {
+  if (internalFieldValue === '') return false;
+  const paddedPropsValueString = valueToString(
+    shouldPadZeroes,
+    maxDigits,
+    propsValue
+  );
+  const paddedInternalFieldValue = shouldPadZeroes
+    ? padZero(internalFieldValue, maxDigits)
+    : internalFieldValue;
+
+  return paddedPropsValueString === paddedInternalFieldValue;
+};
+
 const resolveFieldValue = (
   shouldPadZeroes: boolean,
   maxDigits: number,
@@ -21,17 +40,20 @@ const resolveFieldValue = (
 
   if (typeof propsValue === 'undefined') return internalFieldValue;
 
-  const paddedPropsValueString = valueToString(
+  const valuesEquivalent = areSameValue(
     shouldPadZeroes,
     maxDigits,
+    internalFieldValue,
     propsValue
   );
-  const paddedInternalFieldValue = shouldPadZeroes
-    ? padZero(internalFieldValue, maxDigits)
-    : internalFieldValue;
-  if (paddedPropsValueString === paddedInternalFieldValue)
-    return internalFieldValue;
-  return paddedPropsValueString;
+  if (valuesEquivalent) return internalFieldValue;
+  return valueToString(shouldPadZeroes, maxDigits, propsValue);
 };
 
-export { validateIntegerString, valueToString, resolveFieldValue, padZero };
+export {
+  validateIntegerString,
+  valueToString,
+  resolveFieldValue,
+  padZero,
+  areSameValue,
+};
