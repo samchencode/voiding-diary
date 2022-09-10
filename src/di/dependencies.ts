@@ -10,7 +10,7 @@ import { expoSqliteDatabaseFactory } from '@/infrastructure/persistence/expo-sql
 import { SaveRecordAction } from '@/application/SaveRecordAction';
 import { GetTodaysRecordsAction } from '@/application/GetTodaysRecordsAction';
 import { ExpoSqliteRecordRepository } from '@/infrastructure/persistence/expo-sqlite/ExpoSqliteRecordRepository';
-import { SaveGoalAction } from '@/application/SaveGoalAction';
+import { SetGoalAction } from '@/application/SetGoalAction';
 
 export const module = {
   // APPLICATION SERVICES
@@ -18,7 +18,7 @@ export const module = {
   getTodaysRecordsAction: ['type', GetTodaysRecordsAction],
   saveRecordAction: ['type', SaveRecordAction],
   getGoalAction: ['type', GetGoalAction],
-  saveGoalAction: ['type', SaveGoalAction],
+  setGoalAction: ['type', SetGoalAction],
 
   // INFRASTRUCTURE
   recordRepository: ['type', ExpoSqliteRecordRepository],

@@ -1,7 +1,7 @@
 import type { Goal } from '@/domain/models/Goal';
 import type { GoalRepository } from '@/domain/ports/GoalRepository';
 
-class SaveGoalAction {
+class SetGoalAction {
   repo: GoalRepository;
 
   constructor(goalRepository: GoalRepository) {
@@ -13,4 +13,4 @@ class SaveGoalAction {
   }
 }
 
-export { SaveGoalAction };
+export { SetGoalAction };

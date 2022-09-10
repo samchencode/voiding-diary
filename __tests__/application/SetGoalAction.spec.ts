@@ -1,4 +1,4 @@
-import { SaveGoalAction } from '@/application/SaveGoalAction';
+import { SetGoalAction } from '@/application/SetGoalAction';
 import { Goal } from '@/domain/models/Goal';
 import { TimeInMins } from '@/domain/models/TimeInMins';
 import { VolumeInMl } from '@/domain/models/Volume';
@@ -8,7 +8,7 @@ describe('SaveGoalAction', () => {
   describe('Instantiation', () => {
     it('should create new action given repo', () => {
       const repo = new FakeGoalRepository();
-      const create = () => new SaveGoalAction(repo);
+      const create = () => new SetGoalAction(repo);
       expect(create).not.toThrowError();
     });
   });
@@ -21,7 +21,7 @@ describe('SaveGoalAction', () => {
       });
 
       const repo = new FakeGoalRepository();
-      const action = new SaveGoalAction(repo);
+      const action = new SetGoalAction(repo);
       return action.execute(goal).then(() => {
         expect(repo.fakeValue?.is(goal)).toBe(true);
       });
