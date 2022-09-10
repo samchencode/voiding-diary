@@ -7,10 +7,10 @@ import { ParkSvg } from '@/view/record-screen/svg';
 function ListHeaderComponent() {
   const { width } = useWindowDimensions();
   const svgWidth = Math.min(width, 400);
-  const svgHeight = (svgWidth * 2) / 3;
+  const svgHeight = Math.min((svgWidth * 5) / 6, 300);
 
   return (
-    <View>
+    <View style={styles.container}>
       <StatusBar statusBarStyle="dark" color="transparent" />
       <ParkSvg
         width={svgWidth}
@@ -24,8 +24,12 @@ function ListHeaderComponent() {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    display: 'flex',
+  },
   svg: {
     marginBottom: -theme.spaces.lg,
+    alignSelf: 'center',
   },
   title: {
     ...theme.fonts.lg,
