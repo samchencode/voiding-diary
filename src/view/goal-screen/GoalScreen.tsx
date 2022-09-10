@@ -12,10 +12,29 @@ import { StatusBar } from '@/view/status-bar';
 import type { GetGoalAction } from '@/application/GetGoalAction';
 import { useGoal } from '@/view/goal-screen/useGoal';
 import { useDimensions } from '@/view/goal-screen/useDimensions';
+import type { SetGoalAction } from '@/application/SetGoalAction';
+import {
+  checkSubmittable,
+  checkUndefAndMakeGoal,
+} from '@/view/goal-screen/util';
 
-function factory(getGoalAction: GetGoalAction) {
+function factory(getGoalAction: GetGoalAction, setGoalAction: SetGoalAction) {
   return function GoalScreen() {
     const { width, height, tabBarHeight, statusBarHeight } = useDimensions();
+
+    const [
+      [volume, setVolume],
+      [amInterval, setAmInterval],
+      [pmInterval, setPmInterval],
+      [savedGoal, setSavedGoal],
+    ] = useGoal(getGoalAction);
+
+    const buttonDisabled = !checkSubmittable(
+      volume,
+      amInterval,
+      pmInterval,
+      savedGoal
+    );
 
     const inputRoot = React.useRef<InputRoot>(null);
 
@@ -23,19 +42,12 @@ function factory(getGoalAction: GetGoalAction) {
       // if any input has focus, make sure it is blurred
       // onBlur if input is '', it sets value to 0 so its not the prev value
       if (inputRoot.current) inputRoot.current.blur();
+      setImmediate(() => {
+        const goal = checkUndefAndMakeGoal(volume, amInterval, pmInterval);
+        setGoalAction.execute(goal);
+        setSavedGoal(goal);
+      });
     };
-
-    const [
-      [amInterval, setAmInterval],
-      [pmInterval, setPmInterval],
-      [volume, setVolume],
-    ] = useGoal(getGoalAction);
-
-    const allFieldsFilled = ![amInterval, pmInterval, volume]
-      .flat()
-      .includes(undefined);
-
-    const buttonDisabled = !allFieldsFilled;
 
     return (
       <ScrollView
