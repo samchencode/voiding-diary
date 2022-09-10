@@ -25,8 +25,6 @@ function factory(getGoalAction: GetGoalAction) {
     const { width, height } = useWindowDimensions();
     const tabBarHeight = useBottomTabBarHeight();
     const { statusBarHeight } = Constants;
-    const svgWidth = Math.min(width, 400);
-    const svgHeight = (svgWidth * 2) / 3;
 
     const inputRoot = React.useRef<InputRoot>(null);
 
@@ -55,8 +53,8 @@ function factory(getGoalAction: GetGoalAction) {
           <View style={{ minHeight: height - tabBarHeight - statusBarHeight }}>
             <StatusBar statusBarStyle="dark" color="transparent" />
             <TargetSvg
-              width={svgWidth}
-              height={svgHeight}
+              screenWidth={width}
+              maxWidth={400}
               style={styles.svg}
               themeColor={theme.colors.primary}
             />

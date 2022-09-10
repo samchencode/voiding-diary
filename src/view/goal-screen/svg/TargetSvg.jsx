@@ -10,14 +10,27 @@ import Svg, {
 } from 'react-native-svg';
 /* SVGR has dropped some elements not supported by react-native-svg: title */
 
-// eslint-disable-next-line react/prop-types
-export function TargetSvg({ themeColor = '#5CC2EA', ...rest }) {
+const SVG_WIDTH = 1043.39;
+const SVG_HEIGHT = 696.02;
+
+export function TargetSvg({
+  // eslint-disable-next-line react/prop-types
+  screenWidth = 0, // falsy number to appease TS
+  // eslint-disable-next-line react/prop-types
+  maxWidth = Infinity,
+  // eslint-disable-next-line react/prop-types
+  themeColor = '#5CC2EA',
+  ...rest
+}) {
+  const width = screenWidth ? Math.min(screenWidth, maxWidth) : SVG_WIDTH;
+  const height = screenWidth ? width * (SVG_HEIGHT / SVG_WIDTH) : SVG_HEIGHT;
+
   return (
     <Svg
       data-name="Layer 1"
       xmlns="http://www.w3.org/2000/svg"
-      width={1043.39}
-      height={696.02}
+      width={width}
+      height={height}
       viewBox="0 0 1043.39 696.02"
       // eslint-disable-next-line react/jsx-props-no-spreading
       {...rest}
