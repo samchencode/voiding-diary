@@ -45,6 +45,7 @@ function IntegerInput({
   const handleBlur = () => {
     if (fieldValue === '') {
       onChangeNumber(0);
+      setFieldValue(padZero('', maxDigits));
     } else if (shouldPadZeroes && fieldValue.length < maxDigits) {
       setFieldValue(padZero(fieldValue, maxDigits));
     }
