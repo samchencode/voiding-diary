@@ -10,9 +10,12 @@ type TimeInputProps = {
   onChangeValue: (v: HhSs) => void;
 };
 
+const MAX_MINS = 59;
+
 function TimeInput({ value, onChangeValue }: TimeInputProps) {
   const handleChangeHh = (n: number) => onChangeValue([n, value[1]]);
-  const handleChangeSs = (n: number) => onChangeValue([value[0], n]);
+  const handleChangeSs = (n: number) =>
+    onChangeValue([value[0], Math.min(n, MAX_MINS)]);
 
   return (
     <View style={styles.inputContainer}>
