@@ -6,6 +6,8 @@ import {
   ScrollView,
   useWindowDimensions,
 } from 'react-native';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
+import Constants from 'expo-constants';
 import { TargetSvg } from '@/view/goal-screen/svg';
 import { theme } from '@/view/theme';
 import { Card, Button } from '@/view/components';
@@ -21,6 +23,8 @@ import { useGoal } from '@/view/goal-screen/useGoal';
 function factory(getGoalAction: GetGoalAction) {
   return function GoalScreen() {
     const { width, height } = useWindowDimensions();
+    const tabBarHeight = useBottomTabBarHeight();
+    const { statusBarHeight } = Constants;
     const svgWidth = Math.min(width, 400);
     const svgHeight = (svgWidth * 2) / 3;
 
@@ -36,7 +40,11 @@ function factory(getGoalAction: GetGoalAction) {
       [volume, setVolume],
     ] = useGoal(getGoalAction);
 
-    // Remember to validate for undef before implementing saveGoalAction
+    const allFieldsFilled = ![amInterval, pmInterval, volume]
+      .flat()
+      .includes(undefined);
+
+    const buttonDisabled = !allFieldsFilled;
 
     return (
       <ScrollView
@@ -44,7 +52,7 @@ function factory(getGoalAction: GetGoalAction) {
         contentContainerStyle={styles.contentContainer}
       >
         <InputRoot ref={inputRoot}>
-          <View style={{ minHeight: height }}>
+          <View style={{ minHeight: height - tabBarHeight - statusBarHeight }}>
             <StatusBar statusBarStyle="dark" color="transparent" />
             <TargetSvg
               width={svgWidth}
@@ -70,6 +78,7 @@ function factory(getGoalAction: GetGoalAction) {
                 title="Set"
                 onPress={handlePress}
                 backgroundColor={theme.colors.accent}
+                disabled={buttonDisabled}
               />
             </Card>
           </View>
