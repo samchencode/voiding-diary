@@ -4,6 +4,7 @@ import type { TimerStateBuilder } from '@/domain/models/Timer/TimerStateBuilder'
 type ConfigureFunction = (builder: TimerStateBuilder) => void;
 
 interface TimerBuilder {
+  init(): Promise<void>;
   configure(fn: ConfigureFunction): void;
   build(): Timer;
 }

@@ -8,6 +8,11 @@ import type {
 class BaseTimerBuilder implements TimerBuilder {
   private fns: ConfigureFunction[] = [];
 
+  // eslint-disable-next-line class-methods-use-this
+  async init(): Promise<void> {
+    // no setup necessary
+  }
+
   configure(fn: ConfigureFunction): void {
     this.fns.push(fn);
   }
