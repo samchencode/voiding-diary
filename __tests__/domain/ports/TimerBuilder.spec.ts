@@ -1,4 +1,3 @@
-import { TimeInMins } from '@/domain/models/TimeInMins';
 import { Timer } from '@/domain/models/Timer';
 import { BaseTimerBuilder } from '@/domain/ports/TimerBuilder';
 
@@ -31,7 +30,7 @@ describe('TimerBuilder', () => {
 
     it('should configure timer', () => {
       const cb = jest.fn();
-      const duration = new TimeInMins(1); // 1 minute
+      const endsAt = new Date(Date.now() + 60000); // 1 minute later
 
       const builder = new BaseTimerBuilder();
       builder.configure((b) => {
@@ -41,7 +40,7 @@ describe('TimerBuilder', () => {
       });
 
       const timer = builder.build();
-      timer.start(duration);
+      timer.start(endsAt);
       expect(cb).toBeCalledTimes(1);
     });
   });
