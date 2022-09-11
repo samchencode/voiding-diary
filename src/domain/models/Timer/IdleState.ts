@@ -5,7 +5,7 @@ import type { TimerState } from '@/domain/models/Timer/TimerState';
 import type { TimerStateBuilder } from '@/domain/models/Timer/TimerStateBuilder';
 
 class IdleState implements TimerState {
-  onStartEvent = new Observable();
+  onStartEvent = new Observable<Date>();
 
   context: Timer;
 
@@ -17,12 +17,12 @@ class IdleState implements TimerState {
   }
 
   start(endsAt: Date): void {
-    this.onStartEvent.notifyObservers();
+    this.onStartEvent.notifyObservers(endsAt);
     const tickingState = this.builder.buildTickingState(endsAt);
     this.context.setState(tickingState);
   }
 
-  addOnStartListener(o: Observer) {
+  addOnStartListener(o: Observer<Date>) {
     this.onStartEvent.observe(o);
   }
 }

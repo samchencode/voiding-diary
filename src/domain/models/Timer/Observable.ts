@@ -1,14 +1,14 @@
-type Observer = () => void;
+type Observer<Params> = (p: Params) => void;
 
-class Observable {
-  observers: Observer[] = [];
+class Observable<Params> {
+  observers: Observer<Params>[] = [];
 
-  observe(o: Observer) {
+  observe(o: Observer<Params>) {
     this.observers.push(o);
   }
 
-  notifyObservers() {
-    this.observers.forEach((o) => o());
+  notifyObservers(p: Params) {
+    this.observers.forEach((o) => o(p));
   }
 }
 

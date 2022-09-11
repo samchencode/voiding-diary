@@ -40,6 +40,10 @@ describe('Timer', () => {
       });
       timer.start(duration);
       expect(cb).toBeCalledTimes(1);
+
+      const endTime = new Date(Date.now() + 60000); // 1 minute later
+
+      expect(cb).toBeCalledWith(endTime);
     });
 
     it('should allow subscribing to every tick of timer', () => {
@@ -130,16 +134,21 @@ describe('Timer', () => {
     it('should allow subscribing to onRestart event', () => {
       const cb = jest.fn();
 
-      const duration = new TimeInMins(1); // 1 minute
+      const duration1 = new TimeInMins(1); // 1 minute
+      const duration2 = new TimeInMins(2); // 1 minute
       const timer = new Timer((b) => {
         b.configureTickingState((s) => {
           s.addOnRestartListener(cb);
         });
       });
 
-      timer.start(duration);
-      timer.start(duration);
+      timer.start(duration1);
+      timer.start(duration2);
       expect(cb).toBeCalledTimes(1);
+
+      const endTime = new Date(Date.now() + 120000); // 2 minutes later
+
+      expect(cb).toBeCalledWith(endTime);
     });
   });
 });

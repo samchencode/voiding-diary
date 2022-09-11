@@ -13,11 +13,11 @@ class TickingState implements TimerState {
 
   stale = false;
 
-  onTickEvent = new Observable();
+  onTickEvent = new Observable<undefined>();
 
-  onRestartEvent = new Observable();
+  onRestartEvent = new Observable<Date>();
 
-  onFinishEvent = new Observable();
+  onFinishEvent = new Observable<undefined>();
 
   constructor(context: Timer, builder: TimerStateBuilder, endsAt: Date) {
     this.context = context;
@@ -27,7 +27,7 @@ class TickingState implements TimerState {
   }
 
   start(endsAt: Date): void {
-    this.onRestartEvent.notifyObservers();
+    this.onRestartEvent.notifyObservers(endsAt);
     const newTickingState = this.builder.buildTickingState(endsAt);
     this.context.setState(newTickingState);
     this.stale = true;
@@ -35,7 +35,7 @@ class TickingState implements TimerState {
 
   tick(): void {
     if (this.stale) return;
-    this.onTickEvent.notifyObservers();
+    this.onTickEvent.notifyObservers(undefined);
 
     if (this.checkShouldContinue()) {
       requestAnimationFrame(() => this.tick());
@@ -45,21 +45,21 @@ class TickingState implements TimerState {
   }
 
   finish(): void {
-    this.onFinishEvent.notifyObservers();
+    this.onFinishEvent.notifyObservers(undefined);
     const idleState = this.builder.buildIdleState();
     this.context.setState(idleState);
     this.stale = true;
   }
 
-  addOnTickListener(o: Observer) {
+  addOnTickListener(o: Observer<undefined>) {
     this.onTickEvent.observe(o);
   }
 
-  addOnRestartListener(o: Observer) {
+  addOnRestartListener(o: Observer<Date>) {
     this.onRestartEvent.observe(o);
   }
 
-  addOnFinishListener(o: Observer) {
+  addOnFinishListener(o: Observer<undefined>) {
     this.onFinishEvent.observe(o);
   }
 
