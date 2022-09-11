@@ -4,14 +4,31 @@ import { factory as HomeScreen } from '@/view/home-screen';
 import { factory as GoalScreen } from '@/view/goal-screen';
 import { factory as RecordScreen } from '@/view/record-screen';
 import { GetAllRecordsAction } from '@/application/GetAllRecordsAction';
-import { FakeRecordRepository } from '@/infrastructure/persistence/fake/FakeRecordRepository';
+import { GetGoalAction } from '@/application/GetGoalAction';
+import { expoSqliteDatabaseFactory } from '@/infrastructure/persistence/expo-sqlite/expoSqliteDatabaseFactory';
+import { SaveRecordAction } from '@/application/SaveRecordAction';
+import { GetTodaysRecordsAction } from '@/application/GetTodaysRecordsAction';
+import { ExpoSqliteRecordRepository } from '@/infrastructure/persistence/expo-sqlite/ExpoSqliteRecordRepository';
+import { SetGoalAction } from '@/application/SetGoalAction';
+import { AsyncStorageGoalRepository } from '@/infrastructure/persistence/async-storage/AsyncStorageGoalRepository';
+import { timerBuilderFactory } from '@/infrastructure/timer/timerBuilderFactory';
+import { GetTimerBuilderAction } from '@/application/GetTimerAction';
 
 export const module = {
   // APPLICATION SERVICES
   getAllRecordsAction: ['type', GetAllRecordsAction],
+  getTodaysRecordsAction: ['type', GetTodaysRecordsAction],
+  saveRecordAction: ['type', SaveRecordAction],
+  getGoalAction: ['type', GetGoalAction],
+  setGoalAction: ['type', SetGoalAction],
+  getTimerBuilderAction: ['type', GetTimerBuilderAction],
 
   // INFRASTRUCTURE
-  recordRepository: ['type', FakeRecordRepository],
+  recordRepository: ['type', ExpoSqliteRecordRepository],
+  goalRepository: ['type', AsyncStorageGoalRepository],
+
+  expoSqliteDatabase: ['factory', expoSqliteDatabaseFactory],
+  timerBuilder: ['factory', timerBuilderFactory],
 
   // VALUES
   foo: ['value', 'foo'],
@@ -22,4 +39,10 @@ export const module = {
   HomeScreen: ['factory', HomeScreen],
   GoalScreen: ['factory', GoalScreen],
   RecordScreen: ['factory', RecordScreen],
+
+  // DEBUG
+  asyncStorageGoalRepository: [
+    'factory',
+    (goalRepository: AsyncStorageGoalRepository) => goalRepository,
+  ],
 };

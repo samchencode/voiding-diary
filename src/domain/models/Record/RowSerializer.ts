@@ -13,7 +13,7 @@ class RowSerializer {
   ): RowSerializedRecord {
     return {
       type,
-      volumeMl: Number(volume),
+      volumeOz: Number(volume),
       timestamp: dateAndTime.getTimeInMilliseconds(),
     };
   }

@@ -6,32 +6,43 @@ import { theme } from '@/view/theme';
 import {
   RecordSectionHeader,
   ListHeaderComponent,
+  ListEmptyComponent,
 } from '@/view/record-screen/components';
 import type { GetAllRecordsAction } from '@/application/GetAllRecordsAction';
 import type { Record } from '@/domain/models/Record';
-import { ViewRecordVisitor } from '@/view/lib';
+import { RecordsStaleObservable, ViewRecordVisitor } from '@/view/lib';
 
 export function factory(getAllRecordsAction: GetAllRecordsAction) {
+  const getAndGroupRecords = async () =>
+    getAllRecordsAction
+      .execute()
+      .then((res) => d3.group(res, (r) => r.getDateString()));
+
   return function RecordScreen() {
     type Date = string;
     type RecordsByDate = InternMap<Date, Record[]>;
     const [records, setRecords] = useState<RecordsByDate>(new Map());
 
     useEffect(() => {
-      getAllRecordsAction
-        .execute()
-        .then((res) => d3.group(res, (r) => r.getDateString()))
-        .then((v) => setRecords(v));
+      getAndGroupRecords().then((v) => setRecords(v));
+      RecordsStaleObservable.subscribe(() => {
+        getAndGroupRecords().then((v) => setRecords(v));
+      });
     }, []);
 
     const sections = Array.from(records).map(([title, data]) => ({
       title,
       data,
     }));
+
+    const contentContainerStyle =
+      sections.length === 0 ? styles.emptyListContainer : {};
+
     return (
       <View style={styles.container}>
         <SectionList
           style={styles.list}
+          contentContainerStyle={contentContainerStyle}
           sections={sections}
           renderItem={({ item }) => {
             const Card = new ViewRecordVisitor(item).makeCard();
@@ -42,6 +53,7 @@ export function factory(getAllRecordsAction: GetAllRecordsAction) {
           )}
           keyExtractor={(item) => ViewRecordVisitor.makeKey(item)}
           ListHeaderComponent={ListHeaderComponent}
+          ListEmptyComponent={ListEmptyComponent}
         />
       </View>
     );
@@ -53,6 +65,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.colors.bg,
   },
+  emptyListContainer: { flex: 1 },
   list: {
     paddingLeft: theme.spaces.lg,
     paddingRight: theme.spaces.lg,

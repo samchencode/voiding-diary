@@ -1,12 +1,12 @@
 import { DateAndTime } from '@/domain/models/DateAndTime';
 import { fromRecordType, VoidRecord } from '@/domain/models/Record';
-import { UnknownVolume, VolumeInMl } from '@/domain/models/Volume';
+import { UnknownVolume, VolumeInOz } from '@/domain/models/Volume';
 
 describe('VoidRecord', () => {
   describe('Instantiation', () => {
     it('should create new void record', () => {
       const datetime = new DateAndTime(new Date(0));
-      const urineVolume = new VolumeInMl(8);
+      const urineVolume = new VolumeInOz(8);
 
       const create = () => new VoidRecord(datetime, urineVolume);
 
@@ -15,7 +15,7 @@ describe('VoidRecord', () => {
 
     it('should create providing record type by string', () => {
       const datetime = new DateAndTime(new Date(0));
-      const urineVolume = new VolumeInMl(8);
+      const urineVolume = new VolumeInOz(8);
 
       const voidRecord = fromRecordType('void', datetime, urineVolume);
       expect(voidRecord).toBeInstanceOf(VoidRecord);
@@ -25,7 +25,7 @@ describe('VoidRecord', () => {
   describe('Behavior', () => {
     it('should get date of void', () => {
       const datetime1 = new DateAndTime(new Date(0));
-      const urineVolume = new VolumeInMl(8);
+      const urineVolume = new VolumeInOz(8);
 
       const voidRecord1 = new VoidRecord(datetime1, urineVolume);
 
@@ -42,41 +42,41 @@ describe('VoidRecord', () => {
 
     it('should get the volume voided', () => {
       const datetime = new DateAndTime(new Date(0));
-      const urineVolume = new VolumeInMl(8);
+      const urineVolume = new VolumeInOz(8);
 
       const voidRecord = new VoidRecord(datetime, urineVolume);
 
-      expect(voidRecord.getUrineVolumeString()).toBe('8 mL');
+      expect(voidRecord.getUrineVolumeString()).toBe('8 oz');
     });
   });
 
   it('should equal other record with same urine volume and datetime', () => {
     const datetime1 = new DateAndTime(new Date(0));
-    const urineVolume1 = new VolumeInMl(2);
+    const urineVolume1 = new VolumeInOz(2);
     const void1 = new VoidRecord(datetime1, urineVolume1);
     const datetime2 = new DateAndTime(new Date(0));
-    const urineVolume2 = new VolumeInMl(2);
+    const urineVolume2 = new VolumeInOz(2);
     const void2 = new VoidRecord(datetime2, urineVolume2);
     expect(void1.is(void2)).toBe(true);
 
     const datetime3 = new DateAndTime(new Date(3600000));
-    const urineVolume3 = new VolumeInMl(2);
+    const urineVolume3 = new VolumeInOz(2);
     const void3 = new VoidRecord(datetime3, urineVolume3);
     expect(void1.is(void3)).toBe(false);
 
     const datetime4 = new DateAndTime(new Date(0));
-    const urineVolume4 = new VolumeInMl(0);
+    const urineVolume4 = new VolumeInOz(0);
     const void4 = new VoidRecord(datetime4, urineVolume4);
     expect(void1.is(void4)).toBe(false);
   });
 
   it('should serialize into a record object for storage', () => {
     const datetime1 = new DateAndTime(new Date(0));
-    const voidVolume1 = new VolumeInMl(2);
+    const voidVolume1 = new VolumeInOz(2);
     const serialized1 = new VoidRecord(datetime1, voidVolume1).serialize();
     const expected1 = {
       type: 'void',
-      volumeMl: 2,
+      volumeOz: 2,
       timestamp: 0,
     };
     expect(serialized1).toEqual(expected1);
@@ -86,7 +86,7 @@ describe('VoidRecord', () => {
     const serialized2 = new VoidRecord(datetime2, voidVolume2).serialize();
     const expected2 = {
       type: 'void',
-      volumeMl: -1,
+      volumeOz: -1,
       timestamp: 1000000,
     };
     expect(serialized2).toEqual(expected2);

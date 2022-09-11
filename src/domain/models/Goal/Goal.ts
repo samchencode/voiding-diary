@@ -1,5 +1,6 @@
+import { Serializer } from '@/domain/models/Goal/Serializer';
 import type { TimeInMins } from '@/domain/models/TimeInMins';
-import type { VolumeInMl } from '@/domain/models/Volume';
+import type { VolumeInOz } from '@/domain/models/Volume';
 
 type TargetVoidIntervalAmPm = {
   am: TimeInMins;
@@ -7,12 +8,12 @@ type TargetVoidIntervalAmPm = {
 };
 
 class Goal {
-  private targetIntake: VolumeInMl;
+  private targetIntake: VolumeInOz;
 
   private targetVoidIntervals: TargetVoidIntervalAmPm;
 
   constructor(
-    targetIntake: VolumeInMl,
+    targetIntake: VolumeInOz,
     targetVoidIntervals: TargetVoidIntervalAmPm
   ) {
     this.targetIntake = targetIntake;
@@ -29,6 +30,10 @@ class Goal {
 
   getPmTargetVoidInterval() {
     return this.targetVoidIntervals.pm;
+  }
+
+  serialize() {
+    return Serializer.serialize(this);
   }
 
   is(v: Goal) {

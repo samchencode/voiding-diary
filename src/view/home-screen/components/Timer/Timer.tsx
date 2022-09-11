@@ -31,6 +31,17 @@ type BaseTimerProps = {
   children: JSX.Element[];
 };
 
+const padZero = (s: string, totalLength: number): string =>
+  totalLength - s.length > 0 ? padZero(`0${s}`, totalLength) : s;
+
+const msToTimeString = (ms: number) => {
+  const seconds = Math.floor(ms / 1000);
+  const secondsWithinMinute = seconds % 60;
+  const minutes = Math.floor(seconds / 60);
+  const secondsDisplay = padZero(secondsWithinMinute.toString(), 2);
+  return `${minutes}:${secondsDisplay}`;
+};
+
 function BaseTimer({ children }: BaseTimerProps) {
   const { width } = useWindowDimensions();
   const height = Math.min(width, maxHeight);
@@ -101,7 +112,10 @@ function TickingTimer({ timeElapsedMs, timeRemainingMs }: TickingTimerProps) {
           strokeWidth={10}
         />
       </G>
-      <CountDownText radius={radius} timeString="12:05" />
+      <CountDownText
+        radius={radius}
+        timeString={msToTimeString(timeRemainingMs)}
+      />
     </BaseTimer>
   );
 }

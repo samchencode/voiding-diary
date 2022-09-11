@@ -1,7 +1,7 @@
 import type { Volume } from '@/domain/models/Volume';
 import {
   fromNumericValue,
-  VolumeInMl,
+  VolumeInOz,
   UnknownVolume,
 } from '@/domain/models/Volume';
 
@@ -12,8 +12,8 @@ describe('Volume', () => {
       expect(create).not.toThrowError();
     });
 
-    it('should create new mL volume value object', () => {
-      const create = () => new VolumeInMl(0);
+    it('should create new oz volume value object', () => {
+      const create = () => new VolumeInOz(0);
       expect(create).not.toThrowError();
     });
 
@@ -22,13 +22,13 @@ describe('Volume', () => {
       expect(vol.is(new UnknownVolume())).toBe(true);
     });
 
-    it('should create volume in ml from positive number', () => {
+    it('should create volume in oz from positive number', () => {
       const vol = fromNumericValue(7);
-      expect(vol.is(new VolumeInMl(7))).toBe(true);
+      expect(vol.is(new VolumeInOz(7))).toBe(true);
     });
 
     it('should throw error if negative', () => {
-      const boom = () => new VolumeInMl(-1);
+      const boom = () => new VolumeInOz(-1);
       expect(boom).toThrowError('negative');
     });
   });
@@ -39,26 +39,26 @@ describe('Volume', () => {
       expect(vol.toString()).toBe('');
     });
 
-    it('should toString to a number of mL', () => {
-      const vol: Volume = new VolumeInMl(2);
-      expect(vol.toString()).toBe('2 mL');
+    it('should toString to a number of oz', () => {
+      const vol: Volume = new VolumeInOz(2);
+      expect(vol.toString()).toBe('2 oz');
     });
 
     it('should be same as another object with equal volume', () => {
-      const vol1 = new VolumeInMl(1);
-      const vol2 = new VolumeInMl(1);
+      const vol1 = new VolumeInOz(1);
+      const vol2 = new VolumeInOz(1);
       expect(vol1.is(vol2)).toBe(true);
 
       const vol3 = new UnknownVolume();
       const vol4 = new UnknownVolume();
       expect(vol3.is(vol4)).toBe(true);
 
-      const vol5 = new VolumeInMl(2);
+      const vol5 = new VolumeInOz(2);
       expect(vol1.is(vol5)).toBe(false);
     });
 
     it('should not be equal to unknown if its known', () => {
-      const vol = new VolumeInMl(2);
+      const vol = new VolumeInOz(2);
       const unk = new UnknownVolume();
       expect(vol.is(unk)).toBe(false);
     });
@@ -69,8 +69,8 @@ describe('Volume', () => {
       expect(Number(vol)).toBe(-1);
     });
 
-    it('should convert volume to number of milliliters', () => {
-      const vol = new VolumeInMl(8);
+    it('should convert volume to number of ounces', () => {
+      const vol = new VolumeInOz(8);
       expect(+vol).toBe(8);
       expect(Number(vol)).toBe(8);
     });

@@ -11,6 +11,7 @@ import { theme } from '@/view/theme';
 type ButtonProps = {
   title: string;
   onPress: (e: GestureResponderEvent) => void;
+  disabled?: boolean;
   backgroundColor?: string;
   borderColor?: string;
   darkText?: boolean;
@@ -22,6 +23,7 @@ type ButtonProps = {
 function Button({
   title,
   onPress,
+  disabled,
   backgroundColor,
   borderColor,
   darkText,
@@ -31,15 +33,17 @@ function Button({
 }: ButtonProps) {
   const defaultTextColor = darkText ? theme.colors.dark : theme.colors.light;
 
+  const colorStyle = !disabled
+    ? { backgroundColor, borderColor }
+    : { backgroundColor: theme.colors.gray, borderColor: theme.colors.gray };
+
   return (
-    <TouchableOpacity style={[styles.buttonContainer, style]} onPress={onPress}>
-      <View
-        style={[
-          styles.button,
-          { backgroundColor, borderColor },
-          contentContainerStyle,
-        ]}
-      >
+    <TouchableOpacity
+      style={[styles.buttonContainer, style]}
+      onPress={onPress}
+      disabled={disabled}
+    >
+      <View style={[styles.button, colorStyle, contentContainerStyle]}>
         <Text
           style={[styles.buttonLabel, { color: defaultTextColor }, titleStyle]}
         >
@@ -51,6 +55,7 @@ function Button({
 }
 
 Button.defaultProps = {
+  disabled: false,
   backgroundColor: theme.colors.gray,
   borderColor: theme.colors.gray,
   darkText: false,

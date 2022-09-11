@@ -5,7 +5,7 @@ type RecordType = typeof IntakeRecord.type | typeof VoidRecord.type;
 
 interface RowSerializedRecord {
   type: RecordType;
-  volumeMl: number;
+  volumeOz: number;
   timestamp: number;
 }
 

@@ -1,13 +1,9 @@
 import type { Goal } from '@/domain/models/Goal';
 import type { GoalRepository } from '@/domain/ports/GoalRepository';
-import { GoalNotFoundError } from '@/infrastructure/persistence/fake/GoalNotFoundError';
+import { GoalNotFoundError } from '@/domain/ports/GoalRepository';
 
 class FakeGoalRepository implements GoalRepository {
   fakeValue?: Goal;
-
-  constructor(goal?: Goal) {
-    this.fakeValue = goal;
-  }
 
   async get(): Promise<Goal> {
     if (!this.fakeValue) throw new GoalNotFoundError();
