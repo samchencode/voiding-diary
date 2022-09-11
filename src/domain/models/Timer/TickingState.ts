@@ -36,9 +36,9 @@ class TickingState implements TimerState {
   tick(): void {
     if (this.stale) return;
     const remainingMs = this.getRemainingTimeMs();
-    this.onTickEvent.notifyObservers(remainingMs);
 
     if (remainingMs > 0) {
+      this.onTickEvent.notifyObservers(remainingMs);
       requestAnimationFrame(() => this.tick());
     } else {
       this.finish();
