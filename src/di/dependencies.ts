@@ -12,7 +12,7 @@ import { ExpoSqliteRecordRepository } from '@/infrastructure/persistence/expo-sq
 import { SetGoalAction } from '@/application/SetGoalAction';
 import { AsyncStorageGoalRepository } from '@/infrastructure/persistence/async-storage/AsyncStorageGoalRepository';
 import { timerBuilderFactory } from '@/infrastructure/timer/timerBuilderFactory';
-import { GetTimerAction } from '@/application/GetTimerAction';
+import { GetTimerBuilderAction } from '@/application/GetTimerAction';
 
 export const module = {
   // APPLICATION SERVICES
@@ -21,7 +21,7 @@ export const module = {
   saveRecordAction: ['type', SaveRecordAction],
   getGoalAction: ['type', GetGoalAction],
   setGoalAction: ['type', SetGoalAction],
-  getTimerAction: ['type', GetTimerAction],
+  getTimerBuilderAction: ['type', GetTimerBuilderAction],
 
   // INFRASTRUCTURE
   recordRepository: ['type', ExpoSqliteRecordRepository],

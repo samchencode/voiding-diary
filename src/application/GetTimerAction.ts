@@ -1,25 +1,16 @@
-import type { Timer } from '@/domain/models/Timer';
 import type { TimerBuilder } from '@/domain/ports/TimerBuilder';
 
-class GetTimerAction {
+class GetTimerBuilderAction {
   builder: TimerBuilder;
 
   constructor(timerBuilder: TimerBuilder) {
     this.builder = timerBuilder;
   }
 
-  async execute(): Promise<Timer> {
+  async execute(): Promise<TimerBuilder> {
     await this.builder.init();
-    this.builder.configure((b) => {
-      b.configureIdleState((s) => {
-        s.addOnStartListener(() => console.log('timer start!'));
-      });
-      b.configureTickingState((s) => {
-        s.addOnFinishListener(() => console.log('timer done!'));
-      });
-    });
-    return this.builder.build();
+    return this.builder;
   }
 }
 
-export { GetTimerAction };
+export { GetTimerBuilderAction };

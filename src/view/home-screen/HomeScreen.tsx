@@ -19,7 +19,10 @@ import type { GetTodaysRecordsAction } from '@/application/GetTodaysRecordsActio
 import { Button, Card } from '@/view/components';
 import type { WebSQLDatabase } from 'expo-sqlite';
 import type { AsyncStorageGoalRepository } from '@/infrastructure/persistence/async-storage/AsyncStorageGoalRepository';
-import type { GetTimerAction } from '@/application/GetTimerAction';
+import type { GetTimerBuilderAction } from '@/application/GetTimerAction';
+import type { Timer } from '@/domain/models/Timer';
+import type { GetGoalAction } from '@/application/GetGoalAction';
+import type { TimeInMins } from '@/domain/models/TimeInMins';
 
 const makeIntake = () => {
   const datetime = new DateAndTime(new Date());
@@ -38,7 +41,8 @@ function factory(
   saveRecordAction: SaveRecordAction,
   expoSqliteDatabase: WebSQLDatabase,
   asyncStorageGoalRepository: AsyncStorageGoalRepository,
-  getTimerAction: GetTimerAction
+  getTimerBuilderAction: GetTimerBuilderAction,
+  getGoalAction: GetGoalAction
 ) {
   async function handleNewRecord(makeRecord: () => Record) {
     const record = makeRecord();
@@ -53,19 +57,62 @@ function factory(
   }
 
   return function HomeScreen() {
-    const timeElapsed = 0;
-    const timeRemaining = 0;
+    const [timeTotal, setTimeTotal] = useState(0);
+    const [timeRemaining, setTimeRemaining] = useState(0);
 
     const [records, setRecords] = useState<Record[]>([]);
+
+    const [timer, loadTimer] = useState<Timer | null>(null);
+
+    const [amInterval, setAmInterval] = useState<TimeInMins | null>(null);
+
+    const makeVoidAndStartTimer = () => {
+      if (!amInterval) {
+        console.log('no amInterval set yet...');
+        return makeVoid();
+      }
+      const durationMs = amInterval.getMinutesTotal() * 60 * 1000;
+      const endsAt = new Date(Date.now() + durationMs);
+      timer!.start(endsAt);
+      return makeVoid();
+    };
+
+    useEffect(() => {
+      getTimerBuilderAction.execute().then((b) => {
+        b.configure((bs) => {
+          bs.configureIdleState((s) => {
+            s.addOnStartListener((endsAt) => {
+              setTimeTotal(endsAt.getTime() - Date.now());
+            });
+          });
+          bs.configureTickingState((s) => {
+            s.addOnRestartListener((endsAt) => {
+              setTimeTotal(endsAt.getTime() - Date.now());
+            });
+            s.addOnTickListener((ms) => {
+              setTimeRemaining(ms);
+            });
+            s.addOnFinishListener(() => {
+              setTimeRemaining(0);
+            });
+          });
+        });
+        loadTimer(b.build());
+      });
+
+      getGoalAction
+        .execute()
+        .then((g) => setAmInterval(g.getAmTargetVoidInterval()))
+        .catch(() => {
+          console.log('no goal set yet...');
+        });
+    }, []);
+
     useEffect(() => {
       getTodaysRecordsAction.execute().then((r) => setRecords(r));
       RecordsStaleObservable.subscribe(() => {
         getTodaysRecordsAction.execute().then((r) => setRecords(r));
       });
-
-      // DEBUG: set 1 sec timer
-      const endAt = new Date(Date.now() + 10000);
-      getTimerAction.execute().then((t) => t.start(endAt));
     }, []);
 
     return (
@@ -83,15 +130,15 @@ function factory(
             elevated
           />
           <TimerView
-            onPress={() => handleNewRecord(makeVoid)}
-            timeElapsedMs={timeElapsed}
+            onPress={() => handleNewRecord(makeVoidAndStartTimer)}
+            timeElapsedMs={timeTotal - timeRemaining}
             timeRemainingMs={timeRemaining}
           />
           <View style={styles.cardContainer}>
             <LoggerButtonGroup
               style={styles.item}
               onPressIntake={() => handleNewRecord(makeIntake)}
-              onPressVoid={() => handleNewRecord(makeVoid)}
+              onPressVoid={() => handleNewRecord(makeVoidAndStartTimer)}
             />
             <IntakeChart style={styles.item} goal={32} intake={8} />
             <RecentRecordList style={styles.item} records={records} />
