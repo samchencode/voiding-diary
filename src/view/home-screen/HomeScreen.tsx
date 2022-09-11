@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, ScrollView, View } from 'react-native';
 import { theme } from '@/view/theme';
 import {
@@ -9,12 +9,18 @@ import {
   SplitColorBackground,
 } from '@/view/home-screen/components';
 import { StatusBar } from '@/view/status-bar';
+import { RecordIntakeModal } from '@/view/modals/RecordIntakeModal';
 
 function factory() {
   return function HomeScreen() {
+    const [recordIntakeModalVisible, setRecordIntakeModalVisible] =
+      useState(true);
     const timeElapsed = 0;
     const timeRemaining = 0;
-
+    const recordIntake = (beverage: string, size: number, time: number) => {
+      const newString = `recorded ${beverage}${size}${time}`;
+      alert(newString);
+    };
     return (
       <SplitColorBackground
         color1={theme.colors.primary}
@@ -37,7 +43,9 @@ function factory() {
           <View style={styles.cardContainer}>
             <LoggerButtonGroup
               style={styles.item}
-              onPressIntake={() => alert('pressed intake')}
+              onPressIntake={() => {
+                setRecordIntakeModalVisible(true);
+              }}
               onPressVoid={() => alert('pressed void')}
             />
             <IntakeChart style={styles.item} goal={32} intake={8} />
@@ -46,6 +54,11 @@ function factory() {
               records={[]}
             />
           </View>
+          <RecordIntakeModal
+            visible={recordIntakeModalVisible}
+            recordIntake={recordIntake}
+            setModalVisible={setRecordIntakeModalVisible}
+          />
         </ScrollView>
       </SplitColorBackground>
     );

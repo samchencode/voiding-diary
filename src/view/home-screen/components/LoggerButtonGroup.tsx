@@ -16,6 +16,7 @@ function LoggerButtonGroup({
   onPressVoid,
   style,
 }: LoggerButtonGroupProps) {
+  // const [openModal, setOpenModal] = useState(true);
   return (
     <View style={[styles.container, style]}>
       <Card style={[styles.card, styles.cardLeft]}>
