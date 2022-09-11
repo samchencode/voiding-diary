@@ -13,7 +13,7 @@ class TickingState implements TimerState {
 
   stale = false;
 
-  onTickEvent = new Observable<undefined>();
+  onTickEvent = new Observable<number>();
 
   onRestartEvent = new Observable<Date>();
 
@@ -35,9 +35,10 @@ class TickingState implements TimerState {
 
   tick(): void {
     if (this.stale) return;
-    this.onTickEvent.notifyObservers(undefined);
+    const remainingMs = this.getRemainingTimeMs();
+    this.onTickEvent.notifyObservers(remainingMs);
 
-    if (this.checkShouldContinue()) {
+    if (remainingMs > 0) {
       requestAnimationFrame(() => this.tick());
     } else {
       this.finish();
@@ -51,7 +52,7 @@ class TickingState implements TimerState {
     this.stale = true;
   }
 
-  addOnTickListener(o: Observer<undefined>) {
+  addOnTickListener(o: Observer<number>) {
     this.onTickEvent.observe(o);
   }
 
@@ -63,10 +64,10 @@ class TickingState implements TimerState {
     this.onFinishEvent.observe(o);
   }
 
-  private checkShouldContinue() {
+  private getRemainingTimeMs() {
     const nowMs = Date.now();
     const endTimeMs = this.endsAt.getTime();
-    return nowMs < endTimeMs;
+    return endTimeMs - nowMs;
   }
 }
 

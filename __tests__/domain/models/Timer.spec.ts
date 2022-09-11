@@ -63,6 +63,21 @@ describe('Timer', () => {
       expect(cb).toBeCalledTimes(3);
     });
 
+    it('should provide ms remaining to onTick cb', () => {
+      const cb = jest.fn();
+      const endsAt = new Date(Date.now() + 60000); // 1 minute
+      const timer = new Timer((b) => {
+        b.configureTickingState((s) => {
+          s.addOnTickListener(cb);
+        });
+      });
+      timer.start(endsAt);
+
+      jest.advanceTimersToNextTimer();
+      expect(cb).toBeCalledTimes(1);
+      expect(cb).toBeCalledWith(60000);
+    });
+
     it('should allow subscribing to onFinish of timer', () => {
       const cb = jest.fn();
       const endsAt = new Date(Date.now() + 60000); // 1 minute
