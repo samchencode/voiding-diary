@@ -5,7 +5,7 @@ import {
   IntakeChart,
   LoggerButtonGroup,
   RecentRecordList,
-  Timer,
+  Timer as TimerView,
   SplitColorBackground,
 } from '@/view/home-screen/components';
 import { StatusBar } from '@/view/status-bar';
@@ -19,6 +19,7 @@ import type { GetTodaysRecordsAction } from '@/application/GetTodaysRecordsActio
 import { Button, Card } from '@/view/components';
 import type { WebSQLDatabase } from 'expo-sqlite';
 import type { AsyncStorageGoalRepository } from '@/infrastructure/persistence/async-storage/AsyncStorageGoalRepository';
+import type { GetTimerAction } from '@/application/GetTimerAction';
 
 const makeIntake = () => {
   const datetime = new DateAndTime(new Date());
@@ -36,7 +37,8 @@ function factory(
   getTodaysRecordsAction: GetTodaysRecordsAction,
   saveRecordAction: SaveRecordAction,
   expoSqliteDatabase: WebSQLDatabase,
-  asyncStorageGoalRepository: AsyncStorageGoalRepository
+  asyncStorageGoalRepository: AsyncStorageGoalRepository,
+  getTimerAction: GetTimerAction
 ) {
   async function handleNewRecord(makeRecord: () => Record) {
     const record = makeRecord();
@@ -60,6 +62,10 @@ function factory(
       RecordsStaleObservable.subscribe(() => {
         getTodaysRecordsAction.execute().then((r) => setRecords(r));
       });
+
+      // DEBUG: set 1 sec timer
+      const endAt = new Date(Date.now() + 10000);
+      getTimerAction.execute().then((t) => t.start(endAt));
     }, []);
 
     return (
@@ -76,7 +82,7 @@ function factory(
             statusBarStyle="light"
             elevated
           />
-          <Timer
+          <TimerView
             onPress={() => handleNewRecord(makeVoid)}
             timeElapsedMs={timeElapsed}
             timeRemainingMs={timeRemaining}

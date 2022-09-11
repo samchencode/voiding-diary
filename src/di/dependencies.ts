@@ -11,6 +11,8 @@ import { GetTodaysRecordsAction } from '@/application/GetTodaysRecordsAction';
 import { ExpoSqliteRecordRepository } from '@/infrastructure/persistence/expo-sqlite/ExpoSqliteRecordRepository';
 import { SetGoalAction } from '@/application/SetGoalAction';
 import { AsyncStorageGoalRepository } from '@/infrastructure/persistence/async-storage/AsyncStorageGoalRepository';
+import { timerBuilderFactory } from '@/infrastructure/timer/timerBuilderFactory';
+import { GetTimerAction } from '@/application/GetTimerAction';
 
 export const module = {
   // APPLICATION SERVICES
@@ -19,12 +21,14 @@ export const module = {
   saveRecordAction: ['type', SaveRecordAction],
   getGoalAction: ['type', GetGoalAction],
   setGoalAction: ['type', SetGoalAction],
+  getTimerAction: ['type', GetTimerAction],
 
   // INFRASTRUCTURE
   recordRepository: ['type', ExpoSqliteRecordRepository],
   goalRepository: ['type', AsyncStorageGoalRepository],
 
   expoSqliteDatabase: ['factory', expoSqliteDatabaseFactory],
+  timerBuilder: ['factory', timerBuilderFactory],
 
   // VALUES
   foo: ['value', 'foo'],
