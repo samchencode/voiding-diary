@@ -1,5 +1,6 @@
 import { Card, Button } from '@/view/components';
 import { SizeOption } from '@/view/modals/SizeOption';
+import { SizeOptionOther } from '@/view/modals/SizeOptionOther';
 import { theme } from '@/view/theme';
 import React, { useState } from 'react';
 
@@ -44,7 +45,7 @@ function RecordIntakeModal({
           <SizeOption title="8oz" size={8} setSize={setSize} />
           <SizeOption title="10oz" size={10} setSize={setSize} />
           <SizeOption title="16oz" size={16} setSize={setSize} />
-          <SizeOption title="other" size={0} setSize={setSize} />
+          <SizeOptionOther setSize={setSize} size={size} />
         </View>
         <Button
           onPress={() => {
@@ -90,11 +91,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     ...theme.fonts.sm,
-  },
-  sizes: {
-    ...theme.fonts.md,
-    color: theme.colors.accent,
-    padding: theme.spaces.lg,
   },
 });
 

@@ -58,9 +58,8 @@ function factory(
   }
   return function HomeScreen() {
     const [recordIntakeModalVisible, setRecordIntakeModalVisible] =
-      useState(true);
-    // const timeElapsed = 0;
-    // const timeRemaining = 0;
+      useState(false);
+
     const recordIntake = (beverage: string, size: number, time: number) => {
       const newString = `recorded ${beverage}${size}${time}`;
       alert(newString);
