@@ -25,9 +25,9 @@ import type { Timer } from '@/domain/models/Timer';
 import type { GetGoalAction } from '@/application/GetGoalAction';
 import type { TimeInMins } from '@/domain/models/TimeInMins';
 
-const makeIntake = () => {
+const makeIntake = (amount: number) => {
   const datetime = new DateAndTime(new Date());
-  const volume = new VolumeInOz(30);
+  const volume = new VolumeInOz(amount);
   return new IntakeRecord(datetime, volume);
 };
 
@@ -45,8 +45,7 @@ function factory(
   getTimerBuilderAction: GetTimerBuilderAction,
   getGoalAction: GetGoalAction
 ) {
-  async function handleNewRecord(makeRecord: () => Record) {
-    const record = makeRecord();
+  async function handleNewRecord(record: Record) {
     await saveRecordAction.execute(record);
     RecordsStaleObservable.notifyAll();
   }
@@ -56,13 +55,13 @@ function factory(
     expoSqliteDatabase.deleteDb();
     asyncStorageGoalRepository.reset();
   }
+
   return function HomeScreen() {
     const [recordIntakeModalVisible, setRecordIntakeModalVisible] =
       useState(false);
 
-    const recordIntake = (beverage: string, size: number, time: number) => {
-      const newString = `recorded ${beverage}${size}${time}`;
-      alert(newString);
+    const recordIntake = (amount: number) => {
+      handleNewRecord(makeIntake(amount));
     };
 
     const [timeTotal, setTimeTotal] = useState(0);
@@ -138,7 +137,7 @@ function factory(
             elevated
           />
           <TimerView
-            onPress={() => handleNewRecord(makeVoidAndStartTimer)}
+            onPress={() => handleNewRecord(makeVoidAndStartTimer())}
             timeElapsedMs={timeTotal - timeRemaining}
             timeRemainingMs={timeRemaining}
           />
@@ -147,9 +146,8 @@ function factory(
               style={styles.item}
               onPressIntake={() => {
                 setRecordIntakeModalVisible(true);
-                handleNewRecord(makeIntake);
               }}
-              onPressVoid={() => handleNewRecord(makeVoidAndStartTimer)}
+              onPressVoid={() => handleNewRecord(makeVoidAndStartTimer())}
             />
             <IntakeChart style={styles.item} goal={32} intake={8} />
             <RecentRecordList style={styles.item} records={records} />

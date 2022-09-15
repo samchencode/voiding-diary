@@ -1,51 +1,50 @@
 import { Card, Button } from '@/view/components';
 import { BaseModal } from '@/view/modals/BaseModal';
-import { SizeOption } from '@/view/modals/SizeOption';
 import { SizeOptionOther } from '@/view/modals/SizeOptionOther';
 import { theme } from '@/view/theme';
 import React, { useState } from 'react';
 
 import { Text, StyleSheet, TextInput, View } from 'react-native';
 
-type RecordIntakeModalProps = {
+type EditIntakeModalProps = {
   visible: boolean;
-  recordIntake: (amount: number) => void;
+  editIntake: (beverage: string, size: number, time: number) => void;
   setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function RecordIntakeModal({
+function EditIntakeModal({
   visible,
-  recordIntake,
+  editIntake,
   setModalVisible,
-}: RecordIntakeModalProps) {
+}: EditIntakeModalProps) {
   const [beverage, setBeverage] = useState('');
   const [size, setSize] = useState(0);
+  const time = 0;
 
   return (
     <BaseModal setModalVisible={setModalVisible} visible={visible}>
       <Card style={styles.card}>
-        <Text style={styles.title}>+Intake</Text>
+        <Text style={styles.title}>Edit Intake</Text>
         <Text style={styles.subTitle}>Beverage</Text>
         <TextInput
-          style={styles.textInput}
-          placeholder="Water"
+          style={{ height: 40 }}
           onChangeText={(newText) => setBeverage(newText)}
           defaultValue={beverage}
+          value={beverage}
         />
-        <Text style={styles.subTitle}>Size</Text>
+
         <View style={styles.container}>
-          <SizeOption title="8oz" size={8} setSize={setSize} />
-          <SizeOption title="10oz" size={10} setSize={setSize} />
-          <SizeOption title="16oz" size={16} setSize={setSize} />
+          <Text style={styles.subTitle}>Size: </Text>
           <SizeOptionOther setSize={setSize} size={size} />
         </View>
         <Button
           onPress={() => {
             setModalVisible(false);
             // throw error if size or beverage are unfilled
-            recordIntake(size);
+            // save "beverage" and "size" to database
+            editIntake(beverage, size, time);
           }}
-          title="Add"
+          title="Save Changes"
         />
       </Card>
     </BaseModal>
@@ -68,17 +67,16 @@ const styles = StyleSheet.create({
   subTitle: {
     ...theme.fonts.sm,
   },
-  textInput: {
-    height: 40,
-    ...theme.fonts.sm,
-    borderBottomWidth: 1,
-    marginBottom: 5,
-  },
   container: {
     display: 'flex',
     flexDirection: 'row',
     ...theme.fonts.sm,
   },
+  sizes: {
+    ...theme.fonts.md,
+    color: theme.colors.accent,
+    padding: theme.spaces.lg,
+  },
 });
 
-export { RecordIntakeModal };
+export { EditIntakeModal };
