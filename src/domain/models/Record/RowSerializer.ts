@@ -1,4 +1,5 @@
 import type { DateAndTime } from '@/domain/models/DateAndTime';
+import type { RecordId } from '@/domain/models/Record/RecordId';
 import type {
   RowSerializedRecord,
   RecordType,
@@ -9,12 +10,14 @@ class RowSerializer {
   static serialize(
     type: RecordType,
     dateAndTime: DateAndTime,
-    volume: Volume
+    volume: Volume,
+    id: RecordId
   ): RowSerializedRecord {
     return {
       type,
       volumeOz: Number(volume),
       timestamp: dateAndTime.getTimeInMilliseconds(),
+      id: id.getValue(),
     };
   }
 }

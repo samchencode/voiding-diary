@@ -44,10 +44,10 @@ class BaseExpoSqliteRecordRepository implements RecordRepository {
   async createTable() {
     await this.executeSql(
       `CREATE TABLE IF NOT EXISTS records (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
         type TEXT, 
         volumeOz INTEGER,
-        timestamp INTEGER,
-        PRIMARY KEY(timestamp, type, volumeOz) 
+        timestamp INTEGER
       );`
     );
   }
@@ -58,14 +58,14 @@ class BaseExpoSqliteRecordRepository implements RecordRepository {
 
   async getAll(): Promise<Record[]> {
     return this.executeSqlAndHydrate(
-      `SELECT type, volumeOz, timestamp FROM records
+      `SELECT type, volumeOz, timestamp, id FROM records
       ORDER BY timestamp DESC;`
     );
   }
 
   async getByDateInterval(startDate: Date, endDate: Date): Promise<Record[]> {
     return this.executeSqlAndHydrate(
-      `SELECT type, volumeOz, timestamp FROM records
+      `SELECT type, volumeOz, timestamp, id FROM records
       WHERE timestamp > ? AND timestamp < ?
       ORDER BY timestamp DESC;`,
       [startDate.getTime(), endDate.getTime()]
@@ -74,7 +74,7 @@ class BaseExpoSqliteRecordRepository implements RecordRepository {
 
   async getByLimitAndOffset(limit: number, offset: number): Promise<Record[]> {
     return this.executeSqlAndHydrate(
-      `SELECT type, volumeOz, timestamp FROM records
+      `SELECT type, volumeOz, timestamp, id FROM records
       ORDER BY timestamp DESC
       LIMIT ? OFFSET ?;`,
       [limit, offset]

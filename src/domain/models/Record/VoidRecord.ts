@@ -1,5 +1,6 @@
 import type { DateAndTime } from '@/domain/models/DateAndTime';
 import { Record } from '@/domain/models/Record/Record';
+import type { RecordId } from '@/domain/models/Record/RecordId';
 import type { RecordVisitor } from '@/domain/models/Record/RecordVisitor';
 import type { RowSerializedRecord } from '@/domain/models/Record/RowSerializedRecord';
 import { RowSerializer } from '@/domain/models/Record/RowSerializer';
@@ -10,8 +11,8 @@ class VoidRecord extends Record {
 
   static readonly type = 'void';
 
-  constructor(dateAndTime: DateAndTime, urineVolume: Volume) {
-    super(dateAndTime);
+  constructor(dateAndTime: DateAndTime, urineVolume: Volume, id?: RecordId) {
+    super(dateAndTime, id);
     this.urineVolume = urineVolume;
   }
 
@@ -20,18 +21,15 @@ class VoidRecord extends Record {
   }
 
   is(otherRecord: VoidRecord) {
-    const hasSameDate = this.getDateString() === otherRecord.getDateString();
-    const hasSameTime = this.getTimeString() === otherRecord.getTimeString();
-    const hasSameVolume =
-      this.getUrineVolumeString() === otherRecord.getUrineVolumeString();
-    return hasSameDate && hasSameTime && hasSameVolume;
+    return this.getId().is(otherRecord.getId());
   }
 
   serialize(): RowSerializedRecord {
     return RowSerializer.serialize(
       VoidRecord.type,
       this.dateAndTime,
-      this.urineVolume
+      this.urineVolume,
+      this.id
     );
   }
 

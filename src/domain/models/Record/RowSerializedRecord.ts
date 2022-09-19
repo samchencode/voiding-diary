@@ -7,6 +7,7 @@ interface RowSerializedRecord {
   type: RecordType;
   volumeOz: number;
   timestamp: number;
+  id: string;
 }
 
 export type { RowSerializedRecord, RecordType };

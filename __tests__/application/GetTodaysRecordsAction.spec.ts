@@ -24,11 +24,13 @@ describe('GetTodaysRecordsAction', () => {
     it('should get the records between midnight today and midnight tomorrow', () => {
       const expected = [
         {
+          id: '0',
           type: 'intake',
           volumeOz: 866,
           timestamp: 1662262790000,
         },
         {
+          id: '1',
           type: 'void',
           volumeOz: 491,
           timestamp: 1662250687000,

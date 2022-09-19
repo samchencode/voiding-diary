@@ -17,11 +17,13 @@ describe('GetAllRecordsAction', () => {
       const records = await action.execute();
       expect(records.length).toEqual(1000);
       expect(records[0].serialize()).toEqual({
+        id: '0',
         timestamp: 1662262790000,
         type: 'intake',
         volumeOz: 866,
       });
       expect(records[999].serialize()).toEqual({
+        id: '999',
         timestamp: 1609485765000,
         type: 'void',
         volumeOz: 352,
