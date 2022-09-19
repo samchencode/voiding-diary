@@ -9,6 +9,10 @@ class RecordId {
     return this.id;
   }
 
+  toString() {
+    return this.getValue();
+  }
+
   is(id: RecordId) {
     return this.id === id.getValue();
   }

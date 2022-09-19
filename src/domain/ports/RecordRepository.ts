@@ -1,9 +1,10 @@
-import type { Record } from '@/domain/models/Record';
+import type { Record, RecordId } from '@/domain/models/Record';
 
 interface RecordRepository {
   getAll(): Promise<Record[]>;
   getByDateInterval(startDate: Date, endDate: Date): Promise<Record[]>;
   getByLimitAndOffset(limit: number, offset: number): Promise<Record[]>;
+  update(id: RecordId, record: Record): Promise<void>;
   save(record: Record): Promise<void>;
 }
 

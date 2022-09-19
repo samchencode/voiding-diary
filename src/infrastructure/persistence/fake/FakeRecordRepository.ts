@@ -1,4 +1,4 @@
-import type { Record } from '@/domain/models/Record';
+import type { Record, RecordId } from '@/domain/models/Record';
 import type { RecordRepository } from '@/domain/ports/RecordRepository';
 import { hydrateRowSerializedRecord } from '@/domain/services/hydrateRecord';
 import { mockData } from '@/infrastructure/persistence/fake/mockData';
@@ -34,6 +34,14 @@ class FakeRecordRepository implements RecordRepository {
         // @ts-ignore
         .map(hydrateRowSerializedRecord)
     );
+  }
+
+  async update(id: RecordId, record: Record): Promise<void> {
+    const saved = this.mockData.find((r) => r.id === id.getValue());
+    if (!saved) throw new Error(`Record with id: ${id} not found`);
+    const newInfo = record.serialize();
+    saved.volumeOz = newInfo.volumeOz;
+    saved.timestamp = newInfo.timestamp;
   }
 
   async save(record: Record): Promise<void> {

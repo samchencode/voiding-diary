@@ -1,4 +1,4 @@
-import type { Record } from '@/domain/models/Record';
+import type { Record, RecordId } from '@/domain/models/Record';
 import type { RecordRepository } from '@/domain/ports/RecordRepository';
 import { BaseExpoSqliteRecordRepository } from '@/infrastructure/persistence/expo-sqlite/ExpoSqliteRecordRepository/BaseExpoSqliteRecordRepository';
 import type { WebSQLDatabase } from 'expo-sqlite';
@@ -31,6 +31,11 @@ class ExpoSqliteRecordRepositoryReadyProxy implements RecordRepository {
   async getByLimitAndOffset(limit: number, offset: number): Promise<Record[]> {
     await this.ready;
     return this.repo.getByLimitAndOffset(limit, offset);
+  }
+
+  async update(id: RecordId, record: Record): Promise<void> {
+    await this.ready;
+    return this.repo.update(id, record);
   }
 
   async save(record: Record): Promise<void> {

@@ -1,6 +1,11 @@
-import type { Record, RowSerializedRecord } from '@/domain/models/Record';
+import type {
+  Record,
+  RecordId,
+  RowSerializedRecord,
+} from '@/domain/models/Record';
 import type { RecordRepository } from '@/domain/ports/RecordRepository';
 import { hydrateRowSerializedRecord } from '@/domain/services/hydrateRecord';
+import { RecordIdNotFoundError } from '@/infrastructure/persistence/expo-sqlite/ExpoSqliteRecordRepository/RecordIdNotFoundError';
 import type { WebSQLDatabase, SQLTransaction, SQLResultSet } from 'expo-sqlite';
 
 class BaseExpoSqliteRecordRepository implements RecordRepository {
@@ -79,6 +84,19 @@ class BaseExpoSqliteRecordRepository implements RecordRepository {
       LIMIT ? OFFSET ?;`,
       [limit, offset]
     );
+  }
+
+  async update(id: RecordId, record: Record): Promise<void> {
+    const serialized = record.serialize();
+    const res = await this.executeSql(
+      `UPDATE records
+      SET 
+        volumeOz = ?, 
+        timestamp = ?
+      WHERE id = ?`,
+      [serialized.volumeOz, serialized.timestamp, id.getValue()]
+    );
+    if (res.rowsAffected < 1) throw new RecordIdNotFoundError(id);
   }
 
   async save(record: Record): Promise<void> {
