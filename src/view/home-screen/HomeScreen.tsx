@@ -10,6 +10,7 @@ import {
 } from '@/view/home-screen/components';
 import { StatusBar } from '@/view/status-bar';
 import { RecordIntakeModal } from '@/view/modals/RecordIntakeModal';
+import { FirstGoalModal } from '@/view/modals/FirstGoalModal';
 import type { SaveRecordAction } from '@/application/SaveRecordAction';
 import { DateAndTime } from '@/domain/models/DateAndTime';
 import { VolumeInOz } from '@/domain/models/Volume';
@@ -24,6 +25,7 @@ import type { GetTimerBuilderAction } from '@/application/GetTimerAction';
 import type { Timer } from '@/domain/models/Timer';
 import type { GetGoalAction } from '@/application/GetGoalAction';
 import type { TimeInMins } from '@/domain/models/TimeInMins';
+import type { SetGoalAction } from '@/application/SetGoalAction';
 
 const makeIntake = (amount: number) => {
   const datetime = new DateAndTime(new Date());
@@ -43,7 +45,8 @@ function factory(
   expoSqliteDatabase: WebSQLDatabase,
   asyncStorageGoalRepository: AsyncStorageGoalRepository,
   getTimerBuilderAction: GetTimerBuilderAction,
-  getGoalAction: GetGoalAction
+  getGoalAction: GetGoalAction,
+  setGoalAction: SetGoalAction
 ) {
   async function handleNewRecord(record: Record) {
     await saveRecordAction.execute(record);
@@ -59,14 +62,13 @@ function factory(
   return function HomeScreen() {
     const [recordIntakeModalVisible, setRecordIntakeModalVisible] =
       useState(false);
-
+    const [firstGoalModalVisible, setFirstGoalModalVisible] = useState(false);
     const recordIntake = (amount: number) => {
       handleNewRecord(makeIntake(amount));
     };
 
     const [timeTotal, setTimeTotal] = useState(0);
     const [timeRemaining, setTimeRemaining] = useState(0);
-
     const [records, setRecords] = useState<Record[]>([]);
 
     const [timer, loadTimer] = useState<Timer | null>(null);
@@ -112,6 +114,7 @@ function factory(
         .then((g) => setAmInterval(g.getAmTargetVoidInterval()))
         .catch(() => {
           console.log('no goal set yet...');
+          setFirstGoalModalVisible(true);
         });
     }, []);
 
@@ -162,6 +165,12 @@ function factory(
             visible={recordIntakeModalVisible}
             recordIntake={recordIntake}
             setModalVisible={setRecordIntakeModalVisible}
+          />
+          <FirstGoalModal
+            visible={firstGoalModalVisible}
+            setModalVisible={setFirstGoalModalVisible}
+            setGoalAction={setGoalAction}
+            getGoalAction={getGoalAction}
           />
         </ScrollView>
       </SplitColorBackground>
