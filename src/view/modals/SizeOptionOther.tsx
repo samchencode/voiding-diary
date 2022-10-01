@@ -19,7 +19,6 @@ function SizeOptionOther({ setSize, size }: SizeOptionOtherProps) {
     <View style={styles.otherSizeOption}>
       <TextInput
         style={validSize ? styles.validSize : styles.invalidSize}
-        // placeholder="other"
         onChangeText={(newText) => {
           if (isValidSize(newText)) {
             setValidSize(true);
@@ -27,7 +26,6 @@ function SizeOptionOther({ setSize, size }: SizeOptionOtherProps) {
             return size.toString();
           }
           setValidSize(false);
-          // bug - stops the first invalid entry but alows subsequent invalid entries, instead of size.toString() which remains unchanged.
           return size.toString();
         }}
         defaultValue={size.toString()}
