@@ -1,16 +1,17 @@
-import { Timer } from '@/domain/models/Timer';
+import { BaseTimer } from '@/domain/models/Timer';
+import { TickingState } from '@/domain/models/Timer/TickingState';
 
 describe('Timer', () => {
   describe('Instantiation', () => {
-    it('should be created given configuration function', () => {
-      const create = () => new Timer(() => {});
+    it('should be created without configuration function', () => {
+      const create = () => new BaseTimer();
       expect(create).not.toThrowError();
     });
   });
 
   describe('Behavior', () => {
     beforeAll(() => {
-      jest.useFakeTimers();
+      jest.useFakeTimers({ advanceTimers: true, now: new Date(0) });
     });
 
     beforeEach(() => {
@@ -21,18 +22,49 @@ describe('Timer', () => {
       jest.useRealTimers();
     });
 
-    it('should start timer', () => {
-      const timer = new Timer(() => {});
+    it('should start timer without any config', () => {
+      const timer = new BaseTimer();
       const endsAt = new Date(Date.now() + 60000); // 1 minute
       const start = () => timer.start(endsAt);
       expect(start).not.toThrowError();
+    });
+
+    it('should start timer with empty config', () => {
+      const timer = new BaseTimer();
+      timer.configure(() => {});
+      const endsAt = new Date(Date.now() + 60000); // 1 minute
+      const start = () => timer.start(endsAt);
+      expect(start).not.toThrowError();
+    });
+
+    it('should start timer with default timer duration', () => {
+      const cb = jest.fn();
+      const timer = new BaseTimer();
+      timer.configure((b) => {
+        b.configureTickingState((s) => {
+          s.addOnFinishListener(cb);
+        });
+      });
+      timer.start();
+
+      jest.advanceTimersByTime(1); // 1 ms duration by default
+      expect(cb).toBeCalledTimes(1);
+      cb.mockReset();
+
+      timer.configure((b) => b.setDefaultInterval(1000));
+      timer.start();
+      jest.advanceTimersByTime(10);
+      expect(cb).not.toBeCalled();
+      jest.advanceTimersByTime(1000);
+      expect(cb).toBeCalledTimes(1);
     });
 
     it('should allow subscribing with onStart callback', () => {
       const cb = jest.fn();
 
       const endsAt = new Date(Date.now() + 60000); // 1 minute
-      const timer = new Timer((b) => {
+      const timer = new BaseTimer();
+      timer.configure((b) => {
         b.configureIdleState((s) => {
           s.addOnStartListener(cb);
         });
@@ -48,7 +80,8 @@ describe('Timer', () => {
     it('should allow subscribing to every tick of timer', () => {
       const cb = jest.fn();
       const endsAt = new Date(Date.now() + 60000); // 1 minute
-      const timer = new Timer((b) => {
+      const timer = new BaseTimer();
+      timer.configure((b) => {
         b.configureTickingState((s) => {
           s.addOnTickListener(cb);
         });
@@ -63,10 +96,28 @@ describe('Timer', () => {
       expect(cb).toBeCalledTimes(3);
     });
 
+    it('should allow subscribing to onTick of a timer that has already started', () => {
+      const cb = jest.fn();
+      const endsAt = new Date(Date.now() + 60000); // 1 minute
+      const timer = new BaseTimer();
+      timer.start(endsAt);
+      timer.configure((_, s) => {
+        if (s instanceof TickingState) s.addOnTickListener(cb);
+      });
+
+      jest.advanceTimersToNextTimer();
+      expect(cb).toBeCalledTimes(1);
+      jest.advanceTimersToNextTimer();
+      expect(cb).toBeCalledTimes(2);
+      jest.advanceTimersToNextTimer();
+      expect(cb).toBeCalledTimes(3);
+    });
+
     it('should provide ms remaining to onTick cb', () => {
       const cb = jest.fn();
       const endsAt = new Date(Date.now() + 60000); // 1 minute
-      const timer = new Timer((b) => {
+      const timer = new BaseTimer();
+      timer.configure((b) => {
         b.configureTickingState((s) => {
           s.addOnTickListener(cb);
         });
@@ -81,7 +132,8 @@ describe('Timer', () => {
     it('should allow subscribing to onFinish of timer', () => {
       const cb = jest.fn();
       const endsAt = new Date(Date.now() + 60000); // 1 minute
-      const timer = new Timer((b) => {
+      const timer = new BaseTimer();
+      timer.configure((b) => {
         b.configureTickingState((s) => {
           s.addOnFinishListener(cb);
         });
@@ -95,7 +147,8 @@ describe('Timer', () => {
     it('should not tick after timer finishes', () => {
       const cb = jest.fn();
       const endsAt = new Date(Date.now() + 60000); // 1 minute
-      const timer = new Timer((b) => {
+      const timer = new BaseTimer();
+      timer.configure((b) => {
         b.configureTickingState((s) => {
           s.addOnTickListener(cb);
         });
@@ -112,7 +165,8 @@ describe('Timer', () => {
       const cb = jest.fn();
 
       const endsAt = new Date(Date.now() + 60000); // 1 minute
-      const timer = new Timer((b) => {
+      const timer = new BaseTimer();
+      timer.configure((b) => {
         b.configureIdleState((s) => {
           s.addOnStartListener(cb);
         });
@@ -130,7 +184,8 @@ describe('Timer', () => {
 
       const endsAt1 = new Date(Date.now() + 60000); // 1 minute later
       const endsAt2 = new Date(Date.now() + 90000); // 1.5 minutes later
-      const timer = new Timer((b) => {
+      const timer = new BaseTimer();
+      timer.configure((b) => {
         b.configureTickingState((s) => {
           s.addOnFinishListener(cb);
         });
@@ -151,7 +206,8 @@ describe('Timer', () => {
 
       const endsAt1 = new Date(Date.now() + 60000); // 1 minute
       const endsAt2 = new Date(Date.now() + 120000); // 2 minutes
-      const timer = new Timer((b) => {
+      const timer = new BaseTimer();
+      timer.configure((b) => {
         b.configureTickingState((s) => {
           s.addOnRestartListener(cb);
         });

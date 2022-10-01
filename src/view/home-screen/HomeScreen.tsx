@@ -20,7 +20,7 @@ import type { GetTodaysRecordsAction } from '@/application/GetTodaysRecordsActio
 import { Button, Card } from '@/view/components';
 import type { WebSQLDatabase } from 'expo-sqlite';
 import type { AsyncStorageGoalRepository } from '@/infrastructure/persistence/async-storage/AsyncStorageGoalRepository';
-import type { GetTimerBuilderAction } from '@/application/GetTimerAction';
+import type { GetTimerAction } from '@/application/GetTimerAction';
 import type { Timer } from '@/domain/models/Timer';
 import type { GetGoalAction } from '@/application/GetGoalAction';
 import type { TimeInMins } from '@/domain/models/TimeInMins';
@@ -42,7 +42,7 @@ function factory(
   saveRecordAction: SaveRecordAction,
   expoSqliteDatabase: WebSQLDatabase,
   asyncStorageGoalRepository: AsyncStorageGoalRepository,
-  getTimerBuilderAction: GetTimerBuilderAction,
+  getTimerAction: GetTimerAction,
   getGoalAction: GetGoalAction
 ) {
   async function handleNewRecord(record: Record) {
@@ -85,14 +85,14 @@ function factory(
     };
 
     useEffect(() => {
-      getTimerBuilderAction.execute().then((b) => {
-        b.configure((bs) => {
-          bs.configureIdleState((s) => {
+      getTimerAction.execute().then((t) => {
+        t.configure((b) => {
+          b.configureIdleState((s) => {
             s.addOnStartListener((endsAt) => {
               setTimeTotal(endsAt.getTime() - Date.now());
             });
           });
-          bs.configureTickingState((s) => {
+          b.configureTickingState((s) => {
             s.addOnRestartListener((endsAt) => {
               setTimeTotal(endsAt.getTime() - Date.now());
             });
@@ -104,7 +104,7 @@ function factory(
             });
           });
         });
-        loadTimer(b.build());
+        loadTimer(t);
       });
 
       getGoalAction

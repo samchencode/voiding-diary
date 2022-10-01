@@ -1,16 +1,32 @@
-import type { TimerBuilder } from '@/domain/ports/TimerBuilder';
+import type { NotificationRepository } from '@/application/ports/NotificationRepository';
+import type { NotificationScheduler } from '@/application/ports/NotificationScheduler';
+import type { TimerEndTimeRepository } from '@/application/ports/TimerEndTimeRepository';
+import { SavesEndTime, SendsNotifications } from '@/application/services/timer';
+import type { Timer } from '@/domain/models/Timer';
+import { BaseTimer } from '@/domain/models/Timer';
 
-class GetTimerBuilderAction {
-  builder: TimerBuilder;
+class GetTimerAction {
+  timer: Timer;
 
-  constructor(timerBuilder: TimerBuilder) {
-    this.builder = timerBuilder;
+  constructor(
+    timerEndTimeRepository: TimerEndTimeRepository,
+    notificationRepository: NotificationRepository,
+    notificationScheduler: NotificationScheduler
+  ) {
+    let timer: Timer = new BaseTimer();
+    timer = new SavesEndTime(timer, timerEndTimeRepository);
+    timer = new SendsNotifications(
+      timer,
+      notificationRepository,
+      notificationScheduler
+    );
+    this.timer = timer;
   }
 
-  async execute(): Promise<TimerBuilder> {
-    await this.builder.init();
-    return this.builder;
+  async execute(): Promise<Timer> {
+    await this.timer.init();
+    return this.timer;
   }
 }
 
-export { GetTimerBuilderAction };
+export { GetTimerAction };

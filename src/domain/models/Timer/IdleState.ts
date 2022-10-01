@@ -1,22 +1,32 @@
 import type { Observer } from '@/domain/models/Timer/Observable';
 import { Observable } from '@/domain/models/Timer/Observable';
-import type { Timer } from '@/domain/models/Timer/Timer';
+import type { BaseTimer } from '@/domain/models/Timer/BaseTimer';
 import type { TimerState } from '@/domain/models/Timer/TimerState';
 import type { TimerStateBuilder } from '@/domain/models/Timer/TimerStateBuilder';
+import { nowAddMs } from '@/domain/models/Timer/util';
 
 class IdleState implements TimerState {
-  onStartEvent = new Observable<Date>();
+  static readonly type = 'IdleState';
 
-  context: Timer;
+  private onStartEvent = new Observable<Date>();
 
-  builder: TimerStateBuilder;
+  private context: BaseTimer;
 
-  constructor(context: Timer, builder: TimerStateBuilder) {
+  private builder: TimerStateBuilder;
+
+  private defaultIntervalMs: number;
+
+  constructor(
+    context: BaseTimer,
+    builder: TimerStateBuilder,
+    defaultIntervalMs: number
+  ) {
     this.context = context;
     this.builder = builder;
+    this.defaultIntervalMs = defaultIntervalMs;
   }
 
-  start(endsAt: Date): void {
+  start(endsAt: Date = nowAddMs(this.defaultIntervalMs)): void {
     this.onStartEvent.notifyObservers(endsAt);
     const tickingState = this.builder.buildTickingState(endsAt);
     this.context.setState(tickingState);
@@ -24,6 +34,10 @@ class IdleState implements TimerState {
 
   addOnStartListener(o: Observer<Date>) {
     this.onStartEvent.observe(o);
+  }
+
+  setDefaultInterval(ms: number): void {
+    this.defaultIntervalMs = ms;
   }
 }
 

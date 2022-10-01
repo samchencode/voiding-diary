@@ -11,8 +11,10 @@ import { GetTodaysRecordsAction } from '@/application/GetTodaysRecordsAction';
 import { ExpoSqliteRecordRepository } from '@/infrastructure/persistence/expo-sqlite/ExpoSqliteRecordRepository';
 import { SetGoalAction } from '@/application/SetGoalAction';
 import { AsyncStorageGoalRepository } from '@/infrastructure/persistence/async-storage/AsyncStorageGoalRepository';
-import { timerBuilderFactory } from '@/infrastructure/timer/timerBuilderFactory';
-import { GetTimerBuilderAction } from '@/application/GetTimerAction';
+import { GetTimerAction } from '@/application/GetTimerAction';
+import { AsyncStorageTimerEndTimeRepository } from '@/infrastructure/persistence/async-storage/AsyncStorageTimerEndTimeRepository';
+import { AsyncStorageNotificationRepository } from '@/infrastructure/persistence/async-storage/AsyncStorageNotificationRepository';
+import { ExpoNotificationsNotificationScheduler } from '@/infrastructure/notification/expo-notifications/ExpoNotificationsNotificationScheduler';
 
 export const module = {
   // APPLICATION SERVICES
@@ -21,14 +23,16 @@ export const module = {
   saveRecordAction: ['type', SaveRecordAction],
   getGoalAction: ['type', GetGoalAction],
   setGoalAction: ['type', SetGoalAction],
-  getTimerBuilderAction: ['type', GetTimerBuilderAction],
+  getTimerAction: ['type', GetTimerAction],
 
   // INFRASTRUCTURE
   recordRepository: ['type', ExpoSqliteRecordRepository],
   goalRepository: ['type', AsyncStorageGoalRepository],
+  timerEndTimeRepository: ['type', AsyncStorageTimerEndTimeRepository],
+  notificationRepository: ['type', AsyncStorageNotificationRepository],
+  notificationScheduler: ['type', ExpoNotificationsNotificationScheduler],
 
   expoSqliteDatabase: ['factory', expoSqliteDatabaseFactory],
-  timerBuilder: ['factory', timerBuilderFactory],
 
   // VALUES
   foo: ['value', 'foo'],
