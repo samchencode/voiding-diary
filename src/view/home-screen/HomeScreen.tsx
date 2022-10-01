@@ -22,10 +22,10 @@ import { Button, Card } from '@/view/components';
 import type { WebSQLDatabase } from 'expo-sqlite';
 import type { AsyncStorageGoalRepository } from '@/infrastructure/persistence/async-storage/AsyncStorageGoalRepository';
 import type { GetTimerAction } from '@/application/GetTimerAction';
-import type { Timer } from '@/domain/models/Timer';
 import type { GetGoalAction } from '@/application/GetGoalAction';
 import type { TimeInMins } from '@/domain/models/TimeInMins';
 import type { SetGoalAction } from '@/application/SetGoalAction';
+import { useTimer } from '@/view/home-screen/useTimer';
 
 const makeIntake = (amount: number) => {
   const datetime = new DateAndTime(new Date());
@@ -67,13 +67,9 @@ function factory(
       handleNewRecord(makeIntake(amount));
     };
 
-    const [timeTotal, setTimeTotal] = useState(0);
-    const [timeRemaining, setTimeRemaining] = useState(0);
     const [records, setRecords] = useState<Record[]>([]);
-
-    const [timer, loadTimer] = useState<Timer | null>(null);
-
     const [amInterval, setAmInterval] = useState<TimeInMins | null>(null);
+    const [timer, timeRemaining, timeTotal] = useTimer(getTimerAction);
 
     const makeVoidAndStartTimer = () => {
       if (!amInterval) {
@@ -87,28 +83,6 @@ function factory(
     };
 
     useEffect(() => {
-      getTimerAction.execute().then((t) => {
-        t.configure((b) => {
-          b.configureIdleState((s) => {
-            s.addOnStartListener((endsAt) => {
-              setTimeTotal(endsAt.getTime() - Date.now());
-            });
-          });
-          b.configureTickingState((s) => {
-            s.addOnRestartListener((endsAt) => {
-              setTimeTotal(endsAt.getTime() - Date.now());
-            });
-            s.addOnTickListener((ms) => {
-              setTimeRemaining(ms);
-            });
-            s.addOnFinishListener(() => {
-              setTimeRemaining(0);
-            });
-          });
-        });
-        loadTimer(t);
-      });
-
       getGoalAction
         .execute()
         .then((g) => setAmInterval(g.getAmTargetVoidInterval()))
