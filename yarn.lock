@@ -8222,11 +8222,6 @@ react-native-gradle-plugin@^0.0.6:
   resolved "https://registry.yarnpkg.com/react-native-gradle-plugin/-/react-native-gradle-plugin-0.0.6.tgz#b61a9234ad2f61430937911003cddd7e15c72b45"
   integrity sha512-eIlgtsmDp1jLC24dRn43hB3kEcZVqx6DUQbR0N1ABXGnMEafm9I3V3dUUeD1vh+Dy5WqijSoEwLNUPLgu5zDMg==
 
-react-native-print@^0.10.0:
-  version "0.10.0"
-  resolved "https://registry.yarnpkg.com/react-native-print/-/react-native-print-0.10.0.tgz#803b28592c1605d2bdba80fc909fcdbced0d069f"
-  integrity sha512-jXFIeTLiQeC9rTduRjMGXWzGEaslx69U64tsw851+v2fbfNwn4SP53uEIhCCc0ly3VxGCFxseafrZjfuMyVXNg==
-
 react-native-safe-area-context@4.2.4:
   version "4.2.4"
   resolved "https://registry.yarnpkg.com/react-native-safe-area-context/-/react-native-safe-area-context-4.2.4.tgz#4df42819759c4d3c74252c8678c2772cfa2271a6"
