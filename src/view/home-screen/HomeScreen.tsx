@@ -69,7 +69,10 @@ function factory(
 
     const [records, setRecords] = useState<Record[]>([]);
     const [amInterval, setAmInterval] = useState<TimeInMins | null>(null);
-    const [timer, timeRemaining, timeTotal] = useTimer(getTimerAction);
+    const [timer, timeRemaining, timeTotal] = useTimer(
+      getTimerAction,
+      amInterval
+    );
 
     const makeVoidAndStartTimer = () => {
       if (!amInterval) {
