@@ -15,6 +15,8 @@ import { GetTimerAction } from '@/application/GetTimerAction';
 import { AsyncStorageTimerEndTimeRepository } from '@/infrastructure/persistence/async-storage/AsyncStorageTimerEndTimeRepository';
 import { AsyncStorageNotificationRepository } from '@/infrastructure/persistence/async-storage/AsyncStorageNotificationRepository';
 import { ExpoNotificationsNotificationScheduler } from '@/infrastructure/notification/expo-notifications/ExpoNotificationsNotificationScheduler';
+import { ExpoAvAudioPlayer } from '@/infrastructure/audio/expo-av/ExpoAvAudioPlayer';
+import { ReactNativeVibrator } from '@/infrastructure/vibration/react-native/ReactNativeVibrator';
 
 export const module = {
   // APPLICATION SERVICES
@@ -31,6 +33,8 @@ export const module = {
   timerEndTimeRepository: ['type', AsyncStorageTimerEndTimeRepository],
   notificationRepository: ['type', AsyncStorageNotificationRepository],
   notificationScheduler: ['type', ExpoNotificationsNotificationScheduler],
+  audioPlayer: ['type', ExpoAvAudioPlayer],
+  vibrator: ['type', ReactNativeVibrator],
 
   expoSqliteDatabase: ['factory', expoSqliteDatabaseFactory],
 

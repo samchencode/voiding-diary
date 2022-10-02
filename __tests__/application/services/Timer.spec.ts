@@ -1,8 +1,15 @@
+import type { AudioPlayer } from '@/application/ports/AudioPlayer';
+import type { Vibrator } from '@/application/ports/Vibrator';
 import { SavesEndTime, SendsNotifications } from '@/application/services/timer';
+import { PlaysAlertSound } from '@/application/services/timer/PlaysAlertSound';
+import { Vibrates } from '@/application/services/timer/Vibrates';
+import type { Timer } from '@/domain/models/Timer';
 import { BaseTimer } from '@/domain/models/Timer';
+import { SpyAudioPlayer } from '@/infrastructure/audio/spy/SpyAudioPlayer';
 import { SpyNotifcationScheduler } from '@/infrastructure/notification/spy/SpyNotificationScheduler';
 import { FakeNotificationRepository } from '@/infrastructure/persistence/fake/FakeNotificationRepository';
 import { FakeTimerEndTimeRepository } from '@/infrastructure/persistence/fake/FakeTimerEndTimeRepository';
+import { SpyVibrator } from '@/infrastructure/vibration/spy/SpyVibrator';
 
 describe('Timer decorators', () => {
   beforeAll(() =>
@@ -271,6 +278,68 @@ describe('Timer decorators', () => {
           expect(err).toBe(true);
           jest.clearAllTimers();
         }
+      });
+    });
+  });
+
+  describe('PlaysAlertSound', () => {
+    describe('Instantiation', () => {
+      it('should create timer given AudioPlayer', () => {
+        const player = new SpyAudioPlayer({});
+        const base = new BaseTimer();
+        const create = () => new PlaysAlertSound(base, player);
+        expect(create).not.toThrowError();
+      });
+    });
+
+    describe('Behavior', () => {
+      let playAlertSound: jest.Mock;
+      let player: AudioPlayer;
+      let base: Timer;
+
+      beforeEach(() => {
+        playAlertSound = jest.fn();
+        player = new SpyAudioPlayer({ playAlertSound });
+        base = new BaseTimer();
+      });
+
+      it('should play sound when timer finishes', async () => {
+        const timer = new PlaysAlertSound(base, player);
+        await timer.init();
+        await timer.start();
+        jest.runAllTimers();
+        expect(playAlertSound).toBeCalledTimes(1);
+      });
+    });
+  });
+
+  describe('Vibrates', () => {
+    describe('Instantiation', () => {
+      it('should create timer given Vibrator', () => {
+        const vibe = new SpyVibrator({});
+        const base = new BaseTimer();
+        const create = () => new Vibrates(base, vibe);
+        expect(create).not.toThrowError();
+      });
+    });
+
+    describe('Behavior', () => {
+      let vibrate: jest.Mock;
+      let vibe: Vibrator;
+      let base: Timer;
+
+      beforeEach(() => {
+        vibrate = jest.fn();
+        vibe = new SpyVibrator({ vibrate });
+        base = new BaseTimer();
+      });
+
+      it('should vibrate when timer finishes', async () => {
+        const timer = new Vibrates(base, vibe);
+        await timer.init();
+        await timer.start();
+        jest.runAllTimers();
+        expect(vibrate).toBeCalledTimes(1);
       });
     });
   });
