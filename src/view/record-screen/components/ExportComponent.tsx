@@ -1,51 +1,38 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, SectionList, Image, Dimensions } from 'react-native';
-import { InternMap, reduce } from 'd3-array';
-import { d3 } from '@/vendor/d3';
+import React, { useState } from 'react';
+import { StyleSheet, View } from 'react-native';
 import { theme } from '@/view/theme';
-import {
-  RecordSectionHeader,
-  ListHeaderComponent,
-  ListEmptyComponent,
-} from '@/view/record-screen/components';
-import { GetAllRecordsAction } from '@/application/GetAllRecordsAction';
-import { IntakeRecord, Record } from '@/domain/models/Record';
-import { RecordsStaleObservable, ViewRecordVisitor } from '@/view/lib';
 import DropDownPicker from 'react-native-dropdown-picker';
-import Constants from 'expo-constants';
-import { Button, Card } from '@/view/components';
 import * as Print from 'expo-print';
 import { shareAsync } from 'expo-sharing';
-import { RecentRecordList } from '@/view/home-screen/components';
-import { DateAndTime } from '@/domain/models/DateAndTime';
 
 function ExportComponent() {
+  let listOfRecordsForPDF = '';
+
   const printToPDF = async () => {
     // On iOS/android prints the given html. On web prints the HTML from the current page.
-    var tempArray = listOfRecordsForPDF.split('\n');
+    const tempArray = listOfRecordsForPDF.split('\n');
     listOfRecordsForPDF = '';
-    for (var i = 0; i < tempArray.length - 1; i++) {
-      var temp = tempArray[i].substring(tempArray[i].lastIndexOf(',') + 1);
-      var temp2 = tempArray[i].substring(0, tempArray[i].lastIndexOf(','));
-      var dateTemp = new Date(Number(temp));
-      var options = {
-        hour12: true,
-      };
-      var date = dateTemp.toLocaleString('en-US', options);
-      listOfRecordsForPDF +=
-        temp2.replace(',', '&emsp;') + '&emsp;' + date + '<br><br>';
+    for (let i = 0; i < tempArray.length - 1; i++) {
+      const temp = tempArray[i].substring(tempArray[i].lastIndexOf(',') + 1);
+      const temp2 = tempArray[i].substring(0, tempArray[i].lastIndexOf(','));
+      const dateTemp = new Date(Number(temp));
+      const options = { hour12: true };
+      const date = dateTemp.toLocaleString('en-US', options);
+      listOfRecordsForPDF += `${temp2.replace(
+        ',',
+        '&emsp;'
+      )}&emsp;${date}<br><br>`;
     }
 
-    const html =
-      `
+    const html = `
       <html>
         <head>
           <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
         </head>
         <body style="text-align: center;">
-          <h1 style="font-size: 20px; font-family: Helvetica Neue; font-weight: normal;">` +
-      listOfRecordsForPDF +
-      `</h1>
+          <h1 style="font-size: 20px; font-family: Helvetica Neue; font-weight: normal;">
+      ${listOfRecordsForPDF}
+      </h1>
         </body>
       </html>
       `;
@@ -64,8 +51,6 @@ function ExportComponent() {
     { label: 'Save PDF', value: 'PDF' },
   ]);
 
-  var listOfRecordsForPDF = '';
-
   return (
     <View style={styles.container}>
       <DropDownPicker
@@ -77,9 +62,9 @@ function ExportComponent() {
         setValue={setValue}
         setItems={setItems}
         onSelectItem={(item) => {
-          if (item.value == 'PDF') {
+          if (item.value === 'PDF') {
             printToPDF();
-          } else if (item.value == 'CSV') {
+          } else if (item.value === 'CSV') {
             alert(listOfRecordsForPDF);
           }
         }}
