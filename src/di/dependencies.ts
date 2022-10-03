@@ -17,6 +17,7 @@ import { AsyncStorageNotificationRepository } from '@/infrastructure/persistence
 import { ExpoNotificationsNotificationScheduler } from '@/infrastructure/notification/expo-notifications/ExpoNotificationsNotificationScheduler';
 import { ExpoAvAudioPlayer } from '@/infrastructure/audio/expo-av/ExpoAvAudioPlayer';
 import { ReactNativeVibrator } from '@/infrastructure/vibration/react-native/ReactNativeVibrator';
+import { ejsReportFormatterFactory } from '@/infrastructure/report-formatter/ejs/ejsReportFormatterFactor';
 
 export const module = {
   // APPLICATION SERVICES
@@ -35,6 +36,7 @@ export const module = {
   notificationScheduler: ['type', ExpoNotificationsNotificationScheduler],
   audioPlayer: ['type', ExpoAvAudioPlayer],
   vibrator: ['type', ReactNativeVibrator],
+  reportFormatter: ['factory', ejsReportFormatterFactory],
 
   expoSqliteDatabase: ['factory', expoSqliteDatabaseFactory],
 
