@@ -1,6 +1,6 @@
 import ejs from 'ejs';
 import type { ReportFormatter } from '@/application/ports/ReportFormatter';
-import type { Report } from '@/domain/models/Report/Report';
+import type { Report } from '@/domain/models/Report';
 import type { Record } from '@/domain/models/Record';
 import { EjsRecordVisitor } from '@/infrastructure/report-formatter/ejs/EjsRecordVisitor';
 import type { FileSystem } from '@/application/ports/FileSystem';
