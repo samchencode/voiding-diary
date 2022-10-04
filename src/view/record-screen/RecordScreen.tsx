@@ -7,7 +7,6 @@ import {
   RecordSectionHeader,
   ListHeaderComponent,
   ListEmptyComponent,
-  ExportComponent,
 } from '@/view/record-screen/components';
 import type { GetAllRecordsAction } from '@/application/GetAllRecordsAction';
 import type { Record } from '@/domain/models/Record';
