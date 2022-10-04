@@ -3,23 +3,35 @@ import type { Record } from '@/domain/models/Record';
 import { IntakeRecord, RecordId, VoidRecord } from '@/domain/models/Record';
 import { Report } from '@/domain/models/Report/Report';
 import { VolumeInOz } from '@/domain/models/Volume';
+import { FakeFileSystem } from '@/infrastructure/file-system/fake/FakeFileSystem';
 import { EjsReportFormatter } from '@/infrastructure/report-formatter/ejs/EjsReportFormatter';
 
-async function fakeGetTemplates() {
-  return {
-    layout: `<body>
+const stubbedFiles = {
+  layout: `<body>
   <%_ for(record of report.getRecords()) { _%>
   <%- formatRecord(record) %>
   <%_ } _%>
 </body>`,
-    row: '<h2><%= title %></h2>',
-  };
-}
+  row: '<h2><%= title %></h2>',
+};
 
 describe('EjsReportFormatter', () => {
+  beforeEach(() => {
+    jest.resetModules();
+    jest.doMock(
+      '@/infrastructure/report-formatter/ejs/templates/layout.ejs',
+      () => 'layout'
+    );
+    jest.doMock(
+      '@/infrastructure/report-formatter/ejs/templates/row.ejs',
+      () => 'row'
+    );
+  });
+
   describe('Instantiation', () => {
     it('should create new formatter given template retriever', () => {
-      const create = () => new EjsReportFormatter(fakeGetTemplates);
+      const fs = new FakeFileSystem(stubbedFiles);
+      const create = () => new EjsReportFormatter(fs);
       expect(create).not.toThrowError();
     });
   });
@@ -27,8 +39,10 @@ describe('EjsReportFormatter', () => {
   describe('Behavior', () => {
     let records: Record[];
     let report: Report;
+    let fs: FakeFileSystem;
 
     beforeEach(() => {
+      fs = new FakeFileSystem(stubbedFiles);
       records = [
         new VoidRecord(
           new DateAndTime(new Date(0)),
@@ -45,7 +59,7 @@ describe('EjsReportFormatter', () => {
     });
 
     it('should create html formatted report', async () => {
-      const formatter = new EjsReportFormatter(fakeGetTemplates);
+      const formatter = new EjsReportFormatter(fs);
       const html = await formatter.format(report);
       const expected = `<body>
   <h2>Void</h2>

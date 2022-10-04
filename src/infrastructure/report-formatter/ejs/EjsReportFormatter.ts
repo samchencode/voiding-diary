@@ -3,28 +3,30 @@ import type { ReportFormatter } from '@/application/ports/ReportFormatter';
 import type { Report } from '@/domain/models/Report/Report';
 import type { Record } from '@/domain/models/Record';
 import { EjsRecordVisitor } from '@/infrastructure/report-formatter/ejs/EjsRecordVisitor';
-
-type TemplateFiles = 'layout' | 'row';
-
-type Templates = {
-  [key in TemplateFiles]: string;
-};
+import type { FileSystem } from '@/application/ports/FileSystem';
 
 class EjsReportFormatter implements ReportFormatter {
   layoutTemplate: ejs.TemplateFunction | null = null;
 
   rowTemplate: ejs.TemplateFunction | null = null;
 
-  getTemplates: () => Promise<Templates>;
+  fileSystem: FileSystem;
 
-  constructor(getTemplates: () => Promise<Templates>) {
-    this.getTemplates = getTemplates;
+  constructor(fileSystem: FileSystem) {
+    this.fileSystem = fileSystem;
   }
 
   private async init() {
-    const templates = await this.getTemplates();
-    this.layoutTemplate = ejs.compile(templates.layout);
-    this.rowTemplate = ejs.compile(templates.row);
+    const layoutEjs = await this.fileSystem.getAssetAsString(
+      // eslint-disable-next-line global-require, @typescript-eslint/no-var-requires
+      require('@/infrastructure/report-formatter/ejs/templates/layout.ejs')
+    );
+    const rowEjs = await this.fileSystem.getAssetAsString(
+      // eslint-disable-next-line global-require, @typescript-eslint/no-var-requires
+      require('@/infrastructure/report-formatter/ejs/templates/row.ejs')
+    );
+    this.layoutTemplate = ejs.compile(layoutEjs);
+    this.rowTemplate = ejs.compile(rowEjs);
   }
 
   async format(report: Report): Promise<string> {
@@ -45,4 +47,3 @@ class EjsReportFormatter implements ReportFormatter {
 }
 
 export { EjsReportFormatter };
-export type { Templates, TemplateFiles };
