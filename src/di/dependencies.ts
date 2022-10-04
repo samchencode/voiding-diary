@@ -43,7 +43,7 @@ export const module = {
   expoSqliteDatabase: ['factory', expoSqliteDatabaseFactory],
 
   // VALUES
-  foo: ['value', 'foo'],
+  //  foo: ['value', 'foo'],
 
   // TEMPLATES
   App: ['factory', App],
