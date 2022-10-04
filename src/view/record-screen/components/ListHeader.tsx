@@ -1,10 +1,15 @@
 import React from 'react';
 import { View, Text, useWindowDimensions, StyleSheet } from 'react-native';
+import Constants from 'expo-constants';
 import { theme } from '@/view/theme';
 import { StatusBar } from '@/view/status-bar';
 import { ParkSvg } from '@/view/record-screen/svg';
 
-function ListHeaderComponent() {
+type ListHeaderProps = {
+  renderMenu: () => JSX.Element;
+};
+
+function ListHeader({ renderMenu }: ListHeaderProps) {
   const { width } = useWindowDimensions();
   const svgWidth = Math.min(width, 400);
   const svgHeight = Math.min((svgWidth * 5) / 6, 300);
@@ -19,6 +24,9 @@ function ListHeaderComponent() {
         themeColor={theme.colors.primary}
       />
       <Text style={styles.title}>Records</Text>
+      <View style={[styles.menuContainer, { top: Constants.statusBarHeight }]}>
+        {renderMenu()}
+      </View>
     </View>
   );
 }
@@ -26,6 +34,10 @@ function ListHeaderComponent() {
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
+  },
+  menuContainer: {
+    position: 'absolute',
+    right: 0,
   },
   svg: {
     marginBottom: -theme.spaces.lg,
@@ -38,4 +50,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export { ListHeaderComponent };
+export { ListHeader };

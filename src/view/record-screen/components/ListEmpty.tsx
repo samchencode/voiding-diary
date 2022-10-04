@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, useWindowDimensions } from 'react-native';
 import { NoDataSvg } from '@/view/record-screen/svg/NoDataSvg';
 import { theme } from '@/view/theme';
 
-function ListEmptyComponent() {
+function ListEmpty() {
   const { height } = useWindowDimensions();
   const svgHeight = Math.min(height / 4, 200);
   const svgWidth = svgHeight;
@@ -37,4 +37,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export { ListEmptyComponent };
+export { ListEmpty };

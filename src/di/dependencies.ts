@@ -19,6 +19,10 @@ import { ExpoAvAudioPlayer } from '@/infrastructure/audio/expo-av/ExpoAvAudioPla
 import { ReactNativeVibrator } from '@/infrastructure/vibration/react-native/ReactNativeVibrator';
 import { EjsReportFormatter } from '@/infrastructure/report-formatter/ejs/EjsReportFormatter';
 import { ExpoAssetFileSystem } from '@/infrastructure/file-system/expo-asset/ExpoAssetFileSystem';
+import { ExpoSharingPdfExporter } from '@/infrastructure/export/expo-sharing/ExpoSharingPdfExporter';
+import { ExpoSharingTextFileExporter } from '@/infrastructure/export/expo-sharing/ExpoSharingTextFileExporter';
+import { ExportReportAsPdfAction } from '@/application/ExportReportAsPdfAction';
+import { ExportReportOfAllRecordsAsPdfAction } from '@/application/ExportReportOfAllRecordsAsPdfAction';
 
 export const module = {
   // APPLICATION SERVICES
@@ -28,6 +32,11 @@ export const module = {
   getGoalAction: ['type', GetGoalAction],
   setGoalAction: ['type', SetGoalAction],
   getTimerAction: ['type', GetTimerAction],
+  exportReportAsPdfAction: ['type', ExportReportAsPdfAction],
+  exportReportOfAllRecordsAsPdfAction: [
+    'type',
+    ExportReportOfAllRecordsAsPdfAction,
+  ],
 
   // INFRASTRUCTURE
   recordRepository: ['type', ExpoSqliteRecordRepository],
@@ -37,8 +46,10 @@ export const module = {
   notificationScheduler: ['type', ExpoNotificationsNotificationScheduler],
   audioPlayer: ['type', ExpoAvAudioPlayer],
   vibrator: ['type', ReactNativeVibrator],
-  reportFormatter: ['type', EjsReportFormatter],
+  htmlReportFormatter: ['type', EjsReportFormatter],
   fileSystem: ['type', ExpoAssetFileSystem],
+  pdfExporter: ['type', ExpoSharingPdfExporter],
+  textFileExporter: ['type', ExpoSharingTextFileExporter],
 
   expoSqliteDatabase: ['factory', expoSqliteDatabaseFactory],
 

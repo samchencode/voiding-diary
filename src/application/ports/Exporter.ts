@@ -1,10 +1,9 @@
 interface Exporter {
-  exportAsPdf(html: string): Promise<void>;
-  exportAsFile(
-    data: string,
-    fileExtension: string,
-    mimeType: string
-  ): Promise<void>;
+  export(): Promise<void>;
 }
 
-export type { Exporter };
+interface PdfExporter extends Exporter {
+  configure(html: string): void;
+}
+
+export type { Exporter, PdfExporter };
