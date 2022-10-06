@@ -10,7 +10,6 @@ import {
 } from '@/view/home-screen/components';
 import { StatusBar } from '@/view/status-bar';
 import { RecordIntakeModal } from '@/view/modals/RecordIntakeModal';
-import { FirstGoalModal } from '@/view/modals/FirstGoalModal';
 import type { SaveRecordAction } from '@/application/SaveRecordAction';
 import { DateAndTime } from '@/domain/models/DateAndTime';
 import { VolumeInOz } from '@/domain/models/Volume';
@@ -24,8 +23,8 @@ import type { AsyncStorageGoalRepository } from '@/infrastructure/persistence/as
 import type { GetTimerAction } from '@/application/GetTimerAction';
 import type { GetGoalAction } from '@/application/GetGoalAction';
 import type { TimeInMins } from '@/domain/models/TimeInMins';
-import type { SetGoalAction } from '@/application/SetGoalAction';
 import { useTimer } from '@/view/home-screen/useTimer';
+import type { AppNavigationProps } from '@/view/router';
 
 const makeIntake = (amount: number) => {
   const datetime = new DateAndTime(new Date());
@@ -45,8 +44,7 @@ function factory(
   expoSqliteDatabase: WebSQLDatabase,
   asyncStorageGoalRepository: AsyncStorageGoalRepository,
   getTimerAction: GetTimerAction,
-  getGoalAction: GetGoalAction,
-  setGoalAction: SetGoalAction
+  getGoalAction: GetGoalAction
 ) {
   async function handleNewRecord(record: Record) {
     await saveRecordAction.execute(record);
@@ -59,10 +57,9 @@ function factory(
     asyncStorageGoalRepository.reset();
   }
 
-  return function HomeScreen() {
+  return function HomeScreen({ navigation }: AppNavigationProps<'Home'>) {
     const [recordIntakeModalVisible, setRecordIntakeModalVisible] =
       useState(false);
-    const [firstGoalModalVisible, setFirstGoalModalVisible] = useState(false);
     const recordIntake = (amount: number) => {
       handleNewRecord(makeIntake(amount));
     };
@@ -90,10 +87,9 @@ function factory(
         .execute()
         .then((g) => setAmInterval(g.getAmTargetVoidInterval()))
         .catch(() => {
-          console.log('no goal set yet...');
-          setFirstGoalModalVisible(true);
+          navigation.navigate('NoGoalModal');
         });
-    }, []);
+    }, [navigation]);
 
     useEffect(() => {
       getTodaysRecordsAction.execute().then((r) => setRecords(r));
@@ -142,12 +138,6 @@ function factory(
             visible={recordIntakeModalVisible}
             recordIntake={recordIntake}
             setModalVisible={setRecordIntakeModalVisible}
-          />
-          <FirstGoalModal
-            visible={firstGoalModalVisible}
-            setModalVisible={setFirstGoalModalVisible}
-            setGoalAction={setGoalAction}
-            getGoalAction={getGoalAction}
           />
         </ScrollView>
       </SplitColorBackground>

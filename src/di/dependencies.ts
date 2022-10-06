@@ -4,6 +4,7 @@ import { factory as HomeScreen } from '@/view/home-screen';
 import { factory as GoalScreen } from '@/view/goal-screen';
 import { factory as RecordScreen } from '@/view/record-screen';
 import { factory as NoGoalModal } from '@/view/modals/no-goal-modal';
+import { factory as NoGoalModal } from '@/view/no-goal-modal';
 import { GetAllRecordsAction } from '@/application/GetAllRecordsAction';
 import { GetGoalAction } from '@/application/GetGoalAction';
 import { expoSqliteDatabaseFactory } from '@/infrastructure/persistence/expo-sqlite/expoSqliteDatabaseFactory';
@@ -12,11 +13,9 @@ import { GetTodaysRecordsAction } from '@/application/GetTodaysRecordsAction';
 import { ExpoSqliteRecordRepository } from '@/infrastructure/persistence/expo-sqlite/ExpoSqliteRecordRepository';
 import { SetGoalAction } from '@/application/SetGoalAction';
 import { AsyncStorageGoalRepository } from '@/infrastructure/persistence/async-storage/AsyncStorageGoalRepository';
-<<<<<<< HEAD
 import { timerBuilderFactory } from '@/infrastructure/timer/timerBuilderFactory';
 import { GetTimerBuilderAction } from '@/application/GetTimerAction';
 import { UpdateRecordAction } from '@/application/UpdateRecordAction';
-=======
 import { GetTimerAction } from '@/application/GetTimerAction';
 import { AsyncStorageTimerEndTimeRepository } from '@/infrastructure/persistence/async-storage/AsyncStorageTimerEndTimeRepository';
 import { AsyncStorageNotificationRepository } from '@/infrastructure/persistence/async-storage/AsyncStorageNotificationRepository';
@@ -29,7 +28,6 @@ import { ExpoSharingPdfExporter } from '@/infrastructure/export/expo-sharing/Exp
 import { ExpoSharingTextFileExporter } from '@/infrastructure/export/expo-sharing/ExpoSharingTextFileExporter';
 import { ExportReportAsPdfAction } from '@/application/ExportReportAsPdfAction';
 import { ExportReportOfAllRecordsAsPdfAction } from '@/application/ExportReportOfAllRecordsAsPdfAction';
->>>>>>> 786ba912decf52c45aa0c19077f74901ad5da33c
 
 export const module = {
   // APPLICATION SERVICES
