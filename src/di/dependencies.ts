@@ -12,9 +12,24 @@ import { GetTodaysRecordsAction } from '@/application/GetTodaysRecordsAction';
 import { ExpoSqliteRecordRepository } from '@/infrastructure/persistence/expo-sqlite/ExpoSqliteRecordRepository';
 import { SetGoalAction } from '@/application/SetGoalAction';
 import { AsyncStorageGoalRepository } from '@/infrastructure/persistence/async-storage/AsyncStorageGoalRepository';
+<<<<<<< HEAD
 import { timerBuilderFactory } from '@/infrastructure/timer/timerBuilderFactory';
 import { GetTimerBuilderAction } from '@/application/GetTimerAction';
 import { UpdateRecordAction } from '@/application/UpdateRecordAction';
+=======
+import { GetTimerAction } from '@/application/GetTimerAction';
+import { AsyncStorageTimerEndTimeRepository } from '@/infrastructure/persistence/async-storage/AsyncStorageTimerEndTimeRepository';
+import { AsyncStorageNotificationRepository } from '@/infrastructure/persistence/async-storage/AsyncStorageNotificationRepository';
+import { ExpoNotificationsNotificationScheduler } from '@/infrastructure/notification/expo-notifications/ExpoNotificationsNotificationScheduler';
+import { ExpoAvAudioPlayer } from '@/infrastructure/audio/expo-av/ExpoAvAudioPlayer';
+import { ReactNativeVibrator } from '@/infrastructure/vibration/react-native/ReactNativeVibrator';
+import { EjsReportFormatter } from '@/infrastructure/report-formatter/ejs/EjsReportFormatter';
+import { ExpoAssetFileSystem } from '@/infrastructure/file-system/expo-asset/ExpoAssetFileSystem';
+import { ExpoSharingPdfExporter } from '@/infrastructure/export/expo-sharing/ExpoSharingPdfExporter';
+import { ExpoSharingTextFileExporter } from '@/infrastructure/export/expo-sharing/ExpoSharingTextFileExporter';
+import { ExportReportAsPdfAction } from '@/application/ExportReportAsPdfAction';
+import { ExportReportOfAllRecordsAsPdfAction } from '@/application/ExportReportOfAllRecordsAsPdfAction';
+>>>>>>> 786ba912decf52c45aa0c19077f74901ad5da33c
 
 export const module = {
   // APPLICATION SERVICES
@@ -24,17 +39,30 @@ export const module = {
   updateRecordAction: ['type', UpdateRecordAction],
   getGoalAction: ['type', GetGoalAction],
   setGoalAction: ['type', SetGoalAction],
-  getTimerBuilderAction: ['type', GetTimerBuilderAction],
+  getTimerAction: ['type', GetTimerAction],
+  exportReportAsPdfAction: ['type', ExportReportAsPdfAction],
+  exportReportOfAllRecordsAsPdfAction: [
+    'type',
+    ExportReportOfAllRecordsAsPdfAction,
+  ],
 
   // INFRASTRUCTURE
   recordRepository: ['type', ExpoSqliteRecordRepository],
   goalRepository: ['type', AsyncStorageGoalRepository],
+  timerEndTimeRepository: ['type', AsyncStorageTimerEndTimeRepository],
+  notificationRepository: ['type', AsyncStorageNotificationRepository],
+  notificationScheduler: ['type', ExpoNotificationsNotificationScheduler],
+  audioPlayer: ['type', ExpoAvAudioPlayer],
+  vibrator: ['type', ReactNativeVibrator],
+  htmlReportFormatter: ['type', EjsReportFormatter],
+  fileSystem: ['type', ExpoAssetFileSystem],
+  pdfExporter: ['type', ExpoSharingPdfExporter],
+  textFileExporter: ['type', ExpoSharingTextFileExporter],
 
   expoSqliteDatabase: ['factory', expoSqliteDatabaseFactory],
-  timerBuilder: ['factory', timerBuilderFactory],
 
   // VALUES
-  foo: ['value', 'foo'],
+  //  foo: ['value', 'foo'],
 
   // TEMPLATES
   App: ['factory', App],

@@ -1,32 +1,43 @@
 import type { Observer } from '@/domain/models/Timer/Observable';
 import { Observable } from '@/domain/models/Timer/Observable';
-import type { Timer } from '@/domain/models/Timer/Timer';
+import type { BaseTimer } from '@/domain/models/Timer/BaseTimer';
 import type { TimerState } from '@/domain/models/Timer/TimerState';
 import type { TimerStateBuilder } from '@/domain/models/Timer/TimerStateBuilder';
+import { nowAddMs } from '@/domain/models/Timer/util';
 
 class TickingState implements TimerState {
-  context: Timer;
+  static readonly type = 'TickingState';
 
-  builder: TimerStateBuilder;
+  private context: BaseTimer;
 
-  endsAt: Date;
+  private builder: TimerStateBuilder;
 
-  stale = false;
+  private defaultIntervalMs: number;
 
-  onTickEvent = new Observable<number>();
+  private endsAt: Date;
 
-  onRestartEvent = new Observable<Date>();
+  private stale = false;
 
-  onFinishEvent = new Observable<undefined>();
+  private onTickEvent = new Observable<number>();
 
-  constructor(context: Timer, builder: TimerStateBuilder, endsAt: Date) {
+  private onRestartEvent = new Observable<Date>();
+
+  private onFinishEvent = new Observable<undefined>();
+
+  constructor(
+    context: BaseTimer,
+    builder: TimerStateBuilder,
+    endsAt: Date,
+    defaultIntervalMs: number
+  ) {
     this.context = context;
     this.builder = builder;
     this.endsAt = endsAt;
+    this.defaultIntervalMs = defaultIntervalMs;
     this.tick();
   }
 
-  start(endsAt: Date): void {
+  start(endsAt: Date = nowAddMs(this.defaultIntervalMs)): void {
     this.onRestartEvent.notifyObservers(endsAt);
     const newTickingState = this.builder.buildTickingState(endsAt);
     this.context.setState(newTickingState);
@@ -62,6 +73,10 @@ class TickingState implements TimerState {
 
   addOnFinishListener(o: Observer<undefined>) {
     this.onFinishEvent.observe(o);
+  }
+
+  setDefaultInterval(ms: number) {
+    this.defaultIntervalMs = ms;
   }
 
   private getRemainingTimeMs() {

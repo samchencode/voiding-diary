@@ -5,18 +5,29 @@ import { d3 } from '@/vendor/d3';
 import { theme } from '@/view/theme';
 import {
   RecordSectionHeader,
-  ListHeaderComponent,
-  ListEmptyComponent,
+  ListHeader,
+  ListEmpty,
+  Menu,
 } from '@/view/record-screen/components';
 import type { GetAllRecordsAction } from '@/application/GetAllRecordsAction';
 import type { Record } from '@/domain/models/Record';
 import { RecordsStaleObservable, ViewRecordVisitor } from '@/view/lib';
+import type { ExportReportOfAllRecordsAsPdfAction } from '@/application/ExportReportOfAllRecordsAsPdfAction';
 
-export function factory(getAllRecordsAction: GetAllRecordsAction) {
+export function factory(
+  getAllRecordsAction: GetAllRecordsAction,
+  exportReportOfAllRecordsAsPdfAction: ExportReportOfAllRecordsAsPdfAction
+) {
   const getAndGroupRecords = async () =>
     getAllRecordsAction
       .execute()
       .then((res) => d3.group(res, (r) => r.getDateString()));
+
+  const handlePressExport = () => {
+    exportReportOfAllRecordsAsPdfAction.execute();
+  };
+
+  const renderMenu = () => <Menu onPressExport={handlePressExport} />;
 
   return function RecordScreen() {
     type Date = string;
@@ -52,8 +63,8 @@ export function factory(getAllRecordsAction: GetAllRecordsAction) {
             <RecordSectionHeader date={section.title} />
           )}
           keyExtractor={(item) => ViewRecordVisitor.makeKey(item)}
-          ListHeaderComponent={ListHeaderComponent}
-          ListEmptyComponent={ListEmptyComponent}
+          ListHeaderComponent={<ListHeader renderMenu={renderMenu} />}
+          ListEmptyComponent={ListEmpty}
         />
       </View>
     );

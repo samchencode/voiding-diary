@@ -21,11 +21,11 @@ import type { GetTodaysRecordsAction } from '@/application/GetTodaysRecordsActio
 import { Button, Card } from '@/view/components';
 import type { WebSQLDatabase } from 'expo-sqlite';
 import type { AsyncStorageGoalRepository } from '@/infrastructure/persistence/async-storage/AsyncStorageGoalRepository';
-import type { GetTimerBuilderAction } from '@/application/GetTimerAction';
-import type { Timer } from '@/domain/models/Timer';
+import type { GetTimerAction } from '@/application/GetTimerAction';
 import type { GetGoalAction } from '@/application/GetGoalAction';
 import type { TimeInMins } from '@/domain/models/TimeInMins';
 import type { SetGoalAction } from '@/application/SetGoalAction';
+import { useTimer } from '@/view/home-screen/useTimer';
 
 const makeIntake = (amount: number) => {
   const datetime = new DateAndTime(new Date());
@@ -44,7 +44,7 @@ function factory(
   saveRecordAction: SaveRecordAction,
   expoSqliteDatabase: WebSQLDatabase,
   asyncStorageGoalRepository: AsyncStorageGoalRepository,
-  getTimerBuilderAction: GetTimerBuilderAction,
+  getTimerAction: GetTimerAction,
   getGoalAction: GetGoalAction,
   setGoalAction: SetGoalAction
 ) {
@@ -67,13 +67,12 @@ function factory(
       handleNewRecord(makeIntake(amount));
     };
 
-    const [timeTotal, setTimeTotal] = useState(0);
-    const [timeRemaining, setTimeRemaining] = useState(0);
     const [records, setRecords] = useState<Record[]>([]);
-
-    const [timer, loadTimer] = useState<Timer | null>(null);
-
     const [amInterval, setAmInterval] = useState<TimeInMins | null>(null);
+    const [timer, timeRemaining, timeTotal] = useTimer(
+      getTimerAction,
+      amInterval
+    );
 
     const makeVoidAndStartTimer = () => {
       if (!amInterval) {
@@ -87,28 +86,6 @@ function factory(
     };
 
     useEffect(() => {
-      getTimerBuilderAction.execute().then((b) => {
-        b.configure((bs) => {
-          bs.configureIdleState((s) => {
-            s.addOnStartListener((endsAt) => {
-              setTimeTotal(endsAt.getTime() - Date.now());
-            });
-          });
-          bs.configureTickingState((s) => {
-            s.addOnRestartListener((endsAt) => {
-              setTimeTotal(endsAt.getTime() - Date.now());
-            });
-            s.addOnTickListener((ms) => {
-              setTimeRemaining(ms);
-            });
-            s.addOnFinishListener(() => {
-              setTimeRemaining(0);
-            });
-          });
-        });
-        loadTimer(b.build());
-      });
-
       getGoalAction
         .execute()
         .then((g) => setAmInterval(g.getAmTargetVoidInterval()))
