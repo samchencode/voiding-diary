@@ -8,6 +8,7 @@ type BaseModalProps = {
   onLayout?: (e: LayoutChangeEvent) => void;
   setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
   visible: boolean;
+  onCancel: () => void | undefined;
 };
 
 function BaseModal({
@@ -16,6 +17,7 @@ function BaseModal({
   onLayout,
   setModalVisible,
   visible,
+  onCancel,
 }: BaseModalProps) {
   return (
     <Modal
@@ -24,6 +26,7 @@ function BaseModal({
       visible={visible}
       onRequestClose={() => {
         setModalVisible(!visible);
+        if (onCancel !== undefined) onCancel();
       }}
       style={styles.modal}
     >

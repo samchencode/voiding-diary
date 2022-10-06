@@ -22,7 +22,14 @@ function RecordIntakeModal({
   const [size, setSize] = useState(0);
 
   return (
-    <BaseModal setModalVisible={setModalVisible} visible={visible}>
+    <BaseModal
+      setModalVisible={setModalVisible}
+      visible={visible}
+      onCancel={() => {
+        setBeverage('');
+        setSize(0);
+      }}
+    >
       <Card style={styles.card}>
         <Text style={styles.title}>+Intake</Text>
         <Text style={styles.subTitle}>Beverage</Text>
@@ -42,8 +49,9 @@ function RecordIntakeModal({
         <Button
           onPress={() => {
             setModalVisible(false);
-            // throw error if size or beverage are unfilled
             recordIntake(size);
+            setBeverage('');
+            setSize(0);
           }}
           title="Add"
         />
