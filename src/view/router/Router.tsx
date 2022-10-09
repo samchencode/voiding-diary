@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-no-bind */
-import React from 'react';
+import React, { useMemo } from 'react';
 import type {
   CompositeScreenProps,
   NavigatorScreenParams,
@@ -12,18 +12,22 @@ import { createStackNavigator } from '@react-navigation/stack';
 import type { Type as HomeScreen } from '@/view/home-screen';
 import type { Type as GoalScreen } from '@/view/goal-screen';
 import type { Type as RecordScreen } from '@/view/record-screen';
+import type { Type as TestScreen } from '@/view/test-screen';
 import type { Type as NoGoalModal } from '@/view/no-goal-modal';
 import { makeIcon } from '@/view/router/makeIcon';
 import { theme } from '@/view/theme';
+import type { Environment } from '@/view/env';
 
 const GoalIcon = makeIcon('bullseye');
 const HomeIcon = makeIcon('home');
 const RecordIcon = makeIcon('archive');
+const TestIcon = makeIcon('wrench');
 
 type AppNavigationParams = {
   Home: undefined;
   Goal: undefined;
   Record: undefined;
+  Test: undefined;
 };
 
 type RootNavigationParams = {
@@ -38,9 +42,13 @@ function factory(
   HomeScreen: HomeScreen,
   GoalScreen: GoalScreen,
   RecordScreen: RecordScreen,
-  NoGoalModal: NoGoalModal
+  TestScreen: TestScreen,
+  NoGoalModal: NoGoalModal,
+  environment: Environment
 ) {
   function AppNavigation() {
+    const isDevMode = useMemo(() => environment.mode === 'development', []);
+
     return (
       <Tab.Navigator
         initialRouteName="Home"
@@ -74,6 +82,16 @@ function factory(
             tabBarIcon: RecordIcon,
           }}
         />
+        {isDevMode && (
+          <Tab.Screen
+            name="Test"
+            component={TestScreen}
+            options={{
+              tabBarLabel: 'Testing',
+              tabBarIcon: TestIcon,
+            }}
+          />
+        )}
       </Tab.Navigator>
     );
   }

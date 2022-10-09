@@ -17,9 +17,6 @@ import type { Record } from '@/domain/models/Record';
 import { IntakeRecord, VoidRecord } from '@/domain/models/Record';
 import { RecordsStaleObservable } from '@/view/lib';
 import type { GetTodaysRecordsAction } from '@/application/GetTodaysRecordsAction';
-import { Button, Card } from '@/view/components';
-import type { WebSQLDatabase } from 'expo-sqlite';
-import type { AsyncStorageGoalRepository } from '@/infrastructure/persistence/async-storage/AsyncStorageGoalRepository';
 import type { GetTimerAction } from '@/application/GetTimerAction';
 import type { GetGoalAction } from '@/application/GetGoalAction';
 import { useTimer } from '@/view/home-screen/useTimer';
@@ -41,20 +38,12 @@ const makeVoid = () => {
 function factory(
   getTodaysRecordsAction: GetTodaysRecordsAction,
   saveRecordAction: SaveRecordAction,
-  expoSqliteDatabase: WebSQLDatabase,
-  asyncStorageGoalRepository: AsyncStorageGoalRepository,
   getTimerAction: GetTimerAction,
   getGoalAction: GetGoalAction
 ) {
   async function handleNewRecord(record: Record) {
     await saveRecordAction.execute(record);
     RecordsStaleObservable.notifyAll();
-  }
-
-  function handleResetDb() {
-    // @ts-expect-error for debug only
-    expoSqliteDatabase.deleteDb();
-    asyncStorageGoalRepository.reset();
   }
 
   return function HomeScreen({ navigation }: AppNavigationProps<'Home'>) {
@@ -131,13 +120,10 @@ function factory(
               onPressVoid={() => handleNewRecord(makeVoidAndStartTimer())}
             />
             <IntakeChart style={styles.item} goal={goal} intake={totalIntake} />
-            <RecentRecordList style={styles.item} records={records} />
-            <Card style={[styles.item, styles.lastItem]}>
-              <Button.Danger
-                title="Reset Database"
-                onPress={() => handleResetDb()}
-              />
-            </Card>
+            <RecentRecordList
+              style={[styles.item, styles.lastItem]}
+              records={records}
+            />
           </View>
           <RecordIntakeModal
             visible={recordIntakeModalVisible}

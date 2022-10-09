@@ -3,6 +3,7 @@ import { factory as Router } from '@/view/router';
 import { factory as HomeScreen } from '@/view/home-screen';
 import { factory as GoalScreen } from '@/view/goal-screen';
 import { factory as RecordScreen } from '@/view/record-screen';
+import { factory as TestScreen } from '@/view/test-screen';
 import { factory as NoGoalModal } from '@/view/no-goal-modal';
 import { GetAllRecordsAction } from '@/application/GetAllRecordsAction';
 import { GetGoalAction } from '@/application/GetGoalAction';
@@ -25,6 +26,7 @@ import { ExpoSharingPdfExporter } from '@/infrastructure/export/expo-sharing/Exp
 import { ExpoSharingTextFileExporter } from '@/infrastructure/export/expo-sharing/ExpoSharingTextFileExporter';
 import { ExportReportAsPdfAction } from '@/application/ExportReportAsPdfAction';
 import { ExportReportOfAllRecordsAsPdfAction } from '@/application/ExportReportOfAllRecordsAsPdfAction';
+import { getEnvVars } from '@/view/env';
 
 export const module = {
   // APPLICATION SERVICES
@@ -57,7 +59,7 @@ export const module = {
   expoSqliteDatabase: ['factory', expoSqliteDatabaseFactory],
 
   // VALUES
-  //  foo: ['value', 'foo'],
+  environment: ['factory', getEnvVars],
 
   // TEMPLATES
   App: ['factory', App],
@@ -65,6 +67,7 @@ export const module = {
   HomeScreen: ['factory', HomeScreen],
   GoalScreen: ['factory', GoalScreen],
   RecordScreen: ['factory', RecordScreen],
+  TestScreen: ['factory', TestScreen],
   NoGoalModal: ['factory', NoGoalModal],
 
   // DEBUG
