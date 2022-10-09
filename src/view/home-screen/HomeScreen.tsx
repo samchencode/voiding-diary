@@ -22,9 +22,9 @@ import type { WebSQLDatabase } from 'expo-sqlite';
 import type { AsyncStorageGoalRepository } from '@/infrastructure/persistence/async-storage/AsyncStorageGoalRepository';
 import type { GetTimerAction } from '@/application/GetTimerAction';
 import type { GetGoalAction } from '@/application/GetGoalAction';
-import type { TimeInMins } from '@/domain/models/TimeInMins';
 import { useTimer } from '@/view/home-screen/useTimer';
 import type { AppNavigationProps } from '@/view/router';
+import type { Goal } from '@/domain/models/Goal';
 
 const makeIntake = (amount: number) => {
   const datetime = new DateAndTime(new Date());
@@ -65,18 +65,18 @@ function factory(
     };
 
     const [records, setRecords] = useState<Record[]>([]);
-    const [amInterval, setAmInterval] = useState<TimeInMins | null>(null);
+    const [goal, setGoal] = useState<Goal | null>(null);
     const [timer, timeRemaining, timeTotal] = useTimer(
       getTimerAction,
-      amInterval
+      goal?.getAmTargetVoidInterval() ?? null
     );
 
     const makeVoidAndStartTimer = () => {
-      if (!amInterval) {
+      if (!goal) {
         console.log('no amInterval set yet...');
         return makeVoid();
       }
-      const durationMs = amInterval.getMinutesTotal() * 60 * 1000;
+      const durationMs = goal.getAmTargetVoidInterval().getMillisecondsTotal();
       const endsAt = new Date(Date.now() + durationMs);
       timer!.start(endsAt);
       return makeVoid();
@@ -85,7 +85,7 @@ function factory(
     useEffect(() => {
       getGoalAction
         .execute()
-        .then((g) => setAmInterval(g.getAmTargetVoidInterval()))
+        .then((g) => setGoal(g))
         .catch(() => {
           navigation.navigate('NoGoalModal');
         });
@@ -97,6 +97,11 @@ function factory(
         getTodaysRecordsAction.execute().then((r) => setRecords(r));
       });
     }, []);
+
+    const totalIntake = records
+      .filter((r) => r instanceof IntakeRecord)
+      .map((r) => r as IntakeRecord)
+      .reduce((ag, v: IntakeRecord) => v.getIntakeVolume().getValue() + ag, 0);
 
     return (
       <SplitColorBackground
@@ -125,7 +130,7 @@ function factory(
               }}
               onPressVoid={() => handleNewRecord(makeVoidAndStartTimer())}
             />
-            <IntakeChart style={styles.item} goal={32} intake={8} />
+            <IntakeChart style={styles.item} goal={goal} intake={totalIntake} />
             <RecentRecordList style={styles.item} records={records} />
             <Card style={[styles.item, styles.lastItem]}>
               <Button.Danger

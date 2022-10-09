@@ -5,22 +5,24 @@ import Svg, { Rect, Line, Text as SvgText } from 'react-native-svg';
 import { theme } from '@/view/theme';
 import { Card } from '@/view/components';
 import { d3 } from '@/vendor/d3';
+import type { Goal } from '@/domain/models/Goal';
 
 const containerPadding = theme.spaces.lg;
-const barHeight = 15;
+const barHeight = 16;
 const markerHeight = 40;
 const barOffsetY = markerHeight - barHeight;
 const svgHeight = markerHeight;
-const goalTextOffsetX = 24;
+const goalTextOffsetX = 4;
 
 type IntakeChartProps = {
-  goal: number;
-  intake: number;
+  goal: Goal | null;
+  intake: number | null;
   style?: StyleProp<ViewStyle>;
 };
 
 function IntakeChart({ goal, intake, style }: IntakeChartProps) {
-  const data = { goal, intake };
+  const goalValue = goal?.getTargetIntake().getValue() ?? 0;
+  const intakeValue = intake ?? 0;
 
   const [width, setWidth] = useState(0);
   const onLayout = useCallback(({ nativeEvent }: LayoutChangeEvent) => {
@@ -29,13 +31,13 @@ function IntakeChart({ goal, intake, style }: IntakeChartProps) {
 
   const scaleX = d3
     .scaleLinear()
-    .domain([0, Math.max(data.goal, data.intake)])
+    .domain([0, Math.max(goalValue, intakeValue)])
     .range([0, width]);
 
   return (
     <Card onLayout={onLayout} style={[styles.card, style]}>
       <View style={styles.titleContainer}>
-        <Text style={styles.title}>{data.intake}oz</Text>
+        <Text style={styles.title}>{intakeValue}oz</Text>
         <Text style={styles.subtitle}>Intake</Text>
       </View>
       <Svg
@@ -55,36 +57,31 @@ function IntakeChart({ goal, intake, style }: IntakeChartProps) {
           x={0}
           y={barOffsetY}
           rx={barHeight / 2}
-          width={scaleX(data.intake)}
+          width={scaleX(intakeValue)}
           height={barHeight}
           fill={theme.colors.primary}
         />
-        <Line
-          x1={scaleX(data.goal)}
-          x2={scaleX(data.goal)}
-          y1={0}
-          y2={svgHeight}
-          stroke={theme.colors.danger}
-          strokeWidth={2}
-        />
-        <SvgText
-          x={scaleX(data.goal) - goalTextOffsetX}
-          y={theme.spaces.lg}
-          fontSize={16}
-          fill={theme.colors.danger}
-          textAnchor="end"
-        >
-          {data.goal}
-        </SvgText>
-        <SvgText
-          x={scaleX(data.goal) - goalTextOffsetX + 18}
-          y={theme.spaces.lg}
-          fontSize={16}
-          fill={theme.colors.danger}
-          textAnchor="end"
-        >
-          oz
-        </SvgText>
+        {goal !== null && (
+          <>
+            <Line
+              x1={scaleX(goalValue)}
+              x2={scaleX(goalValue)}
+              y1={0}
+              y2={svgHeight}
+              stroke={theme.colors.danger}
+              strokeWidth={2}
+            />
+            <SvgText
+              x={scaleX(goalValue) - goalTextOffsetX}
+              y={theme.spaces.lg}
+              fontSize={16}
+              fill={theme.colors.danger}
+              textAnchor="end"
+            >
+              {goal.getTargetIntake().toString()}
+            </SvgText>
+          </>
+        )}
       </Svg>
     </Card>
   );

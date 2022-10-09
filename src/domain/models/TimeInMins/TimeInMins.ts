@@ -31,6 +31,10 @@ class TimeInMins {
     return this.minutes;
   }
 
+  getMillisecondsTotal() {
+    return this.minutes * 60 * 1000;
+  }
+
   is(value: TimeInMins) {
     return this.minutes === value.getMinutesTotal();
   }

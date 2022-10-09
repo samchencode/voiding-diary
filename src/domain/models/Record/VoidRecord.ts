@@ -16,6 +16,10 @@ class VoidRecord extends Record {
     this.urineVolume = urineVolume;
   }
 
+  getUrineVolume() {
+    return this.urineVolume;
+  }
+
   getUrineVolumeString() {
     return this.urineVolume.toString();
   }
