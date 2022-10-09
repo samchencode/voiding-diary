@@ -3,9 +3,9 @@ import type { WebSQLDatabase } from 'expo-sqlite';
 
 export function resetDatabase(
   expoSqliteDatabase: WebSQLDatabase,
-  asyncStorageGoalRepository: AsyncStorageGoalRepository
+  goalRepository: AsyncStorageGoalRepository
 ) {
   // @ts-expect-error for debug only
   expoSqliteDatabase.deleteDb();
-  asyncStorageGoalRepository.reset();
+  goalRepository.reset();
 }

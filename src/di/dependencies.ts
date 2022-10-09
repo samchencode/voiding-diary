@@ -69,10 +69,4 @@ export const module = {
   RecordScreen: ['factory', RecordScreen],
   TestScreen: ['factory', TestScreen],
   NoGoalModal: ['factory', NoGoalModal],
-
-  // DEBUG
-  asyncStorageGoalRepository: [
-    'factory',
-    (goalRepository: AsyncStorageGoalRepository) => goalRepository,
-  ],
 };
