@@ -12,7 +12,7 @@ import { StatusBar } from '@/view/status-bar';
 import { RecordIntakeModal } from '@/view/modals/RecordIntakeModal';
 import type { SaveRecordAction } from '@/application/SaveRecordAction';
 import { DateAndTime } from '@/domain/models/DateAndTime';
-import { VolumeInOz } from '@/domain/models/Volume';
+import { UnknownVolume, VolumeInOz } from '@/domain/models/Volume';
 import type { Record } from '@/domain/models/Record';
 import { IntakeRecord, VoidRecord } from '@/domain/models/Record';
 import { RecordsStaleObservable } from '@/view/lib';
@@ -34,7 +34,7 @@ const makeIntake = (amount: number) => {
 
 const makeVoid = () => {
   const datetime = new DateAndTime(new Date());
-  const volume = new VolumeInOz(30);
+  const volume = new UnknownVolume();
   return new VoidRecord(datetime, volume);
 };
 
