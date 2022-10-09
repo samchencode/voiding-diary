@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { StyleSheet, ScrollView, View } from 'react-native';
 import { theme } from '@/view/theme';
 import {
@@ -71,7 +71,7 @@ function factory(
       goal?.getAmTargetVoidInterval() ?? null
     );
 
-    const makeVoidAndStartTimer = () => {
+    const makeVoidAndStartTimer = useCallback(() => {
       if (!goal) {
         console.log('no amInterval set yet...');
         return makeVoid();
@@ -80,7 +80,7 @@ function factory(
       const endsAt = new Date(Date.now() + durationMs);
       timer!.start(endsAt);
       return makeVoid();
-    };
+    }, [goal, timer]);
 
     useEffect(() => {
       getGoalAction
