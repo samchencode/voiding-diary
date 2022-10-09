@@ -23,7 +23,11 @@ function factory() {
           <Text style={styles.message}>
             Looks like you have not set a goal yet
           </Text>
-          <Button.Success title="Set a Goal!" onPress={navigateToGoalScreen} />
+          <Button
+            title="Set a Goal!"
+            onPress={navigateToGoalScreen}
+            backgroundColor={theme.colors.primary}
+          />
         </Card>
       </View>
     );
