@@ -91,6 +91,7 @@ class ExpoNotificationsNotificationScheduler implements NotificationScheduler {
         title: NOTIFICATION_TITLE,
         body: NOTIFICATION_BODY,
         categoryIdentifier: NOTIFICATION_CATEGORY_IDENTIFIER,
+        sound: 'alert.mp3',
       },
       trigger: { seconds },
     });
