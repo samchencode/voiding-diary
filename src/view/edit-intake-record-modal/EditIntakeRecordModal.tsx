@@ -31,7 +31,7 @@ function factory(updateRecordAction: UpdateRecordAction) {
       route.params.intakeRecord.getDateAndTime()
     );
     const [volume, setVolume] = useState(
-      route.params.intakeRecord.getIntakeVolumeString()
+      route.params.intakeRecord.getIntakeVolume().valueOf()
     );
 
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
