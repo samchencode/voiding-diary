@@ -11,13 +11,15 @@ import {
 } from '@/view/record-screen/components';
 import type { GetAllRecordsAction } from '@/application/GetAllRecordsAction';
 import type { IntakeRecord, Record, VoidRecord } from '@/domain/models/Record';
-import { RecordsStaleObservable, ViewRecordVisitor } from '@/view/lib';
+import { ViewRecordVisitor } from '@/view/lib';
 import type { ExportReportOfAllRecordsAsPdfAction } from '@/application/ExportReportOfAllRecordsAsPdfAction';
 import type { AppNavigationProps } from '@/view/router';
+import type { Observable } from '@/view/observables';
 
 export function factory(
   getAllRecordsAction: GetAllRecordsAction,
-  exportReportOfAllRecordsAsPdfAction: ExportReportOfAllRecordsAsPdfAction
+  exportReportOfAllRecordsAsPdfAction: ExportReportOfAllRecordsAsPdfAction,
+  recordsStaleObservable: Observable
 ) {
   const getAndGroupRecords = async () =>
     getAllRecordsAction
@@ -44,7 +46,7 @@ export function factory(
 
     useEffect(() => {
       getAndGroupRecords().then((v) => setRecords(v));
-      RecordsStaleObservable.subscribe(() => {
+      recordsStaleObservable.subscribe(() => {
         getAndGroupRecords().then((v) => setRecords(v));
       });
     }, []);

@@ -16,11 +16,14 @@ import type { UpdateRecordAction } from '@/application/UpdateRecordAction';
 import { DateAndTime } from '@/domain/models/DateAndTime';
 import { VolumeInOz } from '@/domain/models/Volume';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import { RecordsStaleObservable } from '@/view/lib';
+import type { Observable } from '@/view/observables';
 
 type EditVoidRecordModalProps = RootNavigationProps<'EditVoidRecordModal'>;
 
-function factory(updateRecordAction: UpdateRecordAction) {
+function factory(
+  updateRecordAction: UpdateRecordAction,
+  recordsStaleObservable: Observable
+) {
   return function EditVoidRecordModal({
     navigation,
     route,
@@ -43,7 +46,7 @@ function factory(updateRecordAction: UpdateRecordAction) {
     const updateRecord = async () => {
       const r = new VoidRecord(dateAndTime, new VolumeInOz(volume));
       await updateRecordAction.execute(id, r);
-      RecordsStaleObservable.notifyAll();
+      recordsStaleObservable.notifySubscribers();
       navigateToRecordScreen();
     };
 

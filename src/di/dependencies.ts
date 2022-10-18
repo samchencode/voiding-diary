@@ -30,6 +30,10 @@ import { ExpoSharingTextFileExporter } from '@/infrastructure/export/expo-sharin
 import { ExportReportAsPdfAction } from '@/application/ExportReportAsPdfAction';
 import { ExportReportOfAllRecordsAsPdfAction } from '@/application/ExportReportOfAllRecordsAsPdfAction';
 import { getEnvVars } from '@/view/env';
+import {
+  makeGoalStaleObservable,
+  makeRecordsStaleObservable,
+} from '@/view/observables';
 
 export const module = {
   // APPLICATION SERVICES
@@ -75,4 +79,8 @@ export const module = {
   EditVoidRecordModal: ['factory', EditVoidRecordModal],
   EditIntakeRecordModal: ['factory', EditIntakeRecordModal],
   RecordIntakeModal: ['factory', RecordIntakeModal],
+
+  // OBSERVABLES
+  goalStaleObservable: ['factory', makeGoalStaleObservable],
+  recordsStaleObservable: ['factory', makeRecordsStaleObservable],
 };

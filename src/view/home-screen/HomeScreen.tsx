@@ -11,16 +11,16 @@ import {
 import { StatusBar } from '@/view/status-bar';
 import type { SaveRecordAction } from '@/application/SaveRecordAction';
 import { DateAndTime } from '@/domain/models/DateAndTime';
-import { UnknownVolume, VolumeInOz } from '@/domain/models/Volume';
+import { UnknownVolume } from '@/domain/models/Volume';
 import type { Record } from '@/domain/models/Record';
 import { IntakeRecord, VoidRecord } from '@/domain/models/Record';
-import { RecordsStaleObservable } from '@/view/lib';
 import type { GetTodaysRecordsAction } from '@/application/GetTodaysRecordsAction';
 import type { GetTimerAction } from '@/application/GetTimerAction';
 import type { GetGoalAction } from '@/application/GetGoalAction';
 import { useTimer } from '@/view/home-screen/useTimer';
 import type { AppNavigationProps } from '@/view/router';
 import type { Goal } from '@/domain/models/Goal';
+import type { Observable } from '@/view/observables';
 
 const makeVoid = () => {
   const datetime = new DateAndTime(new Date());
@@ -32,11 +32,12 @@ function factory(
   getTodaysRecordsAction: GetTodaysRecordsAction,
   saveRecordAction: SaveRecordAction,
   getTimerAction: GetTimerAction,
-  getGoalAction: GetGoalAction
+  getGoalAction: GetGoalAction,
+  recordsStaleObservable: Observable
 ) {
   async function handleNewVoidRecord(record: VoidRecord) {
     await saveRecordAction.execute(record);
-    RecordsStaleObservable.notifyAll();
+    recordsStaleObservable.notifySubscribers();
   }
 
   return function HomeScreen({ navigation }: AppNavigationProps<'Home'>) {
@@ -73,7 +74,7 @@ function factory(
 
     useEffect(() => {
       getTodaysRecordsAction.execute().then((r) => setRecords(r));
-      RecordsStaleObservable.subscribe(() => {
+      recordsStaleObservable.subscribe(() => {
         getTodaysRecordsAction.execute().then((r) => setRecords(r));
       });
     }, []);

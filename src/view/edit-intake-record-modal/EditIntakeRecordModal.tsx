@@ -13,13 +13,16 @@ import { IntakeRecord } from '@/domain/models/Record';
 
 import type { UpdateRecordAction } from '@/application/UpdateRecordAction';
 import { DateAndTime } from '@/domain/models/DateAndTime';
-import { UnknownVolume, VolumeInOz } from '@/domain/models/Volume';
+import { VolumeInOz } from '@/domain/models/Volume';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import { RecordsStaleObservable } from '@/view/lib';
+import type { Observable } from '@/view/observables';
 
 type EditIntakeRecordModalProps = RootNavigationProps<'EditIntakeRecordModal'>;
 
-function factory(updateRecordAction: UpdateRecordAction) {
+function factory(
+  updateRecordAction: UpdateRecordAction,
+  recordsStaleObservable: Observable
+) {
   return function EditIntakeRecordModal({
     navigation,
     route,
@@ -58,7 +61,7 @@ function factory(updateRecordAction: UpdateRecordAction) {
       // new UnknownVolume()
       const r = new IntakeRecord(dateAndTime, new VolumeInOz(volume));
       await updateRecordAction.execute(id, r);
-      RecordsStaleObservable.notifyAll();
+      recordsStaleObservable.notifySubscribers();
       navigateToRecordScreen();
     };
 

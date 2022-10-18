@@ -1,7 +1,6 @@
 import type { Record } from '@/domain/models/Record';
 import { IntakeRecord } from '@/domain/models/Record';
 import type { SaveRecordAction } from '@/application/SaveRecordAction';
-import { RecordsStaleObservable } from '@/view/lib';
 import React, { useState } from 'react';
 import { SizeOption, SizeOptionOther, Card, Button } from '@/view/components';
 import { TextInput, View, Text, StyleSheet } from 'react-native';
@@ -9,13 +8,17 @@ import { theme } from '@/view/theme';
 import type { RootNavigationProps } from '@/view/router';
 import { DateAndTime } from '@/domain/models/DateAndTime';
 import { VolumeInOz } from '@/domain/models/Volume';
+import type { Observable } from '@/view/observables';
 
 type RecordIntakeModalProps = RootNavigationProps<'RecordIntakeModal'>;
 
-function factory(saveRecordAction: SaveRecordAction) {
+function factory(
+  saveRecordAction: SaveRecordAction,
+  recordsStaleObservable: Observable
+) {
   async function handleNewRecord(record: Record) {
     await saveRecordAction.execute(record);
-    RecordsStaleObservable.notifyAll();
+    recordsStaleObservable.notifySubscribers();
   }
 
   const makeIntake = (amount: number) => {
