@@ -1,18 +1,19 @@
 import React, { useCallback } from 'react';
 import { Button } from '@/view/components';
-import { container } from '@/di';
 import { theme } from '@/view/theme';
+import type { Injector } from 'didi';
 
 type TestProps = {
   title: string;
   action: (...args: never[]) => unknown;
+  container: Injector;
 };
 
-function DebugAction({ title, action }: TestProps) {
+function DebugAction({ title, action, container }: TestProps) {
   const handleAction = useCallback(() => {
     // @ts-expect-error the other two params of `.invoke` are optional
     container.invoke(action);
-  }, [action]);
+  }, [action, container]);
 
   return (
     <Button
