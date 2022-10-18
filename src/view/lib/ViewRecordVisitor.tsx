@@ -1,5 +1,6 @@
 import React from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
+import { Pressable } from 'react-native';
 import type {
   IntakeRecord,
   RecordVisitor,
@@ -22,29 +23,52 @@ class ViewRecordVisitor implements RecordVisitor {
 
   private key?: string;
 
-  constructor(r: Record) {
+  private onEditIntakeRecord?: (r: IntakeRecord) => void;
+
+  private onEditVoidRecord?: (r: VoidRecord) => void;
+
+  constructor(
+    r: Record,
+    onEditIntakeRecord?: (r: IntakeRecord) => void,
+    onEditVoidRecord?: (r: VoidRecord) => void
+  ) {
     r.acceptVisitor(this);
+    this.onEditIntakeRecord = onEditIntakeRecord;
+    this.onEditVoidRecord = onEditVoidRecord;
   }
 
   visitIntakeRecord(r: IntakeRecord): void {
     this.key = makeKey(r);
+
     this.rowElement = (
-      <IntakeRecordRow
+      <Pressable
         key={this.key}
-        volume={r.getIntakeVolumeString()}
-        time={r.getTimeString()}
-      />
+        onPress={() => {
+          this.onEditIntakeRecord(r);
+        }}
+      >
+        <IntakeRecordRow
+          volume={r.getIntakeVolumeString()}
+          time={r.getTimeString()}
+        />
+      </Pressable>
     );
   }
 
   visitVoidRecord(r: VoidRecord): void {
     this.key = makeKey(r);
     this.rowElement = (
-      <VoidRecordRow
+      <Pressable
         key={this.key}
-        volume={r.getUrineVolumeString()}
-        time={r.getTimeString()}
-      />
+        onPress={() => {
+          this.onEditVoidRecord(r);
+        }}
+      >
+        <VoidRecordRow
+          volume={r.getUrineVolumeString()}
+          time={r.getTimeString()}
+        />
+      </Pressable>
     );
   }
 

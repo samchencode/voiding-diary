@@ -14,6 +14,10 @@ abstract class Record {
     this.id = id ?? new NullRecordId();
   }
 
+  getDateAndTime() {
+    return this.dateAndTime;
+  }
+
   getDateString() {
     return this.dateAndTime.getDateString();
   }

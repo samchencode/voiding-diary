@@ -20,6 +20,10 @@ class IntakeRecord extends Record {
     return this.intakeVolume.toString();
   }
 
+  getIntakeVolume() {
+    return this.intakeVolume.valueOf();
+  }
+
   is(otherRecord: IntakeRecord) {
     return this.getId().is(otherRecord.getId());
   }

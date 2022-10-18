@@ -33,6 +33,10 @@ class DateAndTime {
     return formatter.format(this.value);
   }
 
+  getDate() {
+    return this.value;
+  }
+
   toString() {
     return this.value.toString();
   }

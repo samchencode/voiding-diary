@@ -3,8 +3,10 @@ import { factory as Router } from '@/view/router';
 import { factory as HomeScreen } from '@/view/home-screen';
 import { factory as GoalScreen } from '@/view/goal-screen';
 import { factory as RecordScreen } from '@/view/record-screen';
-import { factory as NoGoalModal } from '@/view/modals/no-goal-modal';
 import { factory as NoGoalModal } from '@/view/no-goal-modal';
+import { factory as EditIntakeRecordModal } from '@/view/edit-intake-record-modal';
+import { factory as EditVoidRecordModal } from '@/view/edit-void-record-modal';
+import { factory as RecordIntakeModal } from '@/view/record-intake-modal';
 import { GetAllRecordsAction } from '@/application/GetAllRecordsAction';
 import { GetGoalAction } from '@/application/GetGoalAction';
 import { expoSqliteDatabaseFactory } from '@/infrastructure/persistence/expo-sqlite/expoSqliteDatabaseFactory';
@@ -13,8 +15,8 @@ import { GetTodaysRecordsAction } from '@/application/GetTodaysRecordsAction';
 import { ExpoSqliteRecordRepository } from '@/infrastructure/persistence/expo-sqlite/ExpoSqliteRecordRepository';
 import { SetGoalAction } from '@/application/SetGoalAction';
 import { AsyncStorageGoalRepository } from '@/infrastructure/persistence/async-storage/AsyncStorageGoalRepository';
-import { timerBuilderFactory } from '@/infrastructure/timer/timerBuilderFactory';
-import { GetTimerBuilderAction } from '@/application/GetTimerAction';
+// import { timerBuilderFactory } from '@/infrastructure/timer/timerBuilderFactory';
+// import { GetTimerBuilderAction } from '@/application/GetTimerAction';
 import { UpdateRecordAction } from '@/application/UpdateRecordAction';
 import { GetTimerAction } from '@/application/GetTimerAction';
 import { AsyncStorageTimerEndTimeRepository } from '@/infrastructure/persistence/async-storage/AsyncStorageTimerEndTimeRepository';
@@ -69,6 +71,9 @@ export const module = {
   GoalScreen: ['factory', GoalScreen],
   RecordScreen: ['factory', RecordScreen],
   NoGoalModal: ['factory', NoGoalModal],
+  EditVoidRecordModal: ['factory', EditVoidRecordModal],
+  EditIntakeRecordModal: ['factory', EditIntakeRecordModal],
+  RecordIntakeModal: ['factory', RecordIntakeModal],
 
   // DEBUG
   asyncStorageGoalRepository: [

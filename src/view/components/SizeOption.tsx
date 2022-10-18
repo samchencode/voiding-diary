@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
   sizes: {
     ...theme.fonts.md,
     color: theme.colors.accent,
-    padding: theme.spaces.lg,
+    paddingRight: theme.spaces.sm,
   },
 });
 

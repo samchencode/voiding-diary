@@ -40,8 +40,8 @@ const styles = StyleSheet.create({
   otherSizeOption: {
     ...theme.fonts.md,
     color: theme.colors.accent,
-    padding: theme.spaces.lg,
     flexDirection: 'row',
+    paddingRight: theme.spaces.sm,
   },
   validSize: {
     color: theme.colors.accent,

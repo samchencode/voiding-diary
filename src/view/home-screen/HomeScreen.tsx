@@ -9,12 +9,11 @@ import {
   SplitColorBackground,
 } from '@/view/home-screen/components';
 import { StatusBar } from '@/view/status-bar';
-import { RecordIntakeModal } from '@/view/modals/RecordIntakeModal';
 import type { SaveRecordAction } from '@/application/SaveRecordAction';
 import { DateAndTime } from '@/domain/models/DateAndTime';
 import { VolumeInOz } from '@/domain/models/Volume';
 import type { Record } from '@/domain/models/Record';
-import { IntakeRecord, VoidRecord } from '@/domain/models/Record';
+import { VoidRecord } from '@/domain/models/Record';
 import { RecordsStaleObservable } from '@/view/lib';
 import type { GetTodaysRecordsAction } from '@/application/GetTodaysRecordsAction';
 import { Button, Card } from '@/view/components';
@@ -25,12 +24,6 @@ import type { GetGoalAction } from '@/application/GetGoalAction';
 import type { TimeInMins } from '@/domain/models/TimeInMins';
 import { useTimer } from '@/view/home-screen/useTimer';
 import type { AppNavigationProps } from '@/view/router';
-
-const makeIntake = (amount: number) => {
-  const datetime = new DateAndTime(new Date());
-  const volume = new VolumeInOz(amount);
-  return new IntakeRecord(datetime, volume);
-};
 
 const makeVoid = () => {
   const datetime = new DateAndTime(new Date());
@@ -46,7 +39,7 @@ function factory(
   getTimerAction: GetTimerAction,
   getGoalAction: GetGoalAction
 ) {
-  async function handleNewRecord(record: Record) {
+  async function handleNewVoidRecord(record: VoidRecord) {
     await saveRecordAction.execute(record);
     RecordsStaleObservable.notifyAll();
   }
@@ -58,10 +51,8 @@ function factory(
   }
 
   return function HomeScreen({ navigation }: AppNavigationProps<'Home'>) {
-    const [recordIntakeModalVisible, setRecordIntakeModalVisible] =
-      useState(false);
-    const recordIntake = (amount: number) => {
-      handleNewRecord(makeIntake(amount));
+    const navigateToRecordIntakeModal = () => {
+      navigation.navigate('RecordIntakeModal');
     };
 
     const [records, setRecords] = useState<Record[]>([]);
@@ -113,17 +104,15 @@ function factory(
             elevated
           />
           <TimerView
-            onPress={() => handleNewRecord(makeVoidAndStartTimer())}
+            onPress={() => handleNewVoidRecord(makeVoidAndStartTimer())}
             timeElapsedMs={timeTotal - timeRemaining}
             timeRemainingMs={timeRemaining}
           />
           <View style={styles.cardContainer}>
             <LoggerButtonGroup
               style={styles.item}
-              onPressIntake={() => {
-                setRecordIntakeModalVisible(true);
-              }}
-              onPressVoid={() => handleNewRecord(makeVoidAndStartTimer())}
+              onPressIntake={() => navigateToRecordIntakeModal()}
+              onPressVoid={() => handleNewVoidRecord(makeVoidAndStartTimer())}
             />
             <IntakeChart style={styles.item} goal={32} intake={8} />
             <RecentRecordList style={styles.item} records={records} />
@@ -134,11 +123,6 @@ function factory(
               />
             </Card>
           </View>
-          <RecordIntakeModal
-            visible={recordIntakeModalVisible}
-            recordIntake={recordIntake}
-            setModalVisible={setRecordIntakeModalVisible}
-          />
         </ScrollView>
       </SplitColorBackground>
     );

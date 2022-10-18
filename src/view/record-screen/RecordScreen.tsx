@@ -10,9 +10,10 @@ import {
   Menu,
 } from '@/view/record-screen/components';
 import type { GetAllRecordsAction } from '@/application/GetAllRecordsAction';
-import type { Record } from '@/domain/models/Record';
+import type { IntakeRecord, Record, VoidRecord } from '@/domain/models/Record';
 import { RecordsStaleObservable, ViewRecordVisitor } from '@/view/lib';
 import type { ExportReportOfAllRecordsAsPdfAction } from '@/application/ExportReportOfAllRecordsAsPdfAction';
+import type { AppNavigationProps } from '@/view/router';
 
 export function factory(
   getAllRecordsAction: GetAllRecordsAction,
@@ -29,10 +30,17 @@ export function factory(
 
   const renderMenu = () => <Menu onPressExport={handlePressExport} />;
 
-  return function RecordScreen() {
+  return function RecordScreen({ navigation }: AppNavigationProps<'Record'>) {
     type Date = string;
     type RecordsByDate = InternMap<Date, Record[]>;
     const [records, setRecords] = useState<RecordsByDate>(new Map());
+
+    const onEditVoidRecord = (voidRecord: VoidRecord) => {
+      navigation.navigate('EditVoidRecordModal', { voidRecord });
+    };
+    const onEditIntakeRecord = (intakeRecord: IntakeRecord) => {
+      navigation.navigate('EditIntakeRecordModal', { intakeRecord });
+    };
 
     useEffect(() => {
       getAndGroupRecords().then((v) => setRecords(v));
@@ -56,7 +64,11 @@ export function factory(
           contentContainerStyle={contentContainerStyle}
           sections={sections}
           renderItem={({ item }) => {
-            const Card = new ViewRecordVisitor(item).makeCard();
+            const Card = new ViewRecordVisitor(
+              item,
+              onEditIntakeRecord,
+              onEditVoidRecord
+            ).makeCard();
             return <Card style={styles.card} />;
           }}
           renderSectionHeader={({ section }) => (

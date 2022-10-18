@@ -13,8 +13,12 @@ import type { Type as HomeScreen } from '@/view/home-screen';
 import type { Type as GoalScreen } from '@/view/goal-screen';
 import type { Type as RecordScreen } from '@/view/record-screen';
 import type { Type as NoGoalModal } from '@/view/no-goal-modal';
+import type { Type as EditIntakeRecordModal } from '@/view/edit-intake-record-modal';
+import type { Type as EditVoidRecordModal } from '@/view/edit-void-record-modal';
+import type { Type as RecordIntakeModal } from '@/view/record-intake-modal';
 import { makeIcon } from '@/view/router/makeIcon';
 import { theme } from '@/view/theme';
+import type { IntakeRecord, VoidRecord } from '@/domain/models/Record';
 
 const GoalIcon = makeIcon('bullseye');
 const HomeIcon = makeIcon('home');
@@ -29,6 +33,9 @@ type AppNavigationParams = {
 type RootNavigationParams = {
   App: NavigatorScreenParams<AppNavigationParams>;
   NoGoalModal: undefined;
+  EditIntakeRecordModal: { intakeRecord: IntakeRecord };
+  EditVoidRecordModal: { voidRecord: VoidRecord };
+  RecordIntakeModal: undefined;
 };
 
 const Tab = createBottomTabNavigator<AppNavigationParams>();
@@ -38,7 +45,10 @@ function factory(
   HomeScreen: HomeScreen,
   GoalScreen: GoalScreen,
   RecordScreen: RecordScreen,
-  NoGoalModal: NoGoalModal
+  NoGoalModal: NoGoalModal,
+  EditIntakeRecordModal: EditIntakeRecordModal,
+  EditVoidRecordModal: EditVoidRecordModal,
+  RecordIntakeModal: RecordIntakeModal
 ) {
   function AppNavigation() {
     return (
@@ -87,6 +97,21 @@ function factory(
         <Stack.Screen
           name="NoGoalModal"
           component={NoGoalModal}
+          options={{ presentation: 'transparentModal' }}
+        />
+        <Stack.Screen
+          name="EditIntakeRecordModal"
+          component={EditIntakeRecordModal}
+          options={{ presentation: 'transparentModal' }}
+        />
+        <Stack.Screen
+          name="EditVoidRecordModal"
+          component={EditVoidRecordModal}
+          options={{ presentation: 'transparentModal' }}
+        />
+        <Stack.Screen
+          name="RecordIntakeModal"
+          component={RecordIntakeModal}
           options={{ presentation: 'transparentModal' }}
         />
         <Stack.Screen name="App" component={AppNavigation} />
