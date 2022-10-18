@@ -13,7 +13,7 @@ import { IntakeRecord } from '@/domain/models/Record';
 
 import type { UpdateRecordAction } from '@/application/UpdateRecordAction';
 import { DateAndTime } from '@/domain/models/DateAndTime';
-import { VolumeInOz } from '@/domain/models/Volume';
+import { UnknownVolume, VolumeInOz } from '@/domain/models/Volume';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { RecordsStaleObservable } from '@/view/lib';
 
@@ -31,7 +31,7 @@ function factory(updateRecordAction: UpdateRecordAction) {
       route.params.intakeRecord.getDateAndTime()
     );
     const [volume, setVolume] = useState(
-      route.params.intakeRecord.getIntakeVolume()
+      route.params.intakeRecord.getIntakeVolumeString()
     );
 
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
@@ -55,6 +55,7 @@ function factory(updateRecordAction: UpdateRecordAction) {
     }, [navigation]);
 
     const updateRecord = async () => {
+      // new UnknownVolume()
       const r = new IntakeRecord(dateAndTime, new VolumeInOz(volume));
       await updateRecordAction.execute(id, r);
       RecordsStaleObservable.notifyAll();

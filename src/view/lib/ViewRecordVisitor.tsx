@@ -23,14 +23,14 @@ class ViewRecordVisitor implements RecordVisitor {
 
   private key?: string;
 
-  private onEditIntakeRecord?: (r: IntakeRecord) => void;
+  private onEditIntakeRecord: (r: IntakeRecord) => void;
 
-  private onEditVoidRecord?: (r: VoidRecord) => void;
+  private onEditVoidRecord: (r: VoidRecord) => void;
 
   constructor(
     r: Record,
-    onEditIntakeRecord?: (r: IntakeRecord) => void,
-    onEditVoidRecord?: (r: VoidRecord) => void
+    onEditIntakeRecord: (r: IntakeRecord) => void = () => {},
+    onEditVoidRecord: (r: VoidRecord) => void = () => {}
   ) {
     r.acceptVisitor(this);
     this.onEditIntakeRecord = onEditIntakeRecord;

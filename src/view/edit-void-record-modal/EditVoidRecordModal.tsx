@@ -32,7 +32,7 @@ function factory(updateRecordAction: UpdateRecordAction) {
       route.params.voidRecord.getDateAndTime()
     );
     const [volume, setVolume] = useState(
-      route.params.voidRecord.getUrineVolume()
+      route.params.voidRecord.getUrineVolume().valueOf()
     );
     const id = route.params.voidRecord.getId();
 

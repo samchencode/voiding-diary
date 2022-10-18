@@ -13,7 +13,7 @@ import type { SaveRecordAction } from '@/application/SaveRecordAction';
 import { DateAndTime } from '@/domain/models/DateAndTime';
 import { UnknownVolume, VolumeInOz } from '@/domain/models/Volume';
 import type { Record } from '@/domain/models/Record';
-import { VoidRecord } from '@/domain/models/Record';
+import { IntakeRecord, VoidRecord } from '@/domain/models/Record';
 import { RecordsStaleObservable } from '@/view/lib';
 import type { GetTodaysRecordsAction } from '@/application/GetTodaysRecordsAction';
 import type { GetTimerAction } from '@/application/GetTimerAction';
