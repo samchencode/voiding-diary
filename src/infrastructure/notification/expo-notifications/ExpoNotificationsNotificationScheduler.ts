@@ -86,8 +86,6 @@ class ExpoNotificationsNotificationScheduler implements NotificationScheduler {
     await this.ready;
     const seconds = toMsFromNow(notifyAt) / 1000;
 
-    console.log(seconds);
-
     return ExpoNotifications.scheduleNotificationAsync({
       content: {
         title: NOTIFICATION_TITLE,
