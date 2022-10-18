@@ -3,6 +3,7 @@ import { factory as Router } from '@/view/router';
 import { factory as HomeScreen } from '@/view/home-screen';
 import { factory as GoalScreen } from '@/view/goal-screen';
 import { factory as RecordScreen } from '@/view/record-screen';
+import { factory as TestScreen } from '@/view/test-screen';
 import { factory as NoGoalModal } from '@/view/no-goal-modal';
 import { factory as EditIntakeRecordModal } from '@/view/edit-intake-record-modal';
 import { factory as EditVoidRecordModal } from '@/view/edit-void-record-modal';
@@ -15,8 +16,6 @@ import { GetTodaysRecordsAction } from '@/application/GetTodaysRecordsAction';
 import { ExpoSqliteRecordRepository } from '@/infrastructure/persistence/expo-sqlite/ExpoSqliteRecordRepository';
 import { SetGoalAction } from '@/application/SetGoalAction';
 import { AsyncStorageGoalRepository } from '@/infrastructure/persistence/async-storage/AsyncStorageGoalRepository';
-// import { timerBuilderFactory } from '@/infrastructure/timer/timerBuilderFactory';
-// import { GetTimerBuilderAction } from '@/application/GetTimerAction';
 import { UpdateRecordAction } from '@/application/UpdateRecordAction';
 import { GetTimerAction } from '@/application/GetTimerAction';
 import { AsyncStorageTimerEndTimeRepository } from '@/infrastructure/persistence/async-storage/AsyncStorageTimerEndTimeRepository';
@@ -30,6 +29,7 @@ import { ExpoSharingPdfExporter } from '@/infrastructure/export/expo-sharing/Exp
 import { ExpoSharingTextFileExporter } from '@/infrastructure/export/expo-sharing/ExpoSharingTextFileExporter';
 import { ExportReportAsPdfAction } from '@/application/ExportReportAsPdfAction';
 import { ExportReportOfAllRecordsAsPdfAction } from '@/application/ExportReportOfAllRecordsAsPdfAction';
+import { getEnvVars } from '@/view/env';
 
 export const module = {
   // APPLICATION SERVICES
@@ -62,7 +62,7 @@ export const module = {
   expoSqliteDatabase: ['factory', expoSqliteDatabaseFactory],
 
   // VALUES
-  //  foo: ['value', 'foo'],
+  environment: ['factory', getEnvVars],
 
   // TEMPLATES
   App: ['factory', App],
@@ -70,14 +70,9 @@ export const module = {
   HomeScreen: ['factory', HomeScreen],
   GoalScreen: ['factory', GoalScreen],
   RecordScreen: ['factory', RecordScreen],
+  TestScreen: ['factory', TestScreen],
   NoGoalModal: ['factory', NoGoalModal],
   EditVoidRecordModal: ['factory', EditVoidRecordModal],
   EditIntakeRecordModal: ['factory', EditIntakeRecordModal],
   RecordIntakeModal: ['factory', RecordIntakeModal],
-
-  // DEBUG
-  asyncStorageGoalRepository: [
-    'factory',
-    (goalRepository: AsyncStorageGoalRepository) => goalRepository,
-  ],
 };

@@ -14,6 +14,8 @@ function toMsFromNow(d: Date) {
 }
 
 class ExpoNotificationsNotificationScheduler implements NotificationScheduler {
+  private ready: Promise<unknown>;
+
   constructor() {
     ExpoNotifications.setNotificationHandler({
       handleNotification: async () => ({
@@ -48,6 +50,29 @@ class ExpoNotificationsNotificationScheduler implements NotificationScheduler {
         },
       ]
     );
+
+    this.ready = this.init();
+  }
+
+  async init() {
+    const hasPermission = await this.checkPermissions();
+    if (!hasPermission) await this.requestPermissions();
+  }
+
+  async checkPermissions() {
+    const permission = await ExpoNotifications.getPermissionsAsync();
+    return permission.granted;
+  }
+
+  async requestPermissions() {
+    await ExpoNotifications.requestPermissionsAsync({
+      android: {},
+      ios: {
+        allowAlert: true,
+        allowSound: true,
+        allowAnnouncements: true,
+      },
+    });
   }
 
   setOnInteractionListener(fn: () => void): void {
@@ -58,6 +83,7 @@ class ExpoNotificationsNotificationScheduler implements NotificationScheduler {
   }
 
   async schedule(notifyAt: Date): Promise<string> {
+    await this.ready;
     const seconds = toMsFromNow(notifyAt) / 1000;
 
     return ExpoNotifications.scheduleNotificationAsync({
@@ -65,16 +91,19 @@ class ExpoNotificationsNotificationScheduler implements NotificationScheduler {
         title: NOTIFICATION_TITLE,
         body: NOTIFICATION_BODY,
         categoryIdentifier: NOTIFICATION_CATEGORY_IDENTIFIER,
+        sound: 'alert.mp3',
       },
       trigger: { seconds },
     });
   }
 
   async cancel(id: string): Promise<void> {
+    await this.ready;
     await ExpoNotifications.cancelScheduledNotificationAsync(id);
   }
 
   async dismiss(id: string): Promise<void> {
+    await this.ready;
     await ExpoNotifications.dismissNotificationAsync(id);
   }
 }

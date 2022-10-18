@@ -1,7 +1,7 @@
 import { DateAndTime } from '@/domain/models/DateAndTime';
 import { fromRecordType, IntakeRecord } from '@/domain/models/Record';
 import { RecordId } from '@/domain/models/Record/RecordId';
-import { UnknownVolume, VolumeInOz } from '@/domain/models/Volume';
+import { VolumeInOz } from '@/domain/models/Volume';
 
 describe('IntakeRecord', () => {
   describe('Instantiation', () => {
@@ -94,14 +94,14 @@ describe('IntakeRecord', () => {
       expect(serialized1).toEqual(expected1);
 
       const datetime2 = new DateAndTime(new Date(1000000));
-      const intakeVolume2 = new UnknownVolume();
+      const intakeVolume2 = new VolumeInOz(20);
       const serialized2 = new IntakeRecord(
         datetime2,
         intakeVolume2
       ).serialize();
       const expected2 = {
         type: 'intake',
-        volumeOz: -1,
+        volumeOz: 20,
         timestamp: 1000000,
         id: 'NULL',
       };

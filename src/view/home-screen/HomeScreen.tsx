@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { StyleSheet, ScrollView, View } from 'react-native';
 import { theme } from '@/view/theme';
 import {
@@ -11,31 +11,26 @@ import {
 import { StatusBar } from '@/view/status-bar';
 import type { SaveRecordAction } from '@/application/SaveRecordAction';
 import { DateAndTime } from '@/domain/models/DateAndTime';
-import { VolumeInOz } from '@/domain/models/Volume';
+import { UnknownVolume, VolumeInOz } from '@/domain/models/Volume';
 import type { Record } from '@/domain/models/Record';
 import { VoidRecord } from '@/domain/models/Record';
 import { RecordsStaleObservable } from '@/view/lib';
 import type { GetTodaysRecordsAction } from '@/application/GetTodaysRecordsAction';
-import { Button, Card } from '@/view/components';
-import type { WebSQLDatabase } from 'expo-sqlite';
-import type { AsyncStorageGoalRepository } from '@/infrastructure/persistence/async-storage/AsyncStorageGoalRepository';
 import type { GetTimerAction } from '@/application/GetTimerAction';
 import type { GetGoalAction } from '@/application/GetGoalAction';
-import type { TimeInMins } from '@/domain/models/TimeInMins';
 import { useTimer } from '@/view/home-screen/useTimer';
 import type { AppNavigationProps } from '@/view/router';
+import type { Goal } from '@/domain/models/Goal';
 
 const makeVoid = () => {
   const datetime = new DateAndTime(new Date());
-  const volume = new VolumeInOz(30);
+  const volume = new UnknownVolume();
   return new VoidRecord(datetime, volume);
 };
 
 function factory(
   getTodaysRecordsAction: GetTodaysRecordsAction,
   saveRecordAction: SaveRecordAction,
-  expoSqliteDatabase: WebSQLDatabase,
-  asyncStorageGoalRepository: AsyncStorageGoalRepository,
   getTimerAction: GetTimerAction,
   getGoalAction: GetGoalAction
 ) {
@@ -44,39 +39,33 @@ function factory(
     RecordsStaleObservable.notifyAll();
   }
 
-  function handleResetDb() {
-    // @ts-expect-error for debug only
-    expoSqliteDatabase.deleteDb();
-    asyncStorageGoalRepository.reset();
-  }
-
   return function HomeScreen({ navigation }: AppNavigationProps<'Home'>) {
     const navigateToRecordIntakeModal = () => {
       navigation.navigate('RecordIntakeModal');
     };
 
     const [records, setRecords] = useState<Record[]>([]);
-    const [amInterval, setAmInterval] = useState<TimeInMins | null>(null);
+    const [goal, setGoal] = useState<Goal | null>(null);
     const [timer, timeRemaining, timeTotal] = useTimer(
       getTimerAction,
-      amInterval
+      goal?.getAmTargetVoidInterval() ?? null
     );
 
-    const makeVoidAndStartTimer = () => {
-      if (!amInterval) {
+    const makeVoidAndStartTimer = useCallback(() => {
+      if (!goal) {
         console.log('no amInterval set yet...');
         return makeVoid();
       }
-      const durationMs = amInterval.getMinutesTotal() * 60 * 1000;
+      const durationMs = goal.getAmTargetVoidInterval().getMillisecondsTotal();
       const endsAt = new Date(Date.now() + durationMs);
       timer!.start(endsAt);
       return makeVoid();
-    };
+    }, [goal, timer]);
 
     useEffect(() => {
       getGoalAction
         .execute()
-        .then((g) => setAmInterval(g.getAmTargetVoidInterval()))
+        .then((g) => setGoal(g))
         .catch(() => {
           navigation.navigate('NoGoalModal');
         });
@@ -88,6 +77,11 @@ function factory(
         getTodaysRecordsAction.execute().then((r) => setRecords(r));
       });
     }, []);
+
+    const totalIntake = records
+      .filter((r) => r instanceof IntakeRecord)
+      .map((r) => r as IntakeRecord)
+      .reduce((ag, v: IntakeRecord) => v.getIntakeVolume().getValue() + ag, 0);
 
     return (
       <SplitColorBackground
@@ -114,14 +108,11 @@ function factory(
               onPressIntake={() => navigateToRecordIntakeModal()}
               onPressVoid={() => handleNewVoidRecord(makeVoidAndStartTimer())}
             />
-            <IntakeChart style={styles.item} goal={32} intake={8} />
-            <RecentRecordList style={styles.item} records={records} />
-            <Card style={[styles.item, styles.lastItem]}>
-              <Button.Danger
-                title="Reset Database"
-                onPress={() => handleResetDb()}
-              />
-            </Card>
+            <IntakeChart style={styles.item} goal={goal} intake={totalIntake} />
+            <RecentRecordList
+              style={[styles.item, styles.lastItem]}
+              records={records}
+            />
           </View>
         </ScrollView>
       </SplitColorBackground>
