@@ -21,11 +21,19 @@ import { useTimer } from '@/view/home-screen/useTimer';
 import type { AppNavigationProps } from '@/view/router';
 import type { Goal } from '@/domain/models/Goal';
 import type { Observable } from '@/view/observables';
+import type { Timer } from '@/domain/models/Timer';
+import type { TimeInMins } from '@/domain/models/TimeInMins';
 
 const makeVoid = () => {
   const datetime = new DateAndTime(new Date());
   const volume = new UnknownVolume();
   return new VoidRecord(datetime, volume);
+};
+
+const startTimer = (timer: Timer, timeInMins: TimeInMins) => {
+  const durationMs = timeInMins.getMillisecondsTotal();
+  const endsAt = new Date(Date.now() + durationMs);
+  timer.start(endsAt);
 };
 
 function factory(
@@ -52,15 +60,10 @@ function factory(
       goal?.getAmTargetVoidInterval() ?? null
     );
 
-    const makeVoidAndStartTimer = useCallback(() => {
-      if (!goal) {
-        console.log('no amInterval set yet...');
-        return makeVoid();
-      }
-      const durationMs = goal.getAmTargetVoidInterval().getMillisecondsTotal();
-      const endsAt = new Date(Date.now() + durationMs);
-      timer!.start(endsAt);
-      return makeVoid();
+    const onPressVoid = useCallback(() => {
+      if (timer && goal) startTimer(timer, goal.getAmTargetVoidInterval());
+      const record = makeVoid();
+      handleNewVoidRecord(record);
     }, [goal, timer]);
 
     useEffect(() => {
@@ -99,7 +102,7 @@ function factory(
             elevated
           />
           <TimerView
-            onPress={() => handleNewVoidRecord(makeVoidAndStartTimer())}
+            onPress={onPressVoid}
             timeElapsedMs={timeTotal - timeRemaining}
             timeRemainingMs={timeRemaining}
           />
@@ -107,7 +110,7 @@ function factory(
             <LoggerButtonGroup
               style={styles.item}
               onPressIntake={() => navigateToRecordIntakeModal()}
-              onPressVoid={() => handleNewVoidRecord(makeVoidAndStartTimer())}
+              onPressVoid={onPressVoid}
             />
             <IntakeChart style={styles.item} goal={goal} intake={totalIntake} />
             <RecentRecordList
