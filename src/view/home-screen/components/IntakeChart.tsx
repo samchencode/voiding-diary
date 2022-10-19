@@ -31,7 +31,7 @@ function IntakeChart({ goal, intake, style }: IntakeChartProps) {
 
   const scaleX = d3
     .scaleLinear()
-    .domain([0, Math.max(goalValue, intakeValue)])
+    .domain([0, Math.max(goalValue, intakeValue) || 1]) // if all 0, then max of domain is 1
     .range([0, width]);
 
   return (
