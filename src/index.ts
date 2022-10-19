@@ -1,6 +1,7 @@
 import registerRootComponent from 'expo/build/launch/registerRootComponent';
 import type { Type as App } from '@/view/app';
 import { container } from '@/di';
+import '@/ignoreLogs';
 
 // Polyfill for Intl API on Android
 import 'intl';
