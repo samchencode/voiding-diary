@@ -29,7 +29,7 @@ import { ExpoSharingPdfExporter } from '@/infrastructure/export/expo-sharing/Exp
 import { ExpoSharingTextFileExporter } from '@/infrastructure/export/expo-sharing/ExpoSharingTextFileExporter';
 import { ExportReportAsPdfAction } from '@/application/ExportReportAsPdfAction';
 import { ExportReportOfAllRecordsAsPdfAction } from '@/application/ExportReportOfAllRecordsAsPdfAction';
-import { getEnvVars } from '@/view/env';
+import { getEnvVars } from '@/env';
 import {
   makeGoalStaleObservable,
   makeRecordsStaleObservable,

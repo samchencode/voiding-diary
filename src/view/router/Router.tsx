@@ -20,7 +20,7 @@ import type { Type as RecordIntakeModal } from '@/view/record-intake-modal';
 import { makeIcon } from '@/view/router/makeIcon';
 import { theme } from '@/view/theme';
 import type { IntakeRecord, VoidRecord } from '@/domain/models/Record';
-import type { Environment } from '@/view/env';
+import type { Environment } from '@/env';
 
 const GoalIcon = makeIcon('bullseye');
 const HomeIcon = makeIcon('home');
