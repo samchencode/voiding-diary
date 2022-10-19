@@ -17,8 +17,13 @@ import {
   checkSubmittable,
   checkUndefAndMakeGoal,
 } from '@/view/goal-screen/util';
+import type { Observable } from '@/view/observables';
 
-function factory(getGoalAction: GetGoalAction, setGoalAction: SetGoalAction) {
+function factory(
+  getGoalAction: GetGoalAction,
+  setGoalAction: SetGoalAction,
+  goalStaleObservable: Observable
+) {
   return function GoalScreen() {
     const { width, height, tabBarHeight, statusBarHeight } = useDimensions();
 
@@ -44,7 +49,9 @@ function factory(getGoalAction: GetGoalAction, setGoalAction: SetGoalAction) {
       if (inputRoot.current) inputRoot.current.blur();
       setImmediate(() => {
         const goal = checkUndefAndMakeGoal(volume, amInterval, pmInterval);
-        setGoalAction.execute(goal);
+        setGoalAction
+          .execute(goal)
+          .then(() => goalStaleObservable.notifySubscribers());
         setSavedGoal(goal);
       });
     };

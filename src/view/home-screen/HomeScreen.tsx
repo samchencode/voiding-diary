@@ -41,7 +41,8 @@ function factory(
   saveRecordAction: SaveRecordAction,
   getTimerAction: GetTimerAction,
   getGoalAction: GetGoalAction,
-  recordsStaleObservable: Observable
+  recordsStaleObservable: Observable,
+  goalStaleObservable: Observable
 ) {
   async function handleNewVoidRecord(record: VoidRecord) {
     await saveRecordAction.execute(record);
@@ -70,9 +71,11 @@ function factory(
       getGoalAction
         .execute()
         .then((g) => setGoal(g))
-        .catch(() => {
-          navigation.navigate('NoGoalModal');
-        });
+        .catch(() => navigation.navigate('NoGoalModal'));
+
+      goalStaleObservable.subscribe(() => {
+        getGoalAction.execute().then((g) => setGoal(g));
+      });
     }, [navigation]);
 
     useEffect(() => {
