@@ -17,6 +17,7 @@ import type { Type as GoalScreen } from '@/view/goal-screen';
 import type { Type as RecordScreen } from '@/view/record-screen';
 import type { Type as TestScreen } from '@/view/test-screen';
 import type { Type as AboutUsModal } from '@/view/about-us-modal';
+import type { Type as AttributionsModal } from '@/view/attributions-modal';
 import type { Type as NoGoalModal } from '@/view/no-goal-modal';
 import type { Type as EditIntakeRecordModal } from '@/view/edit-intake-record-modal';
 import type { Type as EditVoidRecordModal } from '@/view/edit-void-record-modal';
@@ -42,6 +43,7 @@ type AppNavigationParams = {
 type RootNavigationParams = {
   App: NavigatorScreenParams<AppNavigationParams>;
   AboutUsModal: undefined;
+  AttributionsModal: undefined;
   NoGoalModal: undefined;
   EditIntakeRecordModal: { intakeRecord: IntakeRecord };
   EditVoidRecordModal: { voidRecord: VoidRecord };
@@ -56,6 +58,7 @@ function factory(
   GoalScreen: GoalScreen,
   RecordScreen: RecordScreen,
   AboutUsModal: AboutUsModal,
+  AttributionsModal: AttributionsModal,
   NoGoalModal: NoGoalModal,
   EditIntakeRecordModal: EditIntakeRecordModal,
   EditVoidRecordModal: EditVoidRecordModal,
@@ -143,6 +146,11 @@ function factory(
         <Stack.Screen
           name="NoGoalModal"
           component={NoGoalModal}
+          options={{ presentation: 'transparentModal' }}
+        />
+        <Stack.Screen
+          name="AttributionsModal"
+          component={AttributionsModal}
           options={{ presentation: 'transparentModal' }}
         />
         <Stack.Screen

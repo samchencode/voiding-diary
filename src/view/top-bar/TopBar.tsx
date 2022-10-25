@@ -50,7 +50,9 @@ function factory(
     }
 
     private handlePressAttributions() {
+      const { navigation } = this.props;
       this.toggleDropDown();
+      navigation.navigate('AttributionsModal');
     }
 
     private toggleDropDown = () => {
