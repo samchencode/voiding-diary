@@ -31,10 +31,12 @@ RecentRecordList.defaultProps = {
 const styles = StyleSheet.create({
   container: {
     display: 'flex',
-    padding: theme.spaces.lg,
+    paddingTop: theme.spaces.lg,
+    paddingBottom: theme.spaces.lg,
   },
   title: {
     ...theme.fonts.lg,
+    paddingLeft: theme.spaces.lg,
     marginTop: -6,
   },
 });

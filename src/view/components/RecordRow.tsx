@@ -5,12 +5,11 @@ import { theme } from '@/view/theme';
 
 type RowProps = {
   title: string;
-  subtitle?: string;
-  rightText: string;
+  subtitle: string;
   iconName: string;
 };
 
-function Row({ title, subtitle, rightText, iconName }: RowProps) {
+function Row({ title, subtitle, iconName }: RowProps) {
   return (
     <View style={styles.container}>
       <Icon
@@ -19,18 +18,13 @@ function Row({ title, subtitle, rightText, iconName }: RowProps) {
         color={theme.colors.primary}
         style={styles.icon}
       />
-      <Text>
+      <View style={styles.titleGroup}>
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.subtitle}>{subtitle}</Text>
-      </Text>
-      <Text style={styles.data}>{rightText}</Text>
+      </View>
     </View>
   );
 }
-
-Row.defaultProps = {
-  subtitle: '',
-};
 
 type RecordRowProps = {
   volume?: string;
@@ -38,22 +32,15 @@ type RecordRowProps = {
 };
 
 function IntakeRecordRow({ volume, time }: RecordRowProps) {
-  return (
-    <Row
-      iconName="glass-whiskey"
-      title="Intake"
-      subtitle={volume}
-      rightText={time}
-    />
-  );
+  const title = !volume ? 'Intake' : `Intake ${volume}`;
+  return <Row iconName="glass-whiskey" title={title} subtitle={time} />;
 }
 
 IntakeRecordRow.defaultProps = { volume: '' };
 
 function VoidRecordRow({ volume, time }: RecordRowProps) {
-  return (
-    <Row iconName="toilet" title="Void" subtitle={volume} rightText={time} />
-  );
+  const title = !volume ? 'Void' : `Void ${volume}`;
+  return <Row iconName="toilet" title={title} subtitle={time} />;
 }
 
 VoidRecordRow.defaultProps = { volume: '' };
@@ -63,24 +50,25 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    padding: theme.spaces.sm,
+    paddingLeft: theme.spaces.lg,
+    paddingTop: theme.spaces.sm,
+    paddingBottom: theme.spaces.sm,
+    paddingRight: theme.spaces.xl,
   },
   icon: {
-    marginRight: theme.spaces.sm,
+    marginRight: theme.spaces.lg,
     width: 40,
     height: 40,
     textAlign: 'center',
   },
+  titleGroup: {
+    justifyContent: 'space-between',
+  },
   title: {
-    ...theme.fonts.mdBold,
+    ...theme.fonts.smBold,
   },
   subtitle: {
-    ...theme.fonts.sm,
-  },
-  data: {
-    ...theme.fonts.md,
-    flex: 1,
-    textAlign: 'right',
+    ...theme.fonts.xs,
   },
 });
 

@@ -30,6 +30,14 @@ const fonts = {
     fontSize: 18,
     fontFamily: 'Roboto_300Light',
   },
+  smBold: {
+    fontSize: 18,
+    fontFamily: 'Roboto_700Bold',
+  },
+  xs: {
+    fontSize: 14,
+    fontFamily: 'Roboto_400Regular',
+  },
   menu: {
     fontSize: 14,
     fontFamily: 'Roboto_400Regular',
@@ -37,6 +45,7 @@ const fonts = {
 };
 
 const spaces = {
+  xl: 24,
   lg: 16,
   sm: 8,
   xs: 4,
