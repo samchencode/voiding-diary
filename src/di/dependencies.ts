@@ -9,6 +9,7 @@ import { factory as NoGoalModal } from '@/view/no-goal-modal';
 import { factory as EditIntakeRecordModal } from '@/view/edit-intake-record-modal';
 import { factory as EditVoidRecordModal } from '@/view/edit-void-record-modal';
 import { factory as RecordIntakeModal } from '@/view/record-intake-modal';
+import { factory as AboutUsModal } from '@/view/about-us-modal';
 import { GetAllRecordsAction } from '@/application/GetAllRecordsAction';
 import { GetGoalAction } from '@/application/GetGoalAction';
 import { expoSqliteDatabaseFactory } from '@/infrastructure/persistence/expo-sqlite/expoSqliteDatabaseFactory';
@@ -80,6 +81,7 @@ export const module = {
   EditVoidRecordModal: ['factory', EditVoidRecordModal],
   EditIntakeRecordModal: ['factory', EditIntakeRecordModal],
   RecordIntakeModal: ['factory', RecordIntakeModal],
+  AboutUsModal: ['factory', AboutUsModal],
   TopBar: ['factory', TopBar],
 
   // OBSERVABLES

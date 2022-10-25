@@ -26,13 +26,13 @@ function factory(
         key: 1,
         label: 'About',
         iconName: 'info-circle',
-        onPress: () => alert('pressed about'),
+        onPress: this.handlePressAbout.bind(this),
       },
       {
         key: 2,
         label: 'Attributions',
         iconName: 'file',
-        onPress: () => alert('pressed attr'),
+        onPress: this.handlePressAttributions.bind(this),
       },
     ];
 
@@ -41,6 +41,16 @@ function factory(
       this.state = {
         dropDownVisible: false,
       };
+    }
+
+    private handlePressAbout() {
+      const { navigation } = this.props;
+      this.toggleDropDown();
+      navigation.navigate('AboutUsModal');
+    }
+
+    private handlePressAttributions() {
+      this.toggleDropDown();
     }
 
     private toggleDropDown = () => {
