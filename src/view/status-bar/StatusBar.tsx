@@ -10,20 +10,28 @@ type StatusBarProps = {
   color: ColorValue;
   statusBarStyle: StatusBarStyle;
   elevated?: boolean;
+  hasPadding?: boolean;
 };
 
-function StatusBar({ color, statusBarStyle, elevated }: StatusBarProps) {
+function StatusBar({
+  color,
+  statusBarStyle,
+  elevated,
+  hasPadding,
+}: StatusBarProps) {
   const isFocused = useIsFocused();
 
   return (
     <>
-      <View
-        style={{
-          backgroundColor: color,
-          height: Constants.statusBarHeight,
-          ...(elevated && { elevation: 1, zIndex: 1 }),
-        }}
-      />
+      {hasPadding && (
+        <View
+          style={{
+            backgroundColor: color,
+            height: Constants.statusBarHeight,
+            ...(elevated && { elevation: 1, zIndex: 1 }),
+          }}
+        />
+      )}
       {isFocused ? <StatusBarControl style={statusBarStyle} /> : null}
     </>
   );
@@ -31,6 +39,7 @@ function StatusBar({ color, statusBarStyle, elevated }: StatusBarProps) {
 
 StatusBar.defaultProps = {
   elevated: false,
+  hasPadding: true,
 };
 
 export { StatusBar };

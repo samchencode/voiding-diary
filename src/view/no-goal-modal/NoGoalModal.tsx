@@ -3,6 +3,7 @@ import { StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { Card, Button } from '@/view/components';
 import { theme } from '@/view/theme';
 import type { RootNavigationProps } from '@/view/router';
+import { StatusBar } from '@/view/status-bar';
 
 type NoGoalModalProps = RootNavigationProps<'NoGoalModal'>;
 
@@ -17,6 +18,11 @@ function factory() {
 
     return (
       <View style={styles.container}>
+        <StatusBar
+          color="transparent"
+          statusBarStyle="light"
+          hasPadding={false}
+        />
         <View style={styles.background} />
         <Card style={[styles.card, { width }]}>
           <Text style={styles.title}>Welcome!</Text>
