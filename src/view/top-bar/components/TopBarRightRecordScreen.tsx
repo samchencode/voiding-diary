@@ -1,6 +1,6 @@
 import React from 'react';
 import { Platform } from 'react-native';
-import { IconButton } from '@/view/top-bar/components/IconButton';
+import { IconButton } from '@/view/components';
 import { TopBarRightDefault } from '@/view/top-bar/components/TopBarRightDefault';
 import { theme } from '@/view/theme';
 

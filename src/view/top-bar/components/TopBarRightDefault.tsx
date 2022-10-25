@@ -1,5 +1,5 @@
 import React from 'react';
-import { IconButton } from '@/view/top-bar/components/IconButton';
+import { IconButton } from '@/view/components';
 import { theme } from '@/view/theme';
 
 type TopBarRightDefaultProps = {
