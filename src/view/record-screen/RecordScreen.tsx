@@ -35,7 +35,9 @@ export function factory(
     const onEditIntakeRecord = (intakeRecord: IntakeRecord) => {
       navigation.navigate('EditIntakeRecordModal', { intakeRecord });
     };
-
+    const onDelete = () => {
+      alert('pressed delete');
+    };
     useEffect(() => {
       getAndGroupRecords().then((v) => setRecords(v));
       recordsStaleObservable.subscribe(() => {
@@ -51,7 +53,6 @@ export function factory(
     return (
       <View style={styles.container}>
         <SectionList
-          style={styles.list}
           contentContainerStyle={[
             styles.listContainer,
             sections.length === 0 && styles.emptyListContainer,
@@ -61,15 +62,11 @@ export function factory(
             const visitor = new RowRecordVisitor(item, {
               intakeRecord: {
                 onPressEdit: onEditIntakeRecord,
-                onPressDelete: () => {
-                  alert('pressed delete');
-                },
+                onPressDelete: onDelete,
               },
               voidRecord: {
                 onPressEdit: onEditVoidRecord,
-                onPressDelete: () => {
-                  alert('pressed delete');
-                },
+                onPressDelete: onDelete,
               },
             });
             return visitor.makeCard(styles.card);
@@ -97,9 +94,8 @@ export const styles = StyleSheet.create({
   },
   emptyListContainer: { flex: 1 },
   listContainer: {
-    minWidth: '100%',
+    minHeight: '100%',
   },
-  list: {},
   sectionHeader: {
     marginLeft: theme.spaces.lg,
     marginRight: theme.spaces.lg,
