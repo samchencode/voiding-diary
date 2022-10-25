@@ -98,11 +98,8 @@ export const styles = StyleSheet.create({
   emptyListContainer: { flex: 1 },
   listContainer: {
     minWidth: '100%',
-    backgroundColor: 'red',
   },
-  list: {
-    backgroundColor: 'green',
-  },
+  list: {},
   sectionHeader: {
     marginLeft: theme.spaces.lg,
     marginRight: theme.spaces.lg,
