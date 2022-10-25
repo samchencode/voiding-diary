@@ -23,13 +23,11 @@ function Row({ title, subtitle, iconName }: RowProps) {
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.subtitle}>{subtitle}</Text>
       </View>
-      <View style={styles.dropDownToggle}>
-        <IconButton
-          name="ellipsis-v"
-          onPress={() => alert('pressed')}
-          color={theme.colors.dark}
-        />
-      </View>
+      <IconButton
+        name="ellipsis-v"
+        onPress={() => alert('pressed')}
+        color={theme.colors.dark}
+      />
     </View>
   );
 }
