@@ -1,5 +1,6 @@
 import { factory as App } from '@/view/app';
 import { factory as Router } from '@/view/router';
+import { factory as TopBar } from '@/view/top-bar';
 import { factory as HomeScreen } from '@/view/home-screen';
 import { factory as GoalScreen } from '@/view/goal-screen';
 import { factory as RecordScreen } from '@/view/record-screen';
@@ -79,6 +80,7 @@ export const module = {
   EditVoidRecordModal: ['factory', EditVoidRecordModal],
   EditIntakeRecordModal: ['factory', EditIntakeRecordModal],
   RecordIntakeModal: ['factory', RecordIntakeModal],
+  TopBar: ['factory', TopBar],
 
   // OBSERVABLES
   goalStaleObservable: ['factory', makeGoalStaleObservable],

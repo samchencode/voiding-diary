@@ -1,6 +1,7 @@
 const colors = {
   dark: '#454549',
   light: '#FEFBFE',
+  lightGray: '#EEEEEE',
   gray: '#818188',
   success: '#A9EBA9',
   danger: '#A73A5D',
@@ -28,6 +29,10 @@ const fonts = {
   sm: {
     fontSize: 18,
     fontFamily: 'Roboto_300Light',
+  },
+  menu: {
+    fontSize: 14,
+    fontFamily: 'Roboto_400Regular',
   },
 };
 

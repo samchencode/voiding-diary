@@ -5,7 +5,10 @@ import type {
   NavigatorScreenParams,
 } from '@react-navigation/native';
 import { NavigationContainer } from '@react-navigation/native';
-import type { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import type {
+  BottomTabHeaderProps,
+  BottomTabScreenProps,
+} from '@react-navigation/bottom-tabs';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import type { StackScreenProps } from '@react-navigation/stack';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -17,6 +20,7 @@ import type { Type as NoGoalModal } from '@/view/no-goal-modal';
 import type { Type as EditIntakeRecordModal } from '@/view/edit-intake-record-modal';
 import type { Type as EditVoidRecordModal } from '@/view/edit-void-record-modal';
 import type { Type as RecordIntakeModal } from '@/view/record-intake-modal';
+import type { Type as TopBar } from '@/view/top-bar';
 import { makeIcon } from '@/view/router/makeIcon';
 import { theme } from '@/view/theme';
 import type { IntakeRecord, VoidRecord } from '@/domain/models/Record';
@@ -54,8 +58,20 @@ function factory(
   EditVoidRecordModal: EditVoidRecordModal,
   RecordIntakeModal: RecordIntakeModal,
   TestScreen: TestScreen,
+  TopBar: TopBar,
   environment: Environment
 ) {
+  function makeHeader(props: BottomTabHeaderProps) {
+    return (
+      <TopBar
+        navigation={props.navigation}
+        route={props.route}
+        options={props.options}
+        layout={props.layout}
+      />
+    );
+  }
+
   function AppNavigation() {
     const isDevMode = useMemo(() => environment.mode === 'development', []);
 
@@ -63,7 +79,7 @@ function factory(
       <Tab.Navigator
         initialRouteName="Home"
         screenOptions={{
-          headerShown: false,
+          header: makeHeader,
           tabBarActiveTintColor: theme.colors.primary,
           tabBarInactiveTintColor: theme.colors.gray,
         }}
@@ -74,6 +90,7 @@ function factory(
           options={{
             tabBarLabel: 'My Goals',
             tabBarIcon: GoalIcon,
+            headerTintColor: theme.colors.dark,
           }}
         />
         <Tab.Screen
@@ -82,6 +99,7 @@ function factory(
           options={{
             tabBarLabel: 'Home',
             tabBarIcon: HomeIcon,
+            headerTintColor: theme.colors.light,
           }}
         />
         <Tab.Screen
@@ -90,6 +108,7 @@ function factory(
           options={{
             tabBarLabel: 'My Records',
             tabBarIcon: RecordIcon,
+            headerTintColor: theme.colors.dark,
           }}
         />
         {isDevMode && (
@@ -99,6 +118,7 @@ function factory(
             options={{
               tabBarLabel: 'Testing',
               tabBarIcon: TestIcon,
+              headerTintColor: theme.colors.dark,
             }}
           />
         )}
