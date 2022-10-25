@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
   title: {
     ...theme.fonts.lg,
     marginBottom: theme.spaces.sm,
+    marginRight: theme.spaces.lg,
     textAlign: 'right',
   },
 });

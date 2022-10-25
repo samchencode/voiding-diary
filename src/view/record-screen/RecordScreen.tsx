@@ -48,14 +48,14 @@ export function factory(
       data,
     }));
 
-    const contentContainerStyle =
-      sections.length === 0 ? styles.emptyListContainer : {};
-
     return (
       <View style={styles.container}>
         <SectionList
           style={styles.list}
-          contentContainerStyle={contentContainerStyle}
+          contentContainerStyle={[
+            styles.listContainer,
+            sections.length === 0 && styles.emptyListContainer,
+          ]}
           sections={sections}
           renderItem={({ item }) => {
             const visitor = new RowRecordVisitor(item, {
@@ -75,7 +75,10 @@ export function factory(
             return visitor.makeCard(styles.card);
           }}
           renderSectionHeader={({ section }) => (
-            <RecordSectionHeader date={section.title} />
+            <RecordSectionHeader
+              date={section.title}
+              style={styles.sectionHeader}
+            />
           )}
           keyExtractor={(record) => record.getId().getValue()}
           ListHeaderComponent={<ListHeader />}
@@ -93,12 +96,21 @@ export const styles = StyleSheet.create({
     backgroundColor: theme.colors.bg,
   },
   emptyListContainer: { flex: 1 },
+  listContainer: {
+    minWidth: '100%',
+    backgroundColor: 'red',
+  },
   list: {
-    paddingLeft: theme.spaces.lg,
-    paddingRight: theme.spaces.lg,
+    backgroundColor: 'green',
+  },
+  sectionHeader: {
+    marginLeft: theme.spaces.lg,
+    marginRight: theme.spaces.lg,
   },
   card: {
     marginBottom: theme.spaces.sm,
+    marginLeft: theme.spaces.lg,
+    marginRight: theme.spaces.lg,
   },
 });
 
