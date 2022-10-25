@@ -1,6 +1,5 @@
 import React from 'react';
 import type { StyleProp, ViewStyle } from 'react-native';
-import { Pressable } from 'react-native';
 import type {
   IntakeRecord,
   RecordVisitor,
@@ -13,56 +12,71 @@ import {
 } from '@/view/components/RecordRow/RecordRow';
 import { Card } from '@/view/components/Card';
 
+type RecordRowMenuHandlerGroup<T extends Record> = {
+  onPressEdit(r: T): void;
+  onPressDelete(r: T): void;
+};
+
+type RecordRowMenuHandlers = {
+  intakeRecord: RecordRowMenuHandlerGroup<IntakeRecord>;
+  voidRecord: RecordRowMenuHandlerGroup<VoidRecord>;
+};
+
+function makeMenuOptions<T extends Record>(
+  r: T,
+  h: RecordRowMenuHandlerGroup<T>
+) {
+  return [
+    {
+      key: 1,
+      iconName: 'edit',
+      label: 'Edit Record',
+      onPress: () => h.onPressEdit(r),
+    },
+    {
+      key: 2,
+      iconName: 'minus-circle',
+      label: 'Delete Record',
+      onPress: () => h.onPressDelete(r),
+    },
+  ];
+}
+
 class RowRecordVisitor implements RecordVisitor {
   private rowElement?: JSX.Element;
 
   private record?: Record;
 
-  private onEditIntakeRecord: (r: IntakeRecord) => void;
+  private handlers?: RecordRowMenuHandlers;
 
-  private onEditVoidRecord: (r: VoidRecord) => void;
-
-  constructor(
-    r: Record,
-    onEditIntakeRecord: (r: IntakeRecord) => void = () => {},
-    onEditVoidRecord: (r: VoidRecord) => void = () => {}
-  ) {
+  constructor(r: Record, handlers?: RecordRowMenuHandlers) {
+    this.handlers = handlers;
     r.acceptVisitor(this);
-    this.onEditIntakeRecord = onEditIntakeRecord;
-    this.onEditVoidRecord = onEditVoidRecord;
   }
 
   visitIntakeRecord(r: IntakeRecord): void {
     this.record = r;
     this.rowElement = (
-      <Pressable
+      <IntakeRecordRow
         key={r.getId().getValue()}
-        onPress={() => {
-          this.onEditIntakeRecord(r);
-        }}
-      >
-        <IntakeRecordRow
-          volume={r.getIntakeVolumeString()}
-          time={r.getTimeString()}
-        />
-      </Pressable>
+        volume={r.getIntakeVolumeString()}
+        time={r.getTimeString()}
+        options={
+          this.handlers && makeMenuOptions(r, this.handlers.intakeRecord)
+        }
+      />
     );
   }
 
   visitVoidRecord(r: VoidRecord): void {
     this.record = r;
     this.rowElement = (
-      <Pressable
+      <VoidRecordRow
         key={r.getId().getValue()}
-        onPress={() => {
-          this.onEditVoidRecord(r);
-        }}
-      >
-        <VoidRecordRow
-          volume={r.getUrineVolumeString()}
-          time={r.getTimeString()}
-        />
-      </Pressable>
+        volume={r.getUrineVolumeString()}
+        time={r.getTimeString()}
+        options={this.handlers && makeMenuOptions(r, this.handlers.voidRecord)}
+      />
     );
   }
 

@@ -4,6 +4,7 @@ import type { InternMap } from 'd3-array';
 import { d3 } from '@/vendor/d3';
 import { theme } from '@/view/theme';
 import {
+  CellRenderer,
   RecordSectionHeader,
   ListHeader,
   ListEmpty,
@@ -57,11 +58,20 @@ export function factory(
           contentContainerStyle={contentContainerStyle}
           sections={sections}
           renderItem={({ item }) => {
-            const visitor = new RowRecordVisitor(
-              item,
-              onEditIntakeRecord,
-              onEditVoidRecord
-            );
+            const visitor = new RowRecordVisitor(item, {
+              intakeRecord: {
+                onPressEdit: onEditIntakeRecord,
+                onPressDelete: () => {
+                  alert('pressed delete');
+                },
+              },
+              voidRecord: {
+                onPressEdit: onEditVoidRecord,
+                onPressDelete: () => {
+                  alert('pressed delete');
+                },
+              },
+            });
             return visitor.makeCard(styles.card);
           }}
           renderSectionHeader={({ section }) => (
@@ -70,6 +80,7 @@ export function factory(
           keyExtractor={(record) => record.getId().getValue()}
           ListHeaderComponent={<ListHeader />}
           ListEmptyComponent={ListEmpty}
+          CellRendererComponent={CellRenderer}
         />
       </View>
     );

@@ -27,11 +27,7 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: theme.colors.surface,
     borderRadius: theme.br,
-    // shadow for Android
-    elevation: 5,
-    // shadow for iOS
-    shadowRadius: 5,
-    shadowOpacity: 0.1,
+    ...theme.shadow,
   },
 });
 

@@ -53,9 +53,18 @@ const spaces = {
 
 const br = 16;
 
+const shadow = {
+  // shadow for Android
+  elevation: 5,
+  // shadow for iOS
+  shadowRadius: 5,
+  shadowOpacity: 0.1,
+};
+
 export const theme = {
-  spaces,
   br,
+  shadow,
+  spaces,
   fonts,
   colors,
 };

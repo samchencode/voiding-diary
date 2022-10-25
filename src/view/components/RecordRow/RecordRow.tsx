@@ -1,16 +1,44 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { theme } from '@/view/theme';
 import { IconButton } from '@/view/components/IconButton';
+import type { DropDownItemSpec } from '@/view/components/DropDownMenu';
+import { DropDownMenu } from '@/view/components/DropDownMenu';
 
 type RowProps = {
   title: string;
   subtitle: string;
   iconName: string;
+  options?: DropDownItemSpec[];
 };
 
-function Row({ title, subtitle, iconName }: RowProps) {
+type RowDropDownProps = {
+  options: DropDownItemSpec[];
+};
+
+function RowDropDown({ options }: RowDropDownProps) {
+  const [visible, setVisible] = useState(false);
+
+  const handleToggle = useCallback(() => setVisible(!visible), [visible]);
+
+  return (
+    <>
+      <IconButton
+        name="ellipsis-v"
+        onPress={handleToggle}
+        color={theme.colors.dark}
+      />
+      <DropDownMenu
+        items={options}
+        visible={visible}
+        style={styles.dropDownMenu}
+      />
+    </>
+  );
+}
+
+function Row({ title, subtitle, iconName, options }: RowProps) {
   return (
     <View style={styles.container}>
       <Icon
@@ -23,33 +51,43 @@ function Row({ title, subtitle, iconName }: RowProps) {
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.subtitle}>{subtitle}</Text>
       </View>
-      <IconButton
-        name="ellipsis-v"
-        onPress={() => alert('pressed')}
-        color={theme.colors.dark}
-      />
+      {options && <RowDropDown options={options} />}
     </View>
   );
 }
 
+Row.defaultProps = {
+  options: undefined,
+};
+
 type RecordRowProps = {
   volume?: string;
+  options?: DropDownItemSpec[];
   time: string;
 };
 
-function IntakeRecordRow({ volume, time }: RecordRowProps) {
+function IntakeRecordRow({ volume, time, options }: RecordRowProps) {
   const title = !volume ? 'Intake' : `Intake ${volume}`;
-  return <Row iconName="glass-whiskey" title={title} subtitle={time} />;
+  return (
+    <Row
+      iconName="glass-whiskey"
+      title={title}
+      subtitle={time}
+      options={options}
+    />
+  );
 }
 
-IntakeRecordRow.defaultProps = { volume: '' };
+IntakeRecordRow.defaultProps = { volume: '', options: undefined };
 
-function VoidRecordRow({ volume, time }: RecordRowProps) {
+function VoidRecordRow({ volume, time, options }: RecordRowProps) {
   const title = !volume ? 'Void' : `Void ${volume}`;
-  return <Row iconName="toilet" title={title} subtitle={time} />;
+  return (
+    <Row iconName="toilet" title={title} subtitle={time} options={options} />
+  );
 }
 
-VoidRecordRow.defaultProps = { volume: '' };
+VoidRecordRow.defaultProps = { volume: '', options: undefined };
 
 export const styles = StyleSheet.create({
   container: {
@@ -81,6 +119,11 @@ export const styles = StyleSheet.create({
   dropDownToggle: {
     width: 48,
     height: 48,
+  },
+  dropDownMenu: {
+    position: 'absolute',
+    top: '110%',
+    right: 0,
   },
 });
 
