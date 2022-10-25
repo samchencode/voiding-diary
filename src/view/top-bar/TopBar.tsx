@@ -5,8 +5,8 @@ import type { BottomTabHeaderProps as Props } from '@react-navigation/bottom-tab
 import {
   TopBarRightDefault,
   TopBarRightRecordScreen,
-  DropDownMenu,
 } from '@/view/top-bar/components';
+import { DropDownMenu } from '@/view/components';
 import type { ExportReportOfAllRecordsAsPdfAction } from '@/application/ExportReportOfAllRecordsAsPdfAction';
 
 type State = {

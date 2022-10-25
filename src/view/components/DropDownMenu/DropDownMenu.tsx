@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { DropDownItem } from '@/view/top-bar/components/DropDownMenu/DropDownItem';
+import { DropDownItem } from '@/view/components/DropDownMenu/DropDownItem';
 import { theme } from '@/view/theme';
 
 type DropDownMenuProps = {

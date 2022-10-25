@@ -2,6 +2,7 @@ import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { theme } from '@/view/theme';
+import { IconButton } from '@/view/components/IconButton';
 
 type RowProps = {
   title: string;
@@ -21,6 +22,13 @@ function Row({ title, subtitle, iconName }: RowProps) {
       <View style={styles.titleGroup}>
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.subtitle}>{subtitle}</Text>
+      </View>
+      <View style={styles.dropDownToggle}>
+        <IconButton
+          name="ellipsis-v"
+          onPress={() => alert('pressed')}
+          color={theme.colors.dark}
+        />
       </View>
     </View>
   );
@@ -53,7 +61,7 @@ export const styles = StyleSheet.create({
     paddingLeft: theme.spaces.lg,
     paddingTop: theme.spaces.sm,
     paddingBottom: theme.spaces.sm,
-    paddingRight: theme.spaces.xl,
+    paddingRight: theme.spaces.xl - 12,
   },
   icon: {
     marginRight: theme.spaces.lg,
@@ -62,6 +70,8 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
   },
   titleGroup: {
+    flex: 1,
+    display: 'flex',
     justifyContent: 'space-between',
   },
   title: {
@@ -69,6 +79,10 @@ export const styles = StyleSheet.create({
   },
   subtitle: {
     ...theme.fonts.xs,
+  },
+  dropDownToggle: {
+    width: 48,
+    height: 48,
   },
 });
 
