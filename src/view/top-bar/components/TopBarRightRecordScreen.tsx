@@ -7,20 +7,18 @@ import { theme } from '@/view/theme';
 type TopBarRightRecordScreenProps = {
   color?: string;
   onPressDropDown: () => void;
+  onPressExport: () => void;
 };
 
 function TopBarRightRecordScreen({
   color = theme.colors.light,
   onPressDropDown,
+  onPressExport,
 }: TopBarRightRecordScreenProps) {
   const shareIconName = Platform.OS === 'ios' ? 'share-square' : 'share-alt';
   return (
     <>
-      <IconButton
-        name={shareIconName}
-        onPress={() => alert('share click')}
-        color={color}
-      />
+      <IconButton name={shareIconName} onPress={onPressExport} color={color} />
       <TopBarRightDefault color={color} onPress={onPressDropDown} />
     </>
   );

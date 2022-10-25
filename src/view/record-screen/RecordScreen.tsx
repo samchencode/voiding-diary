@@ -7,30 +7,21 @@ import {
   RecordSectionHeader,
   ListHeader,
   ListEmpty,
-  Menu,
 } from '@/view/record-screen/components';
 import type { GetAllRecordsAction } from '@/application/GetAllRecordsAction';
 import type { IntakeRecord, Record, VoidRecord } from '@/domain/models/Record';
 import { ViewRecordVisitor } from '@/view/lib';
-import type { ExportReportOfAllRecordsAsPdfAction } from '@/application/ExportReportOfAllRecordsAsPdfAction';
 import type { AppNavigationProps } from '@/view/router';
 import type { Observable } from '@/view/observables';
 
 export function factory(
   getAllRecordsAction: GetAllRecordsAction,
-  exportReportOfAllRecordsAsPdfAction: ExportReportOfAllRecordsAsPdfAction,
   recordsStaleObservable: Observable
 ) {
   const getAndGroupRecords = async () =>
     getAllRecordsAction
       .execute()
       .then((res) => d3.group(res, (r) => r.getDateString()));
-
-  const handlePressExport = () => {
-    exportReportOfAllRecordsAsPdfAction.execute();
-  };
-
-  const renderMenu = () => <Menu onPressExport={handlePressExport} />;
 
   return function RecordScreen({ navigation }: AppNavigationProps<'Record'>) {
     type Date = string;
@@ -77,7 +68,7 @@ export function factory(
             <RecordSectionHeader date={section.title} />
           )}
           keyExtractor={(item) => ViewRecordVisitor.makeKey(item)}
-          ListHeaderComponent={<ListHeader renderMenu={renderMenu} />}
+          ListHeaderComponent={<ListHeader />}
           ListEmptyComponent={ListEmpty}
         />
       </View>

@@ -7,12 +7,19 @@ import {
   TopBarRightRecordScreen,
   DropDownMenu,
 } from '@/view/top-bar/components';
+import type { ExportReportOfAllRecordsAsPdfAction } from '@/application/ExportReportOfAllRecordsAsPdfAction';
 
 type State = {
   dropDownVisible: boolean;
 };
 
-function factory() {
+function factory(
+  exportReportOfAllRecordsAsPdfAction: ExportReportOfAllRecordsAsPdfAction
+) {
+  const handlePressExport = () => {
+    exportReportOfAllRecordsAsPdfAction.execute();
+  };
+
   return class TopBar extends React.PureComponent<Props, State> {
     dropDownItems = [
       {
@@ -54,6 +61,7 @@ function factory() {
               <TopBarRightRecordScreen
                 color={options.headerTintColor}
                 onPressDropDown={() => this.toggleDropDown()}
+                onPressExport={handlePressExport}
               />
             ) : (
               <TopBarRightDefault

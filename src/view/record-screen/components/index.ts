@@ -2,4 +2,3 @@ export { RecordSectionHeader } from '@/view/record-screen/components/RecordSecti
 export { RecordCard } from '@/view/record-screen/components/RecordCard';
 export { ListHeader } from '@/view/record-screen/components/ListHeader';
 export { ListEmpty } from '@/view/record-screen/components/ListEmpty';
-export { Menu } from '@/view/record-screen/components/Menu';
