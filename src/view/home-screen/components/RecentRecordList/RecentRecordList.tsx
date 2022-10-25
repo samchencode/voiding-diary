@@ -1,8 +1,7 @@
 import React from 'react';
 import type { ViewStyle, StyleProp } from 'react-native';
 import { View, Text, StyleSheet } from 'react-native';
-import { Card } from '@/view/components';
-import { ViewRecordVisitor } from '@/view/lib';
+import { Card, RowRecordVisitor } from '@/view/components';
 import { theme } from '@/view/theme';
 import type { Record } from '@/domain/models/Record';
 import { RecordListEmptyComponent } from '@/view/home-screen/components/RecentRecordList/RecordListEmptyComponent';
@@ -13,7 +12,7 @@ type RecentRecordListProps = {
 };
 
 function RecentRecordList({ records, style }: RecentRecordListProps) {
-  const rows = records.map((r) => new ViewRecordVisitor(r).getRow());
+  const rows = records.map((r) => new RowRecordVisitor(r).getRow());
   const isEmpty = rows.length === 0;
 
   return (

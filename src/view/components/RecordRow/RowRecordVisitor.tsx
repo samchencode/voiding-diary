@@ -7,21 +7,16 @@ import type {
   VoidRecord,
   Record,
 } from '@/domain/models/Record';
-import { RecordCard } from '@/view/record-screen/components';
-import { VoidRecordRow, IntakeRecordRow } from '@/view/components';
+import {
+  VoidRecordRow,
+  IntakeRecordRow,
+} from '@/view/components/RecordRow/RecordRow';
+import { Card } from '@/view/components/Card';
 
-type FilledRecordCardProps = {
-  style?: StyleProp<ViewStyle>;
-};
-
-function makeKey(r: Record) {
-  return Object.values(r.serialize()).join(',');
-}
-
-class ViewRecordVisitor implements RecordVisitor {
+class RowRecordVisitor implements RecordVisitor {
   private rowElement?: JSX.Element;
 
-  private key?: string;
+  private record?: Record;
 
   private onEditIntakeRecord: (r: IntakeRecord) => void;
 
@@ -38,11 +33,10 @@ class ViewRecordVisitor implements RecordVisitor {
   }
 
   visitIntakeRecord(r: IntakeRecord): void {
-    this.key = makeKey(r);
-
+    this.record = r;
     this.rowElement = (
       <Pressable
-        key={this.key}
+        key={r.getId().getValue()}
         onPress={() => {
           this.onEditIntakeRecord(r);
         }}
@@ -56,10 +50,10 @@ class ViewRecordVisitor implements RecordVisitor {
   }
 
   visitVoidRecord(r: VoidRecord): void {
-    this.key = makeKey(r);
+    this.record = r;
     this.rowElement = (
       <Pressable
-        key={this.key}
+        key={r.getId().getValue()}
         onPress={() => {
           this.onEditVoidRecord(r);
         }}
@@ -78,32 +72,20 @@ class ViewRecordVisitor implements RecordVisitor {
   }
 
   getKey() {
-    if (!this.key) throw Error();
-    return this.key;
+    if (!this.record) throw Error();
+    return this.record.getId().getValue();
   }
 
-  makeCard() {
+  makeCard(style: StyleProp<ViewStyle>) {
     const row = this.getRow();
     const key = this.getKey();
 
-    function FilledRecordCard({ style }: FilledRecordCardProps) {
-      return <RecordCard recordRow={row} style={style} key={key} />;
-    }
-
-    FilledRecordCard.defaultProps = {
-      style: {},
-    };
-
-    return FilledRecordCard;
-  }
-
-  makeCardAndKey(): [(p: FilledRecordCardProps) => JSX.Element, string] {
-    return [this.makeCard(), this.getKey()];
-  }
-
-  static makeKey(r: Record) {
-    return makeKey(r);
+    return (
+      <Card key={key} style={style}>
+        {row}
+      </Card>
+    );
   }
 }
 
-export { ViewRecordVisitor };
+export { RowRecordVisitor };

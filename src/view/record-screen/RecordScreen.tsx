@@ -10,7 +10,7 @@ import {
 } from '@/view/record-screen/components';
 import type { GetAllRecordsAction } from '@/application/GetAllRecordsAction';
 import type { IntakeRecord, Record, VoidRecord } from '@/domain/models/Record';
-import { ViewRecordVisitor } from '@/view/lib';
+import { RowRecordVisitor } from '@/view/components';
 import type { AppNavigationProps } from '@/view/router';
 import type { Observable } from '@/view/observables';
 
@@ -57,17 +57,17 @@ export function factory(
           contentContainerStyle={contentContainerStyle}
           sections={sections}
           renderItem={({ item }) => {
-            const Card = new ViewRecordVisitor(
+            const visitor = new RowRecordVisitor(
               item,
               onEditIntakeRecord,
               onEditVoidRecord
-            ).makeCard();
-            return <Card style={styles.card} />;
+            );
+            return visitor.makeCard(styles.card);
           }}
           renderSectionHeader={({ section }) => (
             <RecordSectionHeader date={section.title} />
           )}
-          keyExtractor={(item) => ViewRecordVisitor.makeKey(item)}
+          keyExtractor={(record) => record.getId().getValue()}
           ListHeaderComponent={<ListHeader />}
           ListEmptyComponent={ListEmpty}
         />
