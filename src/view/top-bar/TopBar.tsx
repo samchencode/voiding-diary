@@ -41,6 +41,7 @@ function factory(
       this.state = {
         dropDownVisible: false,
       };
+      this.toggleDropDown = this.toggleDropDown.bind(this);
     }
 
     private handlePressAbout() {
@@ -82,7 +83,11 @@ function factory(
               />
             )}
           </View>
-          <DropDownMenu items={this.dropDownItems} visible={dropDownVisible} />
+          <DropDownMenu
+            items={this.dropDownItems}
+            visible={dropDownVisible}
+            onPressOut={this.toggleDropDown}
+          />
         </View>
       );
     }

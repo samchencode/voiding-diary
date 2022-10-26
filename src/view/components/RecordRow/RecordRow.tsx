@@ -33,6 +33,7 @@ function RowDropDown({ options }: RowDropDownProps) {
         items={options}
         visible={visible}
         style={styles.dropDownMenu}
+        onPressOut={handleToggle}
       />
     </>
   );
