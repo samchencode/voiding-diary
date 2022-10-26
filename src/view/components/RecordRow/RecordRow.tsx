@@ -21,6 +21,13 @@ function RowDropDown({ options }: RowDropDownProps) {
   const [visible, setVisible] = useState(false);
 
   const handleToggle = useCallback(() => setVisible(!visible), [visible]);
+  const optionsOnPressToggleVisible = options.map((o) => {
+    const onPress = () => {
+      handleToggle();
+      o.onPress();
+    };
+    return { ...o, onPress };
+  });
 
   return (
     <>
@@ -30,7 +37,7 @@ function RowDropDown({ options }: RowDropDownProps) {
         color={theme.colors.dark}
       />
       <DropDownMenu
-        items={options}
+        items={optionsOnPressToggleVisible}
         visible={visible}
         style={styles.dropDownMenu}
         onPressOut={handleToggle}
