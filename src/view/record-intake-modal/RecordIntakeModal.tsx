@@ -3,12 +3,14 @@ import { IntakeRecord } from '@/domain/models/Record';
 import type { SaveRecordAction } from '@/application/SaveRecordAction';
 import React, { useState } from 'react';
 import { SizeOption, SizeOptionOther, Card, Button } from '@/view/components';
-import { TextInput, View, Text, StyleSheet } from 'react-native';
+import { TextInput, View, Text, StyleSheet, TouchableWithoutFeedback} from 'react-native';
 import { theme } from '@/view/theme';
 import type { RootNavigationProps } from '@/view/router';
 import { DateAndTime } from '@/domain/models/DateAndTime';
 import { VolumeInOz } from '@/domain/models/Volume';
 import type { Observable } from '@/view/observables';
+
+import { StatusBar } from '@/view/status-bar';
 
 type RecordIntakeModalProps = RootNavigationProps<'RecordIntakeModal'>;
 
@@ -37,8 +39,18 @@ function factory(
       navigation.navigate('Home');
     }
 
+
     return (
+      
       <View style={styles.container}>
+        <StatusBar
+          color="transparent"
+          statusBarStyle="light"
+          hasPadding={false}
+        />
+                <TouchableWithoutFeedback onPress={()=>{navigation.goBack()}}>
+          <View style={styles.background} />
+        </TouchableWithoutFeedback>
         <Card style={styles.card}>
           <Text style={styles.title}>+Intake</Text>
           <Text style={styles.subTitle}>Beverage</Text>
@@ -68,6 +80,22 @@ function factory(
 }
 
 const styles = StyleSheet.create({
+  container: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+    backgroundColor: 'transparent',
+  },
+  background: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: 'black',
+    opacity: 0.25,
+  },
   card: {
     width: 363,
     margin: theme.spaces.lg,
@@ -93,13 +121,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     ...theme.fonts.sm,
     marginBottom: theme.spaces.sm,
-  },
-  container: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 1,
-    backgroundColor: 'transparent',
   },
 });
 

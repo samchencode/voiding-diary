@@ -3,6 +3,7 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   useWindowDimensions,
   View,
 } from 'react-native';
@@ -17,6 +18,8 @@ import { DateAndTime } from '@/domain/models/DateAndTime';
 import { VolumeInOz } from '@/domain/models/Volume';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import type { Observable } from '@/view/observables';
+
+import { StatusBar } from '@/view/status-bar';
 
 type EditVoidRecordModalProps = RootNavigationProps<'EditVoidRecordModal'>;
 
@@ -67,7 +70,14 @@ function factory(
 
     return (
       <View style={styles.container}>
-        <View style={styles.background} />
+        <StatusBar
+          color="transparent"
+          statusBarStyle="light"
+          hasPadding={false}
+        />
+                <TouchableWithoutFeedback onPress={()=>{navigation.goBack()}}>
+          <View style={styles.background} />
+        </TouchableWithoutFeedback>
         <Card style={[styles.card, { width }]}>
           <Text style={styles.title}>Edit Void Record</Text>
           <View style={styles.row}>

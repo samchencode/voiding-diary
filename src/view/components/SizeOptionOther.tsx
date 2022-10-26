@@ -15,21 +15,29 @@ function SizeOptionOther({ setSize, size }: SizeOptionOtherProps) {
     }
     return false;
   }
+
+  function onChangeText(newText:string){if (isValidSize(newText)) {
+    setValidSize(true);
+    setSize(Number(newText));
+    return size.toString();
+  }
+  setValidSize(false);
+  return size.toString();}
+
+  function makeValue(){
+    if(size===0) return undefined
+    return size.toString()
+  }
+
   return (
     <View style={styles.otherSizeOption}>
       <TextInput
         style={validSize ? styles.validSize : styles.invalidSize}
-        onChangeText={(newText) => {
-          if (isValidSize(newText)) {
-            setValidSize(true);
-            setSize(Number(newText));
-            return size.toString();
-          }
-          setValidSize(false);
-          return size.toString();
-        }}
-        defaultValue={size.toString()}
-        value={size.toString()}
+        onChangeText={(newText) => {onChangeText(newText)}}
+        keyboardType="numeric"
+        maxLength={4}
+        value = {makeValue()}
+        placeholder = '00'
       />
       <Text style={validSize ? styles.validSize : styles.invalidSize}> oz</Text>
     </View>
@@ -45,10 +53,12 @@ const styles = StyleSheet.create({
   },
   validSize: {
     color: theme.colors.accent,
+    borderBottomWidth: 1,
     ...theme.fonts.md,
   },
   invalidSize: {
     color: theme.colors.danger,
+    borderBottomWidth: 1,
     ...theme.fonts.md,
   },
 });

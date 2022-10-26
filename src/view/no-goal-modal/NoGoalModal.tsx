@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { StyleSheet, Text, TouchableWithoutFeedback, useWindowDimensions, View } from 'react-native';
 import { Card, Button } from '@/view/components';
 import { theme } from '@/view/theme';
 import type { RootNavigationProps } from '@/view/router';
@@ -23,7 +23,9 @@ function factory() {
           statusBarStyle="light"
           hasPadding={false}
         />
-        <View style={styles.background} />
+                        <TouchableWithoutFeedback onPress={()=>{navigation.goBack()}}>
+          <View style={styles.background} />
+        </TouchableWithoutFeedback>
         <Card style={[styles.card, { width }]}>
           <Text style={styles.title}>Welcome!</Text>
           <Text style={styles.message}>
