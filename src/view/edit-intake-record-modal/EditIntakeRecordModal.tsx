@@ -75,7 +75,11 @@ function factory(
           statusBarStyle="light"
           hasPadding={false}
         />
-                <TouchableWithoutFeedback onPress={()=>{navigation.goBack()}}>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            navigation.goBack();
+          }}
+        >
           <View style={styles.background} />
         </TouchableWithoutFeedback>
         <Card style={[styles.card, { width }]}>

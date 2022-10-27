@@ -42,6 +42,11 @@ class ExpoSqliteRecordRepositoryReadyProxy implements RecordRepository {
     await this.ready;
     return this.repo.save(record);
   }
+
+  async delete(id: RecordId): Promise<void> {
+    await this.ready;
+    return this.repo.delete(id);
+  }
 }
 
 export { ExpoSqliteRecordRepositoryReadyProxy };

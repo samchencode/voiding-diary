@@ -35,8 +35,9 @@ export function factory(
     const onEditIntakeRecord = (intakeRecord: IntakeRecord) => {
       navigation.navigate('EditIntakeRecordModal', { intakeRecord });
     };
-    const onDelete = () => {
-      alert('pressed delete');
+    const onDelete = (record: Record) => {
+      const id = record.getId();
+      navigation.navigate('ConfirmDeleteModal', { id });
     };
     useEffect(() => {
       getAndGroupRecords().then((v) => setRecords(v));

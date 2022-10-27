@@ -6,6 +6,7 @@ interface RecordRepository {
   getByLimitAndOffset(limit: number, offset: number): Promise<Record[]>;
   update(id: RecordId, record: Record): Promise<void>;
   save(record: Record): Promise<void>;
+  delete(id: RecordId): Promise<void>;
 }
 
 export type { RecordRepository };

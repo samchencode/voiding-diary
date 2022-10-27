@@ -2,8 +2,14 @@ import type { Record } from '@/domain/models/Record';
 import { IntakeRecord } from '@/domain/models/Record';
 import type { SaveRecordAction } from '@/application/SaveRecordAction';
 import React, { useState } from 'react';
-import { SizeOption, SizeOptionOther, Card, Button } from '@/view/components';
-import { TextInput, View, Text, StyleSheet, TouchableWithoutFeedback} from 'react-native';
+import { SizeOption, Card, Button } from '@/view/components';
+import {
+  TextInput,
+  View,
+  Text,
+  StyleSheet,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import { theme } from '@/view/theme';
 import type { RootNavigationProps } from '@/view/router';
 import { DateAndTime } from '@/domain/models/DateAndTime';
@@ -11,6 +17,7 @@ import { VolumeInOz } from '@/domain/models/Volume';
 import type { Observable } from '@/view/observables';
 
 import { StatusBar } from '@/view/status-bar';
+import { IntakeInput } from '@/view/goal-screen/components';
 
 type RecordIntakeModalProps = RootNavigationProps<'RecordIntakeModal'>;
 
@@ -39,16 +46,18 @@ function factory(
       navigation.navigate('Home');
     }
 
-
     return (
-      
       <View style={styles.container}>
         <StatusBar
           color="transparent"
           statusBarStyle="light"
           hasPadding={false}
         />
-                <TouchableWithoutFeedback onPress={()=>{navigation.goBack()}}>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            navigation.goBack();
+          }}
+        >
           <View style={styles.background} />
         </TouchableWithoutFeedback>
         <Card style={styles.card}>
@@ -65,7 +74,7 @@ function factory(
             <SizeOption title="8oz" size={8} setSize={setSize} />
             <SizeOption title="10oz" size={10} setSize={setSize} />
             <SizeOption title="16oz" size={16} setSize={setSize} />
-            <SizeOptionOther setSize={setSize} size={size} />
+            <IntakeInput value={size} onChangeNumber={setSize} />
           </View>
           <Button
             onPress={() => {

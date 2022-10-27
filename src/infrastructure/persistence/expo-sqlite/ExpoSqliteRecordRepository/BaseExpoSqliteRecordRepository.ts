@@ -106,6 +106,10 @@ class BaseExpoSqliteRecordRepository implements RecordRepository {
       [serialized.type, serialized.volumeOz, serialized.timestamp]
     );
   }
+
+  async delete(id: RecordId): Promise<void> {
+    await this.executeSql('DELETE FROM records WHERE id = ?', [id.getValue()]);
+  }
 }
 
 export { BaseExpoSqliteRecordRepository };

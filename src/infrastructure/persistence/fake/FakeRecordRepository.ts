@@ -47,6 +47,10 @@ class FakeRecordRepository implements RecordRepository {
   async save(record: Record): Promise<void> {
     this.mockData.unshift(record.serialize());
   }
+
+  async delete(id: RecordId): Promise<void> {
+    this.mockData = this.mockData.filter((v) => v.id !== id.getValue());
+  }
 }
 
 export { FakeRecordRepository };

@@ -22,10 +22,15 @@ import type { Type as NoGoalModal } from '@/view/no-goal-modal';
 import type { Type as EditIntakeRecordModal } from '@/view/edit-intake-record-modal';
 import type { Type as EditVoidRecordModal } from '@/view/edit-void-record-modal';
 import type { Type as RecordIntakeModal } from '@/view/record-intake-modal';
+import type { Type as ConfirmDeleteModal } from '@/view/confirm-delete-modal';
 import type { Type as TopBar } from '@/view/top-bar';
 import { makeIcon } from '@/view/router/makeIcon';
 import { theme } from '@/view/theme';
-import type { IntakeRecord, VoidRecord } from '@/domain/models/Record';
+import type {
+  IntakeRecord,
+  RecordId,
+  VoidRecord,
+} from '@/domain/models/Record';
 import type { Environment } from '@/env';
 
 const GoalIcon = makeIcon('bullseye');
@@ -48,6 +53,7 @@ type RootNavigationParams = {
   EditIntakeRecordModal: { intakeRecord: IntakeRecord };
   EditVoidRecordModal: { voidRecord: VoidRecord };
   RecordIntakeModal: undefined;
+  ConfirmDeleteModal: { id: RecordId };
 };
 
 const Tab = createBottomTabNavigator<AppNavigationParams>();
@@ -63,6 +69,7 @@ function factory(
   EditIntakeRecordModal: EditIntakeRecordModal,
   EditVoidRecordModal: EditVoidRecordModal,
   RecordIntakeModal: RecordIntakeModal,
+  ConfirmDeleteModal: ConfirmDeleteModal,
   TestScreen: TestScreen,
   TopBar: TopBar,
   environment: Environment
@@ -166,6 +173,11 @@ function factory(
         <Stack.Screen
           name="RecordIntakeModal"
           component={RecordIntakeModal}
+          options={{ presentation: 'transparentModal' }}
+        />
+        <Stack.Screen
+          name="ConfirmDeleteModal"
+          component={ConfirmDeleteModal}
           options={{ presentation: 'transparentModal' }}
         />
         <Stack.Screen name="App" component={AppNavigation} />

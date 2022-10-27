@@ -11,6 +11,7 @@ import { factory as EditVoidRecordModal } from '@/view/edit-void-record-modal';
 import { factory as RecordIntakeModal } from '@/view/record-intake-modal';
 import { factory as AboutUsModal } from '@/view/about-us-modal';
 import { factory as AttributionsModal } from '@/view/attributions-modal';
+import { factory as ConfirmDeleteModal } from '@/view/confirm-delete-modal';
 import { GetAllRecordsAction } from '@/application/GetAllRecordsAction';
 import { GetGoalAction } from '@/application/GetGoalAction';
 import { expoSqliteDatabaseFactory } from '@/infrastructure/persistence/expo-sqlite/expoSqliteDatabaseFactory';
@@ -20,6 +21,7 @@ import { ExpoSqliteRecordRepository } from '@/infrastructure/persistence/expo-sq
 import { SetGoalAction } from '@/application/SetGoalAction';
 import { AsyncStorageGoalRepository } from '@/infrastructure/persistence/async-storage/AsyncStorageGoalRepository';
 import { UpdateRecordAction } from '@/application/UpdateRecordAction';
+import { DeleteRecordAction } from '@/application/DeleteRecordAction';
 import { GetTimerAction } from '@/application/GetTimerAction';
 import { AsyncStorageTimerEndTimeRepository } from '@/infrastructure/persistence/async-storage/AsyncStorageTimerEndTimeRepository';
 import { AsyncStorageNotificationRepository } from '@/infrastructure/persistence/async-storage/AsyncStorageNotificationRepository';
@@ -44,6 +46,7 @@ export const module = {
   getTodaysRecordsAction: ['type', GetTodaysRecordsAction],
   saveRecordAction: ['type', SaveRecordAction],
   updateRecordAction: ['type', UpdateRecordAction],
+  deleteRecordAction: ['type', DeleteRecordAction],
   getGoalAction: ['type', GetGoalAction],
   setGoalAction: ['type', SetGoalAction],
   getTimerAction: ['type', GetTimerAction],
@@ -81,6 +84,7 @@ export const module = {
   NoGoalModal: ['factory', NoGoalModal],
   EditVoidRecordModal: ['factory', EditVoidRecordModal],
   EditIntakeRecordModal: ['factory', EditIntakeRecordModal],
+  ConfirmDeleteModal: ['factory', ConfirmDeleteModal],
   RecordIntakeModal: ['factory', RecordIntakeModal],
   AboutUsModal: ['factory', AboutUsModal],
   AttributionsModal: ['factory', AttributionsModal],
