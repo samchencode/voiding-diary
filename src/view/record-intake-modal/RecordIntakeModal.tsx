@@ -81,6 +81,7 @@ function factory(
               submitIntakeRecord(size);
             }}
             title="Add"
+            backgroundColor={theme.colors.accent}
           />
         </Card>
       </View>
