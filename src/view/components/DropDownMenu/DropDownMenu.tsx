@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import type { StyleProp, ViewStyle } from 'react-native';
 import { DropDownItem } from '@/view/components/DropDownMenu/DropDownItem';
@@ -25,9 +25,7 @@ function DropDownMenu({
   style,
   onPressOut,
 }: DropDownMenuProps) {
-  const menuRef = useRef<View>(null);
-
-  const onLayout = useTouchOutHandler(menuRef, onPressOut, visible);
+  const [menuRef, onLayout] = useTouchOutHandler(onPressOut, visible);
 
   return (
     <View

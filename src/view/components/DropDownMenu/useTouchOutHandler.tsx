@@ -1,5 +1,5 @@
 import type React from 'react';
-import { useCallback } from 'react';
+import { useCallback, useRef } from 'react';
 import type { View, GestureResponderEvent } from 'react-native';
 import { TouchOutHandler } from '@/view/touch-out-handler';
 
@@ -34,11 +34,11 @@ function handleBlur() {
   touchOutHandler.removeShouldCaptureHandler(handler);
 }
 export function useTouchOutHandler(
-  menuRef: React.RefObject<View>,
   onPressOut: (() => void) | undefined,
   visible: boolean
-) {
-  return useCallback(() => {
+): [React.RefObject<View>, () => void] {
+  const menuRef = useRef<View>(null);
+  const onLayout = useCallback(() => {
     if (!menuRef.current || !onPressOut) return;
     if (visible) {
       const menu = menuRef.current;
@@ -47,4 +47,6 @@ export function useTouchOutHandler(
       });
     } else if (!visible && handler.length > 0) handleBlur();
   }, [menuRef, onPressOut, visible]);
+
+  return [menuRef, onLayout];
 }
