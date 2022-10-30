@@ -40,7 +40,7 @@ function RowDropDown({ options }: RowDropDownProps) {
         items={optionsOnPressToggleVisible}
         visible={visible}
         style={styles.dropDownMenu}
-        onPressOut={handleToggle}
+        onRequestDismiss={handleToggle}
       />
     </>
   );

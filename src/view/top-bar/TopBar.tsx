@@ -86,7 +86,7 @@ function factory(
           <DropDownMenu
             items={this.dropDownItems}
             visible={dropDownVisible}
-            onPressOut={this.toggleDropDown}
+            onRequestDismiss={this.toggleDropDown}
           />
         </View>
       );

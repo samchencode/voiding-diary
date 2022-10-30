@@ -1,9 +1,9 @@
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, { StyleSheet, View } from 'react-native';
 import type { StyleProp, ViewStyle } from 'react-native';
 import { DropDownItem } from '@/view/components/DropDownMenu/DropDownItem';
 import { theme } from '@/view/theme';
 import { useTouchOutHandler } from '@/view/components/DropDownMenu/useTouchOutHandler';
+import { useBackHandler } from '@/view/components/DropDownMenu/useBackHandler';
 
 type DropDownItemSpec = {
   key: number | string;
@@ -16,15 +16,16 @@ type DropDownMenuProps = {
   items: DropDownItemSpec[];
   visible: boolean;
   style?: StyleProp<ViewStyle>;
-  onPressOut?: () => void;
+  onRequestDismiss?: () => void;
 };
 
 function DropDownMenu({
   items,
   visible,
   style,
-  onPressOut,
+  onRequestDismiss: onPressOut,
 }: DropDownMenuProps) {
+  useBackHandler(onPressOut, visible);
   const [menuRef, onLayout] = useTouchOutHandler(onPressOut, visible);
 
   return (
@@ -47,7 +48,7 @@ function DropDownMenu({
 
 DropDownMenu.defaultProps = {
   style: {},
-  onPressOut: () => {},
+  onRequestDismiss: () => {},
 };
 
 const styles = StyleSheet.create({
