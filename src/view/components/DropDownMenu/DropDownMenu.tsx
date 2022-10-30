@@ -1,43 +1,9 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useRef } from 'react';
 import { StyleSheet, View } from 'react-native';
-import type { StyleProp, ViewStyle, GestureResponderEvent } from 'react-native';
+import type { StyleProp, ViewStyle } from 'react-native';
 import { DropDownItem } from '@/view/components/DropDownMenu/DropDownItem';
 import { theme } from '@/view/theme';
-import { TouchOutHandler } from '@/view/touch-out-handler';
-
-let handler: (_: GestureResponderEvent) => boolean = () => false;
-
-type LayoutRectangle = {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  pageX: number;
-  pageY: number;
-};
-
-function handleFocus(l: LayoutRectangle, handlePressOut: () => void) {
-  const touchOutHandler = TouchOutHandler.getInstance();
-  const { pageX: x, pageY: y, width, height } = l;
-  const [xMin, yMin, xMax, yMax] = [x, y, x + width, y + height];
-  const [iXMin, iYMin, iXMax, iYMax] = [xMax - 48, y - 48, xMax, y];
-  handler = (evt) => {
-    const { pageX: touchX, pageY: touchY } = evt.nativeEvent;
-    const isOutOfBounds =
-      touchX < xMin || touchX > xMax || touchY < yMin || touchY > yMax;
-    const isOutOfIconBounds =
-      touchX < iXMin || touchX > iXMax || touchY < iYMin || touchY > iYMax;
-    if (!isOutOfBounds || !isOutOfIconBounds) return false;
-    handlePressOut();
-    return true;
-  };
-  touchOutHandler.addShouldCaptureHandler(handler);
-}
-
-function handleBlur() {
-  const touchOutHandler = TouchOutHandler.getInstance();
-  touchOutHandler.removeShouldCaptureHandler(handler);
-}
+import { useTouchOutHandler } from '@/view/components/DropDownMenu/useTouchOutHandler';
 
 type DropDownItemSpec = {
   key: number | string;
@@ -61,15 +27,7 @@ function DropDownMenu({
 }: DropDownMenuProps) {
   const menuRef = useRef<View>(null);
 
-  const onLayout = useCallback(() => {
-    if (!menuRef.current || !onPressOut) return;
-    if (visible) {
-      const menu = menuRef.current;
-      menu.measure((x, y, width, height, pageX, pageY) => {
-        handleFocus({ x, y, width, height, pageX, pageY }, onPressOut);
-      });
-    } else if (!visible && handler.length > 0) handleBlur();
-  }, [visible, onPressOut]);
+  const onLayout = useTouchOutHandler(menuRef, onPressOut, visible);
 
   return (
     <View
