@@ -29,16 +29,24 @@ export function factory(
     type RecordsByDate = InternMap<Date, Record[]>;
     const [records, setRecords] = useState<RecordsByDate>(new Map());
 
-    const onEditVoidRecord = (voidRecord: VoidRecord) => {
-      navigation.navigate('EditVoidRecordModal', { voidRecord });
-    };
-    const onEditIntakeRecord = (intakeRecord: IntakeRecord) => {
-      navigation.navigate('EditIntakeRecordModal', { intakeRecord });
-    };
-    const onDelete = (record: Record) => {
-      const id = record.getId();
-      navigation.navigate('ConfirmDeleteModal', { id });
-    };
+    const onEditVoidRecord = React.useCallback(
+      (voidRecord: VoidRecord) => {
+        navigation.navigate('EditVoidRecordModal', { voidRecord });
+      },
+      [navigation]
+    );
+    const onEditIntakeRecord = React.useCallback(
+      (intakeRecord: IntakeRecord) => {
+        navigation.navigate('EditIntakeRecordModal', { intakeRecord });
+      },
+      [navigation]
+    );
+    const onDelete = React.useCallback(
+      (record: Record) => {
+        navigation.navigate('ConfirmDeleteModal', { id: record.getId() });
+      },
+      [navigation]
+    );
     useEffect(() => {
       getAndGroupRecords().then((v) => setRecords(v));
       recordsStaleObservable.subscribe(() => {
