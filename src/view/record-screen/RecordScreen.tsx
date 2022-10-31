@@ -8,12 +8,15 @@ import {
   RecordSectionHeader,
   ListHeader,
   ListEmpty,
+  IntakeRecordRow,
+  VoidRecordRow,
 } from '@/view/record-screen/components';
 import type { GetAllRecordsAction } from '@/application/GetAllRecordsAction';
 import type { IntakeRecord, Record, VoidRecord } from '@/domain/models/Record';
 import { RowRecordVisitor } from '@/view/components';
 import type { AppNavigationProps } from '@/view/router';
 import type { Observable } from '@/view/observables';
+import { Card } from '@/view/components/Card';
 
 export function factory(
   getAllRecordsAction: GetAllRecordsAction,
@@ -67,19 +70,28 @@ export function factory(
             sections.length === 0 && styles.emptyListContainer,
           ]}
           sections={sections}
-          renderItem={({ item }) => {
-            const visitor = new RowRecordVisitor(item, {
-              intakeRecord: {
-                onPressEdit: onEditIntakeRecord,
-                onPressDelete: onDelete,
-              },
-              voidRecord: {
-                onPressEdit: onEditVoidRecord,
-                onPressDelete: onDelete,
-              },
-            });
-            return visitor.makeCard(styles.card);
-          }}
+          renderItem={({ item }) =>
+            new RowRecordVisitor(item, {
+              makeIntakeRecordRow: (r) => (
+                <Card key={r.getId().getValue()} style={styles.card}>
+                  <IntakeRecordRow
+                    intakeRecord={r}
+                    onEdit={onEditIntakeRecord}
+                    onDelete={onDelete}
+                  />
+                </Card>
+              ),
+              makeVoidRecordRow: (r) => (
+                <Card key={r.getId().getValue()} style={styles.card}>
+                  <VoidRecordRow
+                    voidRecord={r}
+                    onEdit={onEditVoidRecord}
+                    onDelete={onDelete}
+                  />
+                </Card>
+              ),
+            }).getElement()
+          }
           renderSectionHeader={({ section }) => (
             <RecordSectionHeader
               date={section.title}
