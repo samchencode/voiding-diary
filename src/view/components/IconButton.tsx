@@ -1,8 +1,7 @@
-import { theme } from '@/view/theme';
 import React from 'react';
-import { StyleSheet } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import { theme } from '@/view/theme';
 
 type IconButtonProps = {
   name: string;
@@ -10,9 +9,12 @@ type IconButtonProps = {
   onPress: () => void;
 };
 
-function IconButton({ name, color, onPress }: IconButtonProps) {
+function IconButton(
+  { name, color, onPress }: IconButtonProps,
+  ref: React.ForwardedRef<TouchableOpacity>
+) {
   return (
-    <TouchableOpacity style={styles.container} onPress={onPress}>
+    <TouchableOpacity style={styles.container} onPress={onPress} ref={ref}>
       <Icon name={name} size={24} color={color ?? theme.colors.light} />
     </TouchableOpacity>
   );
@@ -28,4 +30,6 @@ const styles = StyleSheet.create({
   },
 });
 
-export { IconButton };
+const IconButtonWithForwardedRef = React.forwardRef(IconButton);
+
+export { IconButtonWithForwardedRef as IconButton };

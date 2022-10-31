@@ -33,6 +33,7 @@ const styles = StyleSheet.create({
     paddingLeft: 12,
     paddingRight: 12,
     minWidth: 112,
+    maxWidth: 280,
   },
   icon: {
     paddingTop: 12,

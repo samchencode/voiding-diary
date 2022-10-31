@@ -3,12 +3,14 @@ import type { IntakeRecord } from '@/domain/models/Record';
 import { IntakeRecordRow as BaseIntakeRecordRow } from '@/view/components/RecordRow';
 
 type IntakeRecordRowProps = {
+  id: string;
   intakeRecord: IntakeRecord;
   onEdit: (r: IntakeRecord) => void;
   onDelete: (r: IntakeRecord) => void;
 };
 
 function IntakeRecordRow({
+  id,
   intakeRecord,
   onEdit,
   onDelete,
@@ -40,6 +42,7 @@ function IntakeRecordRow({
           onPress: handleDelete,
         },
       ]}
+      id={id}
     />
   );
 }

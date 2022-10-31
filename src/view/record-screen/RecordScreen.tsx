@@ -78,6 +78,7 @@ export function factory(
                     intakeRecord={r}
                     onEdit={onEditIntakeRecord}
                     onDelete={onDelete}
+                    id={r.getId().getValue()}
                   />
                 </Card>
               ),
@@ -87,6 +88,7 @@ export function factory(
                     voidRecord={r}
                     onEdit={onEditVoidRecord}
                     onDelete={onDelete}
+                    id={r.getId().getValue()}
                   />
                 </Card>
               ),

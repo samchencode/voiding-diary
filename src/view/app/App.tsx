@@ -4,6 +4,7 @@ import * as SplashScreen from 'expo-splash-screen';
 import type { Type as Router } from '@/view/router';
 import { useAppFonts } from '@/view/app/useAppFonts';
 import { TouchOutHandler } from '@/view/touch-out-handler';
+import { PortalProvider } from '@/view/portal';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -27,7 +28,9 @@ export function factory(Router: Router) {
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...touchOutHandler.panResponder.panHandlers}
       >
-        <Router />
+        <PortalProvider>
+          <Router />
+        </PortalProvider>
       </View>
     );
   };

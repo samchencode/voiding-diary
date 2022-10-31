@@ -4,6 +4,16 @@ import { DropDownItem } from '@/view/components/DropDownMenu/DropDownItem';
 import { theme } from '@/view/theme';
 import { useTouchOutHandler } from '@/view/components/DropDownMenu/useTouchOutHandler';
 import { useBackHandler } from '@/view/components/DropDownMenu/useBackHandler';
+import { useCallback } from 'react';
+
+type LayoutRectangle = {
+  x: number;
+  y: number;
+  pageX: number;
+  pageY: number;
+  width: number;
+  height: number;
+};
 
 type DropDownItemSpec = {
   key: number | string;
@@ -17,6 +27,7 @@ type DropDownMenuProps = {
   visible: boolean;
   style?: StyleProp<ViewStyle>;
   onRequestDismiss?: () => void;
+  onLayout?: (l: LayoutRectangle) => void;
 };
 
 function DropDownMenu({
@@ -24,14 +35,23 @@ function DropDownMenu({
   visible,
   style,
   onRequestDismiss: onPressOut,
+  onLayout,
 }: DropDownMenuProps) {
   useBackHandler(onPressOut, visible);
-  const [menuRef, onLayout] = useTouchOutHandler(onPressOut, visible);
+  const [menuRef, touchOutHandleLayout] = useTouchOutHandler(
+    onPressOut,
+    visible
+  );
+
+  const handleLayout = useCallback(
+    () => touchOutHandleLayout(onLayout),
+    [onLayout, touchOutHandleLayout]
+  );
 
   return (
     <View
       style={[styles.container, { display: visible ? 'flex' : 'none' }, style]}
-      onLayout={onLayout}
+      onLayout={handleLayout}
       ref={menuRef}
     >
       {items.map((v) => (
@@ -49,6 +69,7 @@ function DropDownMenu({
 DropDownMenu.defaultProps = {
   style: {},
   onRequestDismiss: () => {},
+  onLayout: undefined,
 };
 
 const styles = StyleSheet.create({

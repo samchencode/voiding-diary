@@ -3,12 +3,18 @@ import type { VoidRecord } from '@/domain/models/Record';
 import { VoidRecordRow as BaseVoidRecordRow } from '@/view/components/RecordRow';
 
 type VoidRecordRowProps = {
+  id: string;
   voidRecord: VoidRecord;
   onEdit: (r: VoidRecord) => void;
   onDelete: (r: VoidRecord) => void;
 };
 
-function VoidRecordRow({ voidRecord, onEdit, onDelete }: VoidRecordRowProps) {
+function VoidRecordRow({
+  voidRecord,
+  onEdit,
+  onDelete,
+  id,
+}: VoidRecordRowProps) {
   const handleEdit = React.useCallback(
     () => onEdit(voidRecord),
     [onEdit, voidRecord]
@@ -37,6 +43,7 @@ function VoidRecordRow({ voidRecord, onEdit, onDelete }: VoidRecordRowProps) {
           onPress: handleDelete,
         },
       ]}
+      id={id}
     />
   );
 }

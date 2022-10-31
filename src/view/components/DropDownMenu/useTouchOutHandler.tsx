@@ -36,17 +36,21 @@ function handleBlur() {
 export function useTouchOutHandler(
   onPressOut: (() => void) | undefined,
   visible: boolean
-): [React.RefObject<View>, () => void] {
+): [React.RefObject<View>, (cb?: (l: LayoutRectangle) => void) => void] {
   const menuRef = useRef<View>(null);
-  const onLayout = useCallback(() => {
-    if (!menuRef.current || !onPressOut) return;
-    if (visible) {
-      const menu = menuRef.current;
-      menu.measure((x, y, width, height, pageX, pageY) => {
-        handleFocus({ x, y, width, height, pageX, pageY }, onPressOut);
-      });
-    } else if (!visible && handler.length > 0) handleBlur();
-  }, [menuRef, onPressOut, visible]);
+  const onLayout = useCallback(
+    (onMeasure?: (r: LayoutRectangle) => void) => {
+      if (!menuRef.current || !onPressOut) return;
+      if (visible) {
+        const menu = menuRef.current;
+        menu.measure((x, y, width, height, pageX, pageY) => {
+          handleFocus({ x, y, width, height, pageX, pageY }, onPressOut);
+          if (onMeasure) onMeasure({ x, y, width, height, pageX, pageY });
+        });
+      } else if (!visible && handler.length > 0) handleBlur();
+    },
+    [menuRef, onPressOut, visible]
+  );
 
   return [menuRef, onLayout];
 }
