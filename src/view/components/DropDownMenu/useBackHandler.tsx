@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BackHandler } from 'react-native';
-import { NativeEventSubscription } from 'react-native';
+import type { NativeEventSubscription } from 'react-native';
 
 export function useBackHandler(
   onPressOut: (() => void) | undefined,
