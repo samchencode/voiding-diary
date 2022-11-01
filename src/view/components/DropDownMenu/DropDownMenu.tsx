@@ -55,6 +55,10 @@ class DropDownMenu extends React.PureComponent<Props, unknown> {
     }
   }
 
+  componentWillUnmount(): void {
+    this.mediator.notifyMenuUnmount();
+  }
+
   handleLayout() {
     this.toDoOnLayout.forEach((fn) => fn());
     this.toDoOnLayout = [];

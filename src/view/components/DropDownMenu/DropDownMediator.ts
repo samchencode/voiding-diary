@@ -101,6 +101,12 @@ class DropDownMediator {
     this.touchOutHandler.handleFocus(menuRectangle, iconRectangle);
     this.parent?.handleMenuAndIconMeasured(menuRectangle, iconRectangle);
   }
+
+  notifyMenuUnmount() {
+    if (this.touchOutHandler.hasSubscription())
+      this.touchOutHandler.handleBlur();
+    if (this.backHandler.hasSubscription()) this.backHandler.unsubscribe();
+  }
 }
 
 export { DropDownMediator };
