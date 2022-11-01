@@ -30,7 +30,7 @@ function factory(
     const [
       [volume, setVolume],
       [amInterval, setAmInterval],
-      [pmInterval, setPmInterval],
+      [pmInterval],
       [savedGoal, setSavedGoal],
     ] = useGoal(getGoalAction);
 
@@ -73,13 +73,14 @@ function factory(
             <Card style={styles.card}>
               <Text style={styles.title}>Set Goals</Text>
               <View style={styles.inputGroup}>
-                <Text style={styles.label}>AM Void Interval</Text>
+                <Text style={styles.label}>Void Interval</Text>
                 <TimeInput value={amInterval} onChangeValue={setAmInterval} />
               </View>
-              <View style={styles.inputGroup}>
+              {/* TODO: remove PM interval from goals */}
+              {/* <View style={styles.inputGroup}>
                 <Text style={styles.label}>PM Void Interval</Text>
                 <TimeInput value={pmInterval} onChangeValue={setPmInterval} />
-              </View>
+              </View> */}
               <View style={styles.inputGroup}>
                 <Text style={styles.label}>Daily Intake</Text>
                 <IntakeInput value={volume} onChangeNumber={setVolume} />

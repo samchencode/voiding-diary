@@ -20,10 +20,8 @@ function useGoal(
     undefined,
     undefined,
   ]);
-  const [pmInterval, setPmInterval] = useState<HhMmOrUndef>([
-    undefined,
-    undefined,
-  ]);
+  // TODO: remove PM interval from goals
+  const [pmInterval, setPmInterval] = useState<HhMmOrUndef>([0, 1]);
   const [volume, setVolume] = useState<NumOrUndef>(undefined);
   const [savedGoal, setSavedGoal] = useState<Goal | null>(null);
 
