@@ -33,19 +33,19 @@ export function factory(
     type RecordsByDate = InternMap<Date, Record[]>;
     const [records, setRecords] = useState<RecordsByDate>(new Map());
 
-    const onEditVoidRecord = React.useCallback(
+    const onEditVoidRecord = useCallback(
       (voidRecord: VoidRecord) => {
         navigation.navigate('EditVoidRecordModal', { voidRecord });
       },
       [navigation]
     );
-    const onEditIntakeRecord = React.useCallback(
+    const onEditIntakeRecord = useCallback(
       (intakeRecord: IntakeRecord) => {
         navigation.navigate('EditIntakeRecordModal', { intakeRecord });
       },
       [navigation]
     );
-    const onDelete = React.useCallback(
+    const onDelete = useCallback(
       (record: Record) => {
         navigation.navigate('ConfirmDeleteModal', { id: record.getId() });
       },
