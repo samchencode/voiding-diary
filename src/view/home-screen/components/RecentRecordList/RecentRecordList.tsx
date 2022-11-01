@@ -15,6 +15,7 @@ type RecentRecordListProps = {
 function makeIntakeRecordRow(r: IntakeRecord) {
   return (
     <IntakeRecordRow
+      key={r.getId().getValue()}
       id={r.getId().getValue()}
       volume={r.getIntakeVolumeString()}
       time={r.getTimeString()}
@@ -25,6 +26,7 @@ function makeIntakeRecordRow(r: IntakeRecord) {
 function makeVoidRecordRow(r: VoidRecord) {
   return (
     <VoidRecordRow
+      key={r.getId().getValue()}
       id={r.getId().getValue()}
       volume={r.getUrineVolumeString()}
       time={r.getTimeString()}
