@@ -53,7 +53,7 @@
         "jsx": "never"
       }
     ],
-    "class-methods-use-this": "warn",
+    "class-methods-use-this": "off",
     "import/no-default-export": "error",
     "import/exports-last": "error"
   },

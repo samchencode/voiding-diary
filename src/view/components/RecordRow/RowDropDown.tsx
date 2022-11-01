@@ -1,27 +1,27 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React from 'react';
 import type { TouchableOpacity } from 'react-native';
-import { StyleSheet, useWindowDimensions } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 import { theme } from '@/view/theme';
 import { IconButton } from '@/view/components/IconButton';
 import type { DropDownItemSpec } from '@/view/components/DropDownMenu';
 import { DropDownMenu } from '@/view/components/DropDownMenu';
 import { Portal } from '@/view/portal';
+import type { LayoutRectangle } from '@/view/components/DropDownMenu/LayoutRectangle';
+import type { DropDownMediator } from '@/view/components/DropDownMenu/DropDownMediator';
 
-type RowDropDownProps = {
+type Props = {
   options: DropDownItemSpec[];
   id: string;
 };
 
-type LayoutRectangle = {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-  pageX: number;
-  pageY: number;
-};
-
 type WindowDimensions = { width: number; height: number };
+
+type State = {
+  visible: boolean;
+  iconRectangle: LayoutRectangle | null;
+  menuRectangle: LayoutRectangle | null;
+  windowDimensions: WindowDimensions;
+};
 
 const makeDropDownTransformFromIconMeasurement = (
   {
@@ -44,72 +44,93 @@ const makeDropDownTransformFromIconMeasurement = (
   };
 };
 
-function RowDropDown({ options, id }: RowDropDownProps) {
-  const [visible, setVisible] = useState(false);
-  const [measureIconResult, setMeasureIconResult] =
-    useState<LayoutRectangle | null>(null);
+class RowDropDown extends React.Component<Props, State> {
+  iconRef: React.RefObject<TouchableOpacity>;
 
-  const [dropDownLayout, setDropDownLayout] = useState<LayoutRectangle>({
-    x: 0,
-    y: 0,
-    width: 0,
-    height: 0,
-    pageX: 0,
-    pageY: 0,
-  });
+  menuRef: React.RefObject<DropDownMenu>;
 
-  const iconButton = useRef<TouchableOpacity | null>(null);
+  mediator?: DropDownMediator;
 
-  const windowDimensions = useWindowDimensions();
-
-  const handleToggle = useCallback(() => {
-    if (!iconButton.current) return;
-    iconButton.current.measure((x, y, width, height, pageX, pageY) => {
-      setMeasureIconResult({ x, y, width, height, pageX, pageY });
-    });
-    setVisible(!visible);
-  }, [visible]);
-
-  const handleLayoutDropDown = useCallback(
-    (l: LayoutRectangle) => setDropDownLayout(l),
-    []
-  );
-
-  const optionsOnPressToggleVisible = options.map((o) => {
-    const onPress = () => {
-      handleToggle();
-      o.onPress();
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      visible: false,
+      windowDimensions: Dimensions.get('window'),
+      iconRectangle: null,
+      menuRectangle: null,
     };
-    return { ...o, onPress };
-  });
+    this.iconRef = React.createRef();
+    this.menuRef = React.createRef();
 
-  return (
-    <>
-      <IconButton
-        name="ellipsis-v"
-        onPress={handleToggle}
-        color={theme.colors.dark}
-        ref={iconButton}
-      />
-      <Portal id={`RecordRow.RowDropDown-${id}`}>
-        <DropDownMenu
-          onLayout={handleLayoutDropDown}
-          items={optionsOnPressToggleVisible}
-          visible={visible}
-          style={[
-            styles.dropDownMenu,
-            measureIconResult &&
-              makeDropDownTransformFromIconMeasurement(
-                measureIconResult,
-                windowDimensions,
-                dropDownLayout
-              ),
-          ]}
-          onRequestDismiss={handleToggle}
+    this.handleToggle = this.handleToggle.bind(this);
+    this.handleLayoutDropDown = this.handleLayoutDropDown.bind(this);
+  }
+
+  componentDidMount(): void {
+    this.mediator = this.menuRef.current?.setParentOnMediator(this);
+    // TODO: add iconRef to mediator
+  }
+
+  private handleToggle() {
+    const { visible } = this.state;
+    if (!this.iconRef.current) return;
+    this.iconRef.current.measure((x, y, width, height, pageX, pageY) => {
+      this.setState({ iconRectangle: { x, y, width, height, pageX, pageY } });
+    });
+    this.setState({ visible: !visible });
+  }
+
+  private handleLayoutDropDown(l: LayoutRectangle) {
+    this.setState({ menuRectangle: l });
+  }
+
+  private makeMenuOptionsTogglingVisible() {
+    const { options } = this.props;
+    return options.map((o) => ({
+      ...o,
+      onPress: () => {
+        o.onPress();
+        this.handleToggle();
+      },
+    }));
+  }
+
+  render() {
+    const { id } = this.props;
+    const { visible, menuRectangle, iconRectangle, windowDimensions } =
+      this.state;
+
+    const options = this.makeMenuOptionsTogglingVisible();
+
+    return (
+      <>
+        <IconButton
+          name="ellipsis-v"
+          onPress={this.handleToggle}
+          color={theme.colors.dark}
+          ref={this.iconRef}
         />
-      </Portal>
-    </>
-  );
+        <Portal id={`RecordRow.RowDropDown-${id}`}>
+          <DropDownMenu
+            ref={this.menuRef}
+            onLayout={this.handleLayoutDropDown}
+            items={options}
+            visible={visible}
+            style={[
+              styles.dropDownMenu,
+              iconRectangle &&
+                makeDropDownTransformFromIconMeasurement(
+                  iconRectangle,
+                  windowDimensions,
+                  menuRectangle
+                ),
+            ]}
+            onRequestDismiss={this.handleToggle}
+          />
+        </Portal>
+      </>
+    );
+  }
 }
 
 export const styles = StyleSheet.create({

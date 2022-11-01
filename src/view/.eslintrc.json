@@ -12,6 +12,7 @@
     "react/prop-types": [
       "error",
       { "ignore": ["navigation", "navigation.navigate"] }
-    ]
+    ],
+    "react/static-property-placement": ["error", "static public field"]
   }
 }

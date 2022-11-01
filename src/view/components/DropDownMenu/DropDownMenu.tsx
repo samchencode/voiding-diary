@@ -1,19 +1,13 @@
-import React, { StyleSheet, View } from 'react-native';
-import type { StyleProp, ViewStyle } from 'react-native';
-import { DropDownItem } from '@/view/components/DropDownMenu/DropDownItem';
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
+import type { StyleProp, ViewStyle, LayoutChangeEvent } from 'react-native';
 import { theme } from '@/view/theme';
-import { useTouchOutHandler } from '@/view/components/DropDownMenu/useTouchOutHandler';
-import { useBackHandler } from '@/view/components/DropDownMenu/useBackHandler';
-import { useCallback } from 'react';
-
-type LayoutRectangle = {
-  x: number;
-  y: number;
-  pageX: number;
-  pageY: number;
-  width: number;
-  height: number;
-};
+import { DropDownItem } from '@/view/components/DropDownMenu/DropDownItem';
+import { DropDownTouchOutHandler } from '@/view/components/DropDownMenu/DropDownTouchOutHandler';
+import type { LayoutRectangle } from '@/view/components/DropDownMenu/LayoutRectangle';
+import { DropDownBackHandler } from '@/view/components/DropDownMenu/DropDownBackHandler';
+import { DropDownMediator } from '@/view/components/DropDownMenu/DropDownMediator';
+import type { DropDownParent } from '@/view/components/DropDownMenu/DropDownParent';
 
 type DropDownItemSpec = {
   key: number | string;
@@ -22,55 +16,92 @@ type DropDownItemSpec = {
   onPress: () => void;
 };
 
-type DropDownMenuProps = {
+type Props = {
   items: DropDownItemSpec[];
   visible: boolean;
   style?: StyleProp<ViewStyle>;
   onRequestDismiss?: () => void;
-  onLayout?: (l: LayoutRectangle) => void;
+  onLayout?: (l: LayoutRectangle) => void; // FIXME: unclear that we need this...
 };
 
-function DropDownMenu({
-  items,
-  visible,
-  style,
-  onRequestDismiss: onPressOut,
-  onLayout,
-}: DropDownMenuProps) {
-  useBackHandler(onPressOut, visible);
-  const [menuRef, touchOutHandleLayout] = useTouchOutHandler(
-    onPressOut,
-    visible
-  );
+class DropDownMenu extends React.PureComponent<Props, unknown> {
+  static defaultProps = {
+    style: {},
+    onRequestDismiss: () => {},
+    onLayout: undefined,
+  };
 
-  const handleLayout = useCallback(
-    () => touchOutHandleLayout(onLayout),
-    [onLayout, touchOutHandleLayout]
-  );
+  private menuRef: React.RefObject<View>;
 
-  return (
-    <View
-      style={[styles.container, { display: visible ? 'flex' : 'none' }, style]}
-      onLayout={handleLayout}
-      ref={menuRef}
-    >
-      {items.map((v) => (
-        <DropDownItem
-          key={v.key}
-          label={v.label}
-          iconName={v.iconName}
-          onPress={v.onPress}
-        />
-      ))}
-    </View>
-  );
+  private mediator: DropDownMediator;
+
+  private toDoOnLayout: (() => void)[] = [];
+
+  constructor(props: Props) {
+    super(props);
+
+    const onRequestDismiss =
+      props.onRequestDismiss ?? DropDownMenu.defaultProps.onRequestDismiss;
+
+    this.menuRef = React.createRef();
+    this.mediator = new DropDownMediator();
+    this.mediator.setMenu(this);
+    this.mediator.setViewRef(this.menuRef);
+    // eslint-disable-next-line no-new
+    new DropDownTouchOutHandler(this.mediator, onRequestDismiss);
+    // eslint-disable-next-line no-new
+    new DropDownBackHandler(this.mediator, onRequestDismiss);
+
+    this.handleLayout = this.handleLayout.bind(this);
+  }
+
+  componentDidUpdate({ visible: prevVisible }: Readonly<Props>) {
+    const { visible } = this.props;
+    if (prevVisible && !visible) this.mediator.notifyMenuInvisible();
+    if (!prevVisible && visible) {
+      const fn = () => this.mediator.notifyMenuVisible();
+      this.toDoOnLayout.push(fn);
+    }
+  }
+
+  handleLayout({ nativeEvent }: LayoutChangeEvent) {
+    // TODO: Remove this when we fully use mediator
+    const { onLayout } = this.props;
+    if (onLayout) onLayout(nativeEvent.layout as any);
+    this.toDoOnLayout.forEach((fn) => fn());
+    this.toDoOnLayout = [];
+  }
+
+  setParentOnMediator(p: DropDownParent) {
+    this.mediator.setParent(p);
+    return this.mediator;
+  }
+
+  render() {
+    const { items, visible, style } = this.props;
+
+    return (
+      <View
+        style={[
+          styles.container,
+          { display: visible ? 'flex' : 'none' },
+          style,
+        ]}
+        ref={this.menuRef}
+        onLayout={this.handleLayout}
+      >
+        {items.map((v) => (
+          <DropDownItem
+            key={v.key}
+            label={v.label}
+            iconName={v.iconName}
+            onPress={v.onPress}
+          />
+        ))}
+      </View>
+    );
+  }
 }
-
-DropDownMenu.defaultProps = {
-  style: {},
-  onRequestDismiss: () => {},
-  onLayout: undefined,
-};
 
 const styles = StyleSheet.create({
   container: {
