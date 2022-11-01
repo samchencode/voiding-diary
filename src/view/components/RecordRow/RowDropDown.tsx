@@ -23,6 +23,7 @@ type WindowDimensions = { width: number; height: number };
 
 type State = {
   visible: boolean;
+  transparent: boolean;
   menuTransformStyle: StyleProp<TransformsStyle> | null;
 };
 
@@ -60,6 +61,7 @@ class RowDropDown
     this.state = {
       visible: false,
       menuTransformStyle: null,
+      transparent: false,
     };
     this.iconRef = React.createRef();
     this.handleToggle = this.handleToggle.bind(this);
@@ -81,12 +83,14 @@ class RowDropDown
       menuRectangle,
       iconRectangle
     );
-    this.setState({ menuTransformStyle: transforms });
+    this.setState({ menuTransformStyle: transforms, transparent: false });
   }
 
   private handleToggle() {
     const { visible } = this.state;
-    this.setState({ visible: !visible });
+    const newState = !visible;
+    this.setState({ visible: newState });
+    if (newState === true) this.setState({ transparent: true });
   }
 
   private makeMenuOptionsTogglingVisible() {
@@ -102,7 +106,7 @@ class RowDropDown
 
   render() {
     const { id } = this.props;
-    const { visible, menuTransformStyle } = this.state;
+    const { visible, menuTransformStyle, transparent } = this.state;
 
     const options = this.makeMenuOptionsTogglingVisible();
 
@@ -119,7 +123,11 @@ class RowDropDown
             ref={this.handleMenuRefCallback}
             items={options}
             visible={visible}
-            style={[styles.dropDownMenu, menuTransformStyle]}
+            style={[
+              styles.dropDownMenu,
+              menuTransformStyle,
+              transparent && { opacity: 0 },
+            ]}
             onRequestDismiss={this.handleToggle}
           />
         </Portal>
