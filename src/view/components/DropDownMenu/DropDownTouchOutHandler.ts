@@ -8,17 +8,13 @@ type TouchOutHandlerCallback = (e: GestureResponderEvent) => boolean;
 class DropDownTouchOutHandler {
   private handler: TouchOutHandlerCallback | null = null;
 
-  private onRequestDismiss: () => void;
-
   private touchOutHandler: TouchOutHandler;
 
   private mediator: DropDownMediator;
 
-  constructor(mediator: DropDownMediator, onRequestDismiss: () => void) {
-    this.onRequestDismiss = onRequestDismiss;
+  constructor(mediator: DropDownMediator) {
     this.touchOutHandler = TouchOutHandler.getInstance();
     this.mediator = mediator;
-    this.mediator.setTouchOutHandler(this);
   }
 
   handleFocus(menuRectangle: LayoutRectangle) {
@@ -48,7 +44,7 @@ class DropDownTouchOutHandler {
       const isOutOfIconBounds =
         touchX < iXMin || touchX > iXMax || touchY < iYMin || touchY > iYMax;
       if (!isOutOfBounds || !isOutOfIconBounds) return false;
-      this.onRequestDismiss();
+      this.mediator.notifyRequestDismiss();
       return true;
     };
   }

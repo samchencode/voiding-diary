@@ -3,21 +3,17 @@ import type { NativeEventSubscription } from 'react-native';
 import type { DropDownMediator } from '@/view/components/DropDownMenu/DropDownMediator';
 
 class DropDownBackHandler {
-  private onRequestDimiss: () => void;
-
   private subscription: NativeEventSubscription | null = null;
 
   private mediator: DropDownMediator;
 
-  constructor(mediator: DropDownMediator, onRequestDismiss: () => void) {
+  constructor(mediator: DropDownMediator) {
     this.handleBackPress = this.handleBackPress.bind(this);
-    this.onRequestDimiss = onRequestDismiss;
     this.mediator = mediator;
-    this.mediator.setBackHandler(this);
   }
 
   private handleBackPress() {
-    this.onRequestDimiss();
+    this.mediator.notifyRequestDismiss();
     return true;
   }
 

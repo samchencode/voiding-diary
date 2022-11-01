@@ -1,5 +1,9 @@
 import React from 'react';
-import type { TouchableOpacity } from 'react-native';
+import type {
+  StyleProp,
+  TouchableOpacity,
+  TransformsStyle,
+} from 'react-native';
 import { Dimensions, StyleSheet } from 'react-native';
 import { theme } from '@/view/theme';
 import { IconButton } from '@/view/components/IconButton';
@@ -8,6 +12,7 @@ import { DropDownMenu } from '@/view/components/DropDownMenu';
 import { Portal } from '@/view/portal';
 import type { LayoutRectangle } from '@/view/components/DropDownMenu/LayoutRectangle';
 import type { DropDownMediator } from '@/view/components/DropDownMenu/DropDownMediator';
+import type { DropDownParent } from '@/view/components/DropDownMenu/DropDownParent';
 
 type Props = {
   options: DropDownItemSpec[];
@@ -18,20 +23,18 @@ type WindowDimensions = { width: number; height: number };
 
 type State = {
   visible: boolean;
-  iconRectangle: LayoutRectangle | null;
-  menuRectangle: LayoutRectangle | null;
-  windowDimensions: WindowDimensions;
+  menuTransformStyle: StyleProp<TransformsStyle> | null;
 };
 
-const makeDropDownTransformFromIconMeasurement = (
+const makeTransformsFromMenuAndIconMeasurements = (
+  { height: windowHeight }: WindowDimensions,
+  { width: menuWidth, height: menuHeight }: LayoutRectangle,
   {
     pageX: iconX,
     pageY: iconY,
     width: iconWidth,
     height: iconHeight,
-  }: LayoutRectangle,
-  { height: windowHeight }: WindowDimensions,
-  { width: menuWidth, height: menuHeight }: LayoutRectangle
+  }: LayoutRectangle
 ) => {
   const iconXMax = iconX + iconWidth;
   const iconYMax = iconY + iconHeight;
@@ -44,10 +47,11 @@ const makeDropDownTransformFromIconMeasurement = (
   };
 };
 
-class RowDropDown extends React.Component<Props, State> {
+class RowDropDown
+  extends React.Component<Props, State>
+  implements DropDownParent
+{
   iconRef: React.RefObject<TouchableOpacity>;
-
-  menuRef: React.RefObject<DropDownMenu>;
 
   mediator?: DropDownMediator;
 
@@ -55,33 +59,34 @@ class RowDropDown extends React.Component<Props, State> {
     super(props);
     this.state = {
       visible: false,
-      windowDimensions: Dimensions.get('window'),
-      iconRectangle: null,
-      menuRectangle: null,
+      menuTransformStyle: null,
     };
     this.iconRef = React.createRef();
-    this.menuRef = React.createRef();
-
     this.handleToggle = this.handleToggle.bind(this);
-    this.handleLayoutDropDown = this.handleLayoutDropDown.bind(this);
+    this.handleMenuRefCallback = this.handleMenuRefCallback.bind(this);
   }
 
-  componentDidMount(): void {
-    this.mediator = this.menuRef.current?.setParentOnMediator(this);
-    // TODO: add iconRef to mediator
+  handleMenuRefCallback(menu: DropDownMenu | null): void {
+    this.mediator = menu?.getMediatorAndSetParent(this);
+    this.mediator?.setIconRef(this.iconRef);
+  }
+
+  // eslint-disable-next-line react/no-unused-class-component-methods
+  handleMenuAndIconMeasured(
+    menuRectangle: LayoutRectangle,
+    iconRectangle: LayoutRectangle
+  ): void {
+    const transforms = makeTransformsFromMenuAndIconMeasurements(
+      Dimensions.get('window'),
+      menuRectangle,
+      iconRectangle
+    );
+    this.setState({ menuTransformStyle: transforms });
   }
 
   private handleToggle() {
     const { visible } = this.state;
-    if (!this.iconRef.current) return;
-    this.iconRef.current.measure((x, y, width, height, pageX, pageY) => {
-      this.setState({ iconRectangle: { x, y, width, height, pageX, pageY } });
-    });
     this.setState({ visible: !visible });
-  }
-
-  private handleLayoutDropDown(l: LayoutRectangle) {
-    this.setState({ menuRectangle: l });
   }
 
   private makeMenuOptionsTogglingVisible() {
@@ -97,8 +102,7 @@ class RowDropDown extends React.Component<Props, State> {
 
   render() {
     const { id } = this.props;
-    const { visible, menuRectangle, iconRectangle, windowDimensions } =
-      this.state;
+    const { visible, menuTransformStyle } = this.state;
 
     const options = this.makeMenuOptionsTogglingVisible();
 
@@ -112,19 +116,10 @@ class RowDropDown extends React.Component<Props, State> {
         />
         <Portal id={`RecordRow.RowDropDown-${id}`}>
           <DropDownMenu
-            ref={this.menuRef}
-            onLayout={this.handleLayoutDropDown}
+            ref={this.handleMenuRefCallback}
             items={options}
             visible={visible}
-            style={[
-              styles.dropDownMenu,
-              iconRectangle &&
-                makeDropDownTransformFromIconMeasurement(
-                  iconRectangle,
-                  windowDimensions,
-                  menuRectangle
-                ),
-            ]}
+            style={[styles.dropDownMenu, menuTransformStyle]}
             onRequestDismiss={this.handleToggle}
           />
         </Portal>

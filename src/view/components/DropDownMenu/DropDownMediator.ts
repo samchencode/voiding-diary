@@ -1,21 +1,31 @@
 import type { RefObject } from 'react';
-import type { View } from 'react-native';
-import type { DropDownBackHandler } from '@/view/components/DropDownMenu/DropDownBackHandler';
+import type { View, TouchableOpacity } from 'react-native';
+import { DropDownBackHandler } from '@/view/components/DropDownMenu/DropDownBackHandler';
 import type { DropDownMenu } from '@/view/components/DropDownMenu/DropDownMenu';
-import type { DropDownTouchOutHandler } from '@/view/components/DropDownMenu/DropDownTouchOutHandler';
+import { DropDownTouchOutHandler } from '@/view/components/DropDownMenu/DropDownTouchOutHandler';
 import type { LayoutRectangle } from '@/view/components/DropDownMenu/LayoutRectangle';
 import type { DropDownParent } from '@/view/components/DropDownMenu/DropDownParent';
 
 class DropDownMediator {
   private menu?: DropDownMenu;
 
-  private backHandler?: DropDownBackHandler;
+  private backHandler: DropDownBackHandler;
 
-  private touchOutHandler?: DropDownTouchOutHandler;
+  private touchOutHandler: DropDownTouchOutHandler;
 
   private parent?: DropDownParent;
 
   private viewRef?: RefObject<View>;
+
+  private iconRef?: RefObject<TouchableOpacity>;
+
+  private onRequestDismiss?: () => void;
+
+  constructor() {
+    this.notifyRequestDismiss = this.notifyRequestDismiss.bind(this);
+    this.touchOutHandler = new DropDownTouchOutHandler(this);
+    this.backHandler = new DropDownBackHandler(this);
+  }
 
   setMenu(m: DropDownMenu) {
     this.menu = m;
@@ -37,6 +47,18 @@ class DropDownMediator {
     this.viewRef = v;
   }
 
+  setIconRef(i: RefObject<TouchableOpacity>) {
+    this.iconRef = i;
+  }
+
+  setOnRequestDismiss(fn: () => void) {
+    this.onRequestDismiss = fn;
+  }
+
+  notifyRequestDismiss() {
+    this.onRequestDismiss?.();
+  }
+
   notifyMenuVisible() {
     if (this.backHandler && !this.backHandler.hasSubscription()) {
       this.backHandler.subscribe();
@@ -50,13 +72,34 @@ class DropDownMediator {
     if (this.backHandler?.hasSubscription()) {
       this.backHandler.unsubscribe();
     }
-    if (this.touchOutHandler?.hasSubscription()) {
+    if (this.touchOutHandler.hasSubscription()) {
       this.touchOutHandler.handleBlur();
     }
   }
 
-  notifyVisibleMenuMeasured(l: LayoutRectangle) {
-    this.touchOutHandler?.handleFocus(l);
+  notifyVisibleMenuMeasured(menuRectangle: LayoutRectangle) {
+    if (!this.iconRef?.current) {
+      this.touchOutHandler.handleFocus(menuRectangle);
+    } else {
+      this.iconRef.current.measure((x, y, width, height, pageX, pageY) => {
+        this.notifyMenuAndIconMeasured(menuRectangle, {
+          x,
+          y,
+          width,
+          height,
+          pageX,
+          pageY,
+        });
+      });
+    }
+  }
+
+  notifyMenuAndIconMeasured(
+    menuRectangle: LayoutRectangle,
+    iconRectangle: LayoutRectangle
+  ) {
+    this.touchOutHandler.handleFocus(menuRectangle);
+    this.parent?.handleMenuAndIconMeasured(menuRectangle, iconRectangle);
   }
 }
 
