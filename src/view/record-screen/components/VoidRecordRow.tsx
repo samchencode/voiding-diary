@@ -7,6 +7,7 @@ type VoidRecordRowProps = {
   voidRecord: VoidRecord;
   onEdit: (r: VoidRecord) => void;
   onDelete: (r: VoidRecord) => void;
+  screenHeight: number;
 };
 
 function VoidRecordRow({
@@ -14,6 +15,7 @@ function VoidRecordRow({
   onEdit,
   onDelete,
   id,
+  screenHeight,
 }: VoidRecordRowProps) {
   const handleEdit = React.useCallback(
     () => onEdit(voidRecord),
@@ -44,6 +46,7 @@ function VoidRecordRow({
         },
       ]}
       id={id}
+      screenHeight={screenHeight}
     />
   );
 }

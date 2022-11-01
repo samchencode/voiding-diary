@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import type { LayoutChangeEvent } from 'react-native';
 import { StyleSheet, View, SectionList } from 'react-native';
 import type { InternMap } from 'd3-array';
 import { d3 } from '@/vendor/d3';
@@ -62,8 +63,13 @@ export function factory(
       data,
     }));
 
+    const [screenHeight, setScreenHeight] = useState<number>(0);
+    const onLayout = useCallback((e: LayoutChangeEvent) => {
+      setScreenHeight(e.nativeEvent.layout.height);
+    }, []);
+
     return (
-      <View style={styles.container}>
+      <View style={styles.container} onLayout={onLayout}>
         <SectionList
           contentContainerStyle={[
             styles.listContainer,
@@ -79,6 +85,7 @@ export function factory(
                     onEdit={onEditIntakeRecord}
                     onDelete={onDelete}
                     id={r.getId().getValue()}
+                    screenHeight={screenHeight}
                   />
                 </Card>
               ),
@@ -89,6 +96,7 @@ export function factory(
                     onEdit={onEditVoidRecord}
                     onDelete={onDelete}
                     id={r.getId().getValue()}
+                    screenHeight={screenHeight}
                   />
                 </Card>
               ),

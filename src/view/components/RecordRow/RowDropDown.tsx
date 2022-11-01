@@ -17,9 +17,8 @@ import type { DropDownParent } from '@/view/components/DropDownMenu/DropDownPare
 type Props = {
   options: DropDownItemSpec[];
   id: string;
+  screenHeight?: number;
 };
-
-type WindowDimensions = { width: number; height: number };
 
 type State = {
   visible: boolean;
@@ -28,18 +27,18 @@ type State = {
 };
 
 const makeTransformsFromMenuAndIconMeasurements = (
-  { height: windowHeight }: WindowDimensions,
   { width: menuWidth, height: menuHeight }: LayoutRectangle,
   {
     pageX: iconX,
     pageY: iconY,
     width: iconWidth,
     height: iconHeight,
-  }: LayoutRectangle
+  }: LayoutRectangle,
+  screenHeight: number = Dimensions.get('window').height
 ) => {
   const iconXMax = iconX + iconWidth;
   const iconYMax = iconY + iconHeight;
-  const menuYMaxIsBelowWindow = iconYMax + menuHeight < windowHeight;
+  const menuYMaxIsBelowWindow = iconYMax + menuHeight < screenHeight;
   return {
     transform: [
       { translateX: iconXMax - menuWidth },
@@ -55,6 +54,10 @@ class RowDropDown
   iconRef: React.RefObject<TouchableOpacity>;
 
   mediator?: DropDownMediator;
+
+  static defaultProps = {
+    screenHeight: undefined,
+  };
 
   constructor(props: Props) {
     super(props);
@@ -78,10 +81,11 @@ class RowDropDown
     menuRectangle: LayoutRectangle,
     iconRectangle: LayoutRectangle
   ): void {
+    const { screenHeight } = this.props;
     const transforms = makeTransformsFromMenuAndIconMeasurements(
-      Dimensions.get('window'),
       menuRectangle,
-      iconRectangle
+      iconRectangle,
+      screenHeight
     );
     this.setState({ menuTransformStyle: transforms, transparent: false });
   }

@@ -7,6 +7,7 @@ type IntakeRecordRowProps = {
   intakeRecord: IntakeRecord;
   onEdit: (r: IntakeRecord) => void;
   onDelete: (r: IntakeRecord) => void;
+  screenHeight: number;
 };
 
 function IntakeRecordRow({
@@ -14,6 +15,7 @@ function IntakeRecordRow({
   intakeRecord,
   onEdit,
   onDelete,
+  screenHeight,
 }: IntakeRecordRowProps) {
   const handleEdit = React.useCallback(
     () => onEdit(intakeRecord),
@@ -43,6 +45,7 @@ function IntakeRecordRow({
         },
       ]}
       id={id}
+      screenHeight={screenHeight}
     />
   );
 }

@@ -11,9 +11,17 @@ type RowProps = {
   iconName: string;
   id?: string;
   options?: DropDownItemSpec[];
+  screenHeight?: number;
 };
 
-function Row({ title, subtitle, iconName, options, id: key = '0' }: RowProps) {
+function Row({
+  title,
+  subtitle,
+  iconName,
+  options,
+  id: key = '0',
+  screenHeight,
+}: RowProps) {
   return (
     <View style={styles.container}>
       <Icon
@@ -26,7 +34,9 @@ function Row({ title, subtitle, iconName, options, id: key = '0' }: RowProps) {
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.subtitle}>{subtitle}</Text>
       </View>
-      {options && <RowDropDown options={options} id={key} />}
+      {options && (
+        <RowDropDown options={options} id={key} screenHeight={screenHeight} />
+      )}
     </View>
   );
 }
@@ -34,6 +44,7 @@ function Row({ title, subtitle, iconName, options, id: key = '0' }: RowProps) {
 Row.defaultProps = {
   options: undefined,
   id: '0',
+  screenHeight: undefined,
 };
 
 type RecordRowProps = {
@@ -41,9 +52,16 @@ type RecordRowProps = {
   options?: DropDownItemSpec[];
   time: string;
   id?: string;
+  screenHeight?: number;
 };
 
-function IntakeRecordRow({ volume, time, options, id }: RecordRowProps) {
+function IntakeRecordRow({
+  volume,
+  time,
+  options,
+  id,
+  screenHeight,
+}: RecordRowProps) {
   const title = !volume ? 'Intake' : `Intake ${volume}`;
   return (
     <Row
@@ -52,13 +70,25 @@ function IntakeRecordRow({ volume, time, options, id }: RecordRowProps) {
       subtitle={time}
       options={options}
       id={id}
+      screenHeight={screenHeight}
     />
   );
 }
 
-IntakeRecordRow.defaultProps = { volume: '', options: undefined, id: '0' };
+IntakeRecordRow.defaultProps = {
+  volume: '',
+  options: undefined,
+  id: '0',
+  screenHeight: undefined,
+};
 
-function VoidRecordRow({ volume, time, options, id }: RecordRowProps) {
+function VoidRecordRow({
+  volume,
+  time,
+  options,
+  id,
+  screenHeight,
+}: RecordRowProps) {
   const title = !volume ? 'Void' : `Void ${volume}`;
   return (
     <Row
@@ -67,11 +97,17 @@ function VoidRecordRow({ volume, time, options, id }: RecordRowProps) {
       subtitle={time}
       options={options}
       id={id}
+      screenHeight={screenHeight}
     />
   );
 }
 
-VoidRecordRow.defaultProps = { volume: '', options: undefined, id: '0' };
+VoidRecordRow.defaultProps = {
+  volume: '',
+  options: undefined,
+  id: '0',
+  screenHeight: undefined,
+};
 
 export const styles = StyleSheet.create({
   container: {
