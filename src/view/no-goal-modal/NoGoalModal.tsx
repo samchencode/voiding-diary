@@ -1,5 +1,11 @@
 import React, { useCallback } from 'react';
-import { StyleSheet, Text, TouchableWithoutFeedback, useWindowDimensions, View } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 import { Card, Button } from '@/view/components';
 import { theme } from '@/view/theme';
 import type { RootNavigationProps } from '@/view/router';
@@ -23,7 +29,11 @@ function factory() {
           statusBarStyle="light"
           hasPadding={false}
         />
-                        <TouchableWithoutFeedback onPress={()=>{navigation.goBack()}}>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            navigation.goBack();
+          }}
+        >
           <View style={styles.background} />
         </TouchableWithoutFeedback>
         <Card style={[styles.card, { width }]}>
@@ -34,7 +44,7 @@ function factory() {
           <Button
             title="Set a Goal!"
             onPress={navigateToGoalScreen}
-            backgroundColor={theme.colors.primary}
+            backgroundColor={theme.colors.accent}
           />
         </Card>
       </View>
