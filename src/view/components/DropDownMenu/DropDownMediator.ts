@@ -98,7 +98,7 @@ class DropDownMediator {
     menuRectangle: LayoutRectangle,
     iconRectangle: LayoutRectangle
   ) {
-    this.touchOutHandler.handleFocus(menuRectangle);
+    this.touchOutHandler.handleFocus(menuRectangle, iconRectangle);
     this.parent?.handleMenuAndIconMeasured(menuRectangle, iconRectangle);
   }
 }

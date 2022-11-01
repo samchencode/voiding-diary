@@ -17,8 +17,8 @@ class DropDownTouchOutHandler {
     this.mediator = mediator;
   }
 
-  handleFocus(menuRectangle: LayoutRectangle) {
-    this.handler = this.makeHandler(menuRectangle);
+  handleFocus(menuRectangle: LayoutRectangle, iconRectangle?: LayoutRectangle) {
+    this.handler = this.makeHandler(menuRectangle, iconRectangle);
     this.touchOutHandler.addShouldCaptureHandler(this.handler);
   }
 
@@ -32,15 +32,44 @@ class DropDownTouchOutHandler {
     return this.handler !== null;
   }
 
-  private makeHandler({ pageX: x, pageY: y, width, height }: LayoutRectangle) {
-    const [xMin, yMin, xMax, yMax] = [x, y, x + width, y + height];
-    const [iXMin, iYMin, iXMax, iYMax] = [xMax - 48, y - 48, xMax, y];
+  private makeHandler(
+    {
+      pageX: menuX,
+      pageY: menuY,
+      width: menuWidth,
+      height: menuHeight,
+    }: LayoutRectangle,
+    icon?: LayoutRectangle
+  ) {
+    const [mXMin, mYMin, mXMax, mYMax] = [
+      menuX,
+      menuY,
+      menuX + menuWidth,
+      menuY + menuHeight,
+    ];
+    const iconOrDefault = icon ?? {
+      pageX: mXMax - 48,
+      pageY: menuY - 48,
+      width: 48,
+      height: 48,
+    };
+    const {
+      pageX: iconX,
+      pageY: iconY,
+      width: iconWidth,
+      height: iconHeight,
+    } = iconOrDefault;
+    const [iXMin, iYMin, iXMax, iYMax] = [
+      iconX,
+      iconY,
+      iconX + iconWidth,
+      iconY + iconHeight,
+    ];
 
     return (evt: GestureResponderEvent) => {
       const { pageX: touchX, pageY: touchY } = evt.nativeEvent;
       const isOutOfBounds =
-        touchX < xMin || touchX > xMax || touchY < yMin || touchY > yMax;
-      // TODO: Get this from icon measurement...
+        touchX < mXMin || touchX > mXMax || touchY < mYMin || touchY > mYMax;
       const isOutOfIconBounds =
         touchX < iXMin || touchX > iXMax || touchY < iYMin || touchY > iYMax;
       if (!isOutOfBounds || !isOutOfIconBounds) return false;
