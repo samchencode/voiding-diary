@@ -3,7 +3,10 @@ import type { View, TouchableOpacity } from 'react-native';
 import { DropDownBackHandler } from '@/view/components/DropDownMenu/DropDownBackHandler';
 import type { DropDownMenu } from '@/view/components/DropDownMenu/DropDownMenu';
 import { DropDownTouchOutHandler } from '@/view/components/DropDownMenu/DropDownTouchOutHandler';
-import type { LayoutRectangle } from '@/view/components/DropDownMenu/LayoutRectangle';
+import type {
+  LayoutRectangle,
+  LayoutRectangleWithoutPageCoordinates,
+} from '@/view/components/DropDownMenu/LayoutRectangle';
 import type { DropDownParent } from '@/view/components/DropDownMenu/DropDownParent';
 
 class DropDownMediator {
@@ -63,9 +66,6 @@ class DropDownMediator {
     if (this.backHandler && !this.backHandler.hasSubscription()) {
       this.backHandler.subscribe();
     }
-    this.viewRef?.current?.measure((x, y, width, height, pageX, pageY) => {
-      this.notifyVisibleMenuMeasured({ x, y, width, height, pageX, pageY });
-    });
   }
 
   notifyMenuInvisible() {
@@ -77,12 +77,12 @@ class DropDownMediator {
     }
   }
 
-  notifyVisibleMenuMeasured(menuRectangle: LayoutRectangle) {
-    if (!this.iconRef?.current) {
-      this.touchOutHandler.handleFocus(menuRectangle);
-    } else {
-      this.iconRef.current.measure((x, y, width, height, pageX, pageY) => {
-        this.notifyMenuAndIconMeasured(menuRectangle, {
+  notifyVisibleMenuLayout(
+    menuRectangle: LayoutRectangleWithoutPageCoordinates
+  ) {
+    if (this.parent && this.parent.isMenuPositionAbsolute()) {
+      this.iconRef?.current?.measure((x, y, width, height, pageX, pageY) => {
+        this.notifyMenuLayoutDoneIconMeasured(menuRectangle, {
           x,
           y,
           width,
@@ -91,7 +91,37 @@ class DropDownMediator {
           pageY,
         });
       });
+      // measure icon -> position menu -> measure menu -> touchoutFocus
+    } else {
+      this.viewRef?.current?.measure((x, y, width, height, pageX, pageY) => {
+        this.notifyVisibleMenuMeasured({ x, y, width, height, pageX, pageY });
+      });
     }
+  }
+
+  notifyVisibleMenuMeasured(menuRectangle: LayoutRectangle) {
+    this.touchOutHandler.handleFocus(menuRectangle);
+  }
+
+  notifyMenuLayoutDoneIconMeasured(
+    menuRectangle: LayoutRectangleWithoutPageCoordinates,
+    iconRectangle: LayoutRectangle
+  ) {
+    this.parent?.handleMenuLayoutDoneAndIconMeasured(
+      menuRectangle,
+      iconRectangle
+    );
+  }
+
+  notifyParentVisibleMenuTransformUpdated() {
+    this.viewRef?.current?.measure((x, y, width, height, pageX, pageY) => {
+      const menuRectangle = { x, y, width, height, pageX, pageY };
+      // eslint-disable-next-line @typescript-eslint/no-shadow
+      this.iconRef?.current?.measure((x, y, width, height, pageX, pageY) => {
+        const iconRectangle = { x, y, width, height, pageX, pageY };
+        this.notifyMenuAndIconMeasured(menuRectangle, iconRectangle);
+      });
+    });
   }
 
   notifyMenuAndIconMeasured(
@@ -99,7 +129,6 @@ class DropDownMediator {
     iconRectangle: LayoutRectangle
   ) {
     this.touchOutHandler.handleFocus(menuRectangle, iconRectangle);
-    this.parent?.handleMenuAndIconMeasured(menuRectangle, iconRectangle);
   }
 
   notifyMenuUnmount() {

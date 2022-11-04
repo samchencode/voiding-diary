@@ -1,10 +1,6 @@
 import React from 'react';
-import type {
-  StyleProp,
-  TouchableOpacity,
-  TransformsStyle,
-} from 'react-native';
-import { Dimensions, StyleSheet } from 'react-native';
+import type { TouchableOpacity } from 'react-native';
+import { Dimensions, StyleSheet, Animated } from 'react-native';
 import { theme } from '@/view/theme';
 import { IconButton } from '@/view/components/IconButton';
 import type { DropDownItemSpec } from '@/view/components/DropDownMenu';
@@ -23,7 +19,8 @@ type Props = {
 type State = {
   visible: boolean;
   transparent: boolean;
-  menuTransformStyle: StyleProp<TransformsStyle> | null;
+  menuTranslateX: number;
+  menuTranslateY: number;
 };
 
 const makeTransformsFromMenuAndIconMeasurements = (
@@ -40,10 +37,8 @@ const makeTransformsFromMenuAndIconMeasurements = (
   const iconYMax = iconY + iconHeight;
   const menuYMaxIsBelowWindow = iconYMax + menuHeight < screenHeight;
   return {
-    transform: [
-      { translateX: iconXMax - menuWidth },
-      { translateY: menuYMaxIsBelowWindow ? iconYMax : iconY - menuHeight },
-    ],
+    translateX: iconXMax - menuWidth,
+    translateY: menuYMaxIsBelowWindow ? iconYMax : iconY - menuHeight,
   };
 };
 
@@ -51,24 +46,62 @@ class RowDropDown
   extends React.Component<Props, State>
   implements DropDownParent
 {
-  iconRef: React.RefObject<TouchableOpacity>;
+  private iconRef: React.RefObject<TouchableOpacity>;
 
-  mediator?: DropDownMediator;
+  private mediator?: DropDownMediator;
 
   static defaultProps = {
     screenHeight: undefined,
+  };
+
+  private menuTransforms = {
+    translateX: new Animated.Value(0),
+    translateY: new Animated.Value(0),
   };
 
   constructor(props: Props) {
     super(props);
     this.state = {
       visible: false,
-      menuTransformStyle: null,
       transparent: false,
+      menuTranslateX: 0,
+      menuTranslateY: 0,
     };
     this.iconRef = React.createRef();
     this.handleToggle = this.handleToggle.bind(this);
     this.handleMenuRefCallback = this.handleMenuRefCallback.bind(this);
+  }
+
+  componentDidUpdate(
+    _prevProps: Readonly<Props>,
+    {
+      menuTranslateX: oldTranslateX,
+      menuTranslateY: oldTranslateY,
+    }: Readonly<State>
+  ): void {
+    const {
+      menuTranslateX: newTranslateX,
+      menuTranslateY: newTranslateY,
+      visible,
+    } = this.state;
+    if (!visible) return;
+    if (oldTranslateX !== newTranslateX || oldTranslateY !== newTranslateY) {
+      // need to notify mediator once menu translate is done
+      const { translateX, translateY } = this.menuTransforms;
+      const xAnim = Animated.timing(translateX, {
+        toValue: newTranslateX,
+        duration: 1,
+        useNativeDriver: true,
+      });
+      const yAnim = Animated.timing(translateY, {
+        toValue: newTranslateY,
+        duration: 1,
+        useNativeDriver: true,
+      });
+      Animated.parallel([xAnim, yAnim]).start(() => {
+        this.mediator?.notifyParentVisibleMenuTransformUpdated();
+      });
+    }
   }
 
   handleMenuRefCallback(menu: DropDownMenu | null): void {
@@ -77,17 +110,22 @@ class RowDropDown
   }
 
   // eslint-disable-next-line react/no-unused-class-component-methods
-  handleMenuAndIconMeasured(
+  handleMenuLayoutDoneAndIconMeasured(
     menuRectangle: LayoutRectangle,
     iconRectangle: LayoutRectangle
   ): void {
     const { screenHeight } = this.props;
-    const transforms = makeTransformsFromMenuAndIconMeasurements(
-      menuRectangle,
-      iconRectangle,
-      screenHeight
-    );
-    this.setState({ menuTransformStyle: transforms, transparent: false });
+    const { translateX, translateY } =
+      makeTransformsFromMenuAndIconMeasurements(
+        menuRectangle,
+        iconRectangle,
+        screenHeight
+      );
+    this.setState({
+      menuTranslateX: translateX,
+      menuTranslateY: translateY,
+      transparent: false,
+    });
   }
 
   private handleToggle() {
@@ -95,6 +133,13 @@ class RowDropDown
     const newState = !visible;
     this.setState({ visible: newState });
     if (newState === true) this.setState({ transparent: true });
+    if (newState === false)
+      this.setState({ menuTranslateX: 0, menuTranslateY: 0 });
+  }
+
+  // eslint-disable-next-line react/no-unused-class-component-methods
+  isMenuPositionAbsolute(): boolean {
+    return true;
   }
 
   private makeMenuOptionsTogglingVisible() {
@@ -110,7 +155,11 @@ class RowDropDown
 
   render() {
     const { id } = this.props;
-    const { visible, menuTransformStyle, transparent } = this.state;
+    const { visible, transparent } = this.state;
+    const { translateX, translateY } = this.menuTransforms;
+    const menuTransformStyle = {
+      transform: [{ translateX }, { translateY }],
+    };
 
     const options = this.makeMenuOptionsTogglingVisible();
 

@@ -2,10 +2,12 @@ import type { LayoutRectangle } from '@/view/components/DropDownMenu/LayoutRecta
 import type React from 'react';
 
 interface DropDownParent extends React.Component {
-  handleMenuAndIconMeasured(
-    menuRectangle: LayoutRectangle,
+  handleMenuLayoutDoneAndIconMeasured(
+    menuRectangle: Omit<LayoutRectangle, 'pageX' | 'pageY'>,
     iconRectangle: LayoutRectangle
   ): void;
+
+  isMenuPositionAbsolute(): boolean;
 }
 
 export type { DropDownParent };

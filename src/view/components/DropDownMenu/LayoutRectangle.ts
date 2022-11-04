@@ -6,3 +6,8 @@ export type LayoutRectangle = {
   width: number;
   height: number;
 };
+
+export type LayoutRectangleWithoutPageCoordinates = Omit<
+  LayoutRectangle,
+  'pageX' | 'pageY'
+>;

@@ -1,6 +1,11 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import type { StyleProp, ViewStyle } from 'react-native';
+import { StyleSheet, Animated } from 'react-native';
+import type {
+  StyleProp,
+  ViewStyle,
+  LayoutChangeEvent,
+  View,
+} from 'react-native';
 import { theme } from '@/view/theme';
 import { DropDownItem } from '@/view/components/DropDownMenu/DropDownItem';
 import { DropDownMediator } from '@/view/components/DropDownMenu/DropDownMediator';
@@ -16,7 +21,7 @@ type DropDownItemSpec = {
 type Props = {
   items: DropDownItemSpec[];
   visible: boolean;
-  style?: StyleProp<ViewStyle>;
+  style?: StyleProp<Animated.WithAnimatedValue<ViewStyle>>;
   onRequestDismiss?: () => void;
 };
 
@@ -29,8 +34,6 @@ class DropDownMenu extends React.PureComponent<Props, unknown> {
   private menuRef: React.RefObject<View>;
 
   private mediator: DropDownMediator;
-
-  private toDoOnLayout: (() => void)[] = [];
 
   constructor(props: Props) {
     super(props);
@@ -49,19 +52,16 @@ class DropDownMenu extends React.PureComponent<Props, unknown> {
   componentDidUpdate({ visible: prevVisible }: Readonly<Props>) {
     const { visible } = this.props;
     if (prevVisible && !visible) this.mediator.notifyMenuInvisible();
-    if (!prevVisible && visible) {
-      const fn = () => this.mediator.notifyMenuVisible();
-      this.toDoOnLayout.push(fn);
-    }
+    if (!prevVisible && visible) this.mediator.notifyMenuVisible();
   }
 
   componentWillUnmount(): void {
     this.mediator.notifyMenuUnmount();
   }
 
-  handleLayout() {
-    this.toDoOnLayout.forEach((fn) => fn());
-    this.toDoOnLayout = [];
+  handleLayout({ nativeEvent }: LayoutChangeEvent) {
+    const { visible } = this.props;
+    if (visible) this.mediator.notifyVisibleMenuLayout(nativeEvent.layout);
   }
 
   // eslint-disable-next-line react/no-unused-class-component-methods
@@ -74,7 +74,7 @@ class DropDownMenu extends React.PureComponent<Props, unknown> {
     const { items, visible, style } = this.props;
 
     return (
-      <View
+      <Animated.View
         style={[
           styles.container,
           { display: visible ? 'flex' : 'none' },
@@ -91,7 +91,7 @@ class DropDownMenu extends React.PureComponent<Props, unknown> {
             onPress={v.onPress}
           />
         ))}
-      </View>
+      </Animated.View>
     );
   }
 }
