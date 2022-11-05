@@ -18,6 +18,7 @@ import { RowRecordVisitor } from '@/view/components';
 import type { AppNavigationProps } from '@/view/router';
 import type { Observable } from '@/view/observables';
 import { Card } from '@/view/components/Card';
+import { PortalProvider } from '@/view/portal';
 
 export function factory(
   getAllRecordsAction: GetAllRecordsAction,
@@ -69,51 +70,53 @@ export function factory(
     }, []);
 
     return (
-      <View style={styles.container} onLayout={onLayout}>
-        <SectionList
-          contentContainerStyle={[
-            styles.listContainer,
-            sections.length === 0 && styles.emptyListContainer,
-          ]}
-          sections={sections}
-          renderItem={({ item }) =>
-            new RowRecordVisitor(item, {
-              makeIntakeRecordRow: (r) => (
-                <Card key={r.getId().getValue()} style={styles.card}>
-                  <IntakeRecordRow
-                    intakeRecord={r}
-                    onEdit={onEditIntakeRecord}
-                    onDelete={onDelete}
-                    id={r.getId().getValue()}
-                    screenHeight={screenHeight}
-                  />
-                </Card>
-              ),
-              makeVoidRecordRow: (r) => (
-                <Card key={r.getId().getValue()} style={styles.card}>
-                  <VoidRecordRow
-                    voidRecord={r}
-                    onEdit={onEditVoidRecord}
-                    onDelete={onDelete}
-                    id={r.getId().getValue()}
-                    screenHeight={screenHeight}
-                  />
-                </Card>
-              ),
-            }).getElement()
-          }
-          renderSectionHeader={({ section }) => (
-            <RecordSectionHeader
-              date={section.title}
-              style={styles.sectionHeader}
-            />
-          )}
-          keyExtractor={(record) => record.getId().getValue()}
-          ListHeaderComponent={<ListHeader />}
-          ListEmptyComponent={ListEmpty}
-          CellRendererComponent={CellRenderer}
-        />
-      </View>
+      <PortalProvider>
+        <View style={styles.container} onLayout={onLayout}>
+          <SectionList
+            contentContainerStyle={[
+              styles.listContainer,
+              sections.length === 0 && styles.emptyListContainer,
+            ]}
+            sections={sections}
+            renderItem={({ item }) =>
+              new RowRecordVisitor(item, {
+                makeIntakeRecordRow: (r) => (
+                  <Card key={r.getId().getValue()} style={styles.card}>
+                    <IntakeRecordRow
+                      intakeRecord={r}
+                      onEdit={onEditIntakeRecord}
+                      onDelete={onDelete}
+                      id={r.getId().getValue()}
+                      screenHeight={screenHeight}
+                    />
+                  </Card>
+                ),
+                makeVoidRecordRow: (r) => (
+                  <Card key={r.getId().getValue()} style={styles.card}>
+                    <VoidRecordRow
+                      voidRecord={r}
+                      onEdit={onEditVoidRecord}
+                      onDelete={onDelete}
+                      id={r.getId().getValue()}
+                      screenHeight={screenHeight}
+                    />
+                  </Card>
+                ),
+              }).getElement()
+            }
+            renderSectionHeader={({ section }) => (
+              <RecordSectionHeader
+                date={section.title}
+                style={styles.sectionHeader}
+              />
+            )}
+            keyExtractor={(record) => record.getId().getValue()}
+            ListHeaderComponent={<ListHeader />}
+            ListEmptyComponent={ListEmpty}
+            CellRendererComponent={CellRenderer}
+          />
+        </View>
+      </PortalProvider>
     );
   };
 }

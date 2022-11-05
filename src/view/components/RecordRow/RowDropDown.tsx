@@ -90,12 +90,12 @@ class RowDropDown
       const { translateX, translateY } = this.menuTransforms;
       const xAnim = Animated.timing(translateX, {
         toValue: newTranslateX,
-        duration: 1,
+        duration: 20,
         useNativeDriver: true,
       });
       const yAnim = Animated.timing(translateY, {
         toValue: newTranslateY,
-        duration: 1,
+        duration: 20,
         useNativeDriver: true,
       });
       Animated.parallel([xAnim, yAnim]).start(() => {
@@ -171,7 +171,7 @@ class RowDropDown
           color={theme.colors.dark}
           ref={this.iconRef}
         />
-        <Portal id={`RecordRow.RowDropDown-${id}`}>
+        <Portal id={`RowDropDown-${id}`}>
           <DropDownMenu
             ref={this.handleMenuRefCallback}
             items={options}
