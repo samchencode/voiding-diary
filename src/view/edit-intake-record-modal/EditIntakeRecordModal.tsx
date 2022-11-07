@@ -61,12 +61,15 @@ function factory(
     }, [navigation]);
 
     const updateRecord = async () => {
-      // new UnknownVolume()
       const r = new IntakeRecord(dateAndTime, new VolumeInOz(volume));
       await updateRecordAction.execute(id, r);
       recordsStaleObservable.notifySubscribers();
       navigateToRecordScreen();
     };
+
+    const goBack = useCallback(() => {
+      navigation.goBack();
+    }, [navigation]);
 
     return (
       <View style={styles.container}>
@@ -106,7 +109,20 @@ function factory(
             onConfirm={handleConfirmDate}
             onCancel={hideDatePicker}
           />
-          <Button.Success title="Update Record" onPress={updateRecord} />
+          <View style={styles.buttonGroup}>
+            <Button
+              title="Back"
+              onPress={goBack}
+              backgroundColor={theme.colors.gray}
+              style={styles.button}
+            />
+            <Button
+              title="Update"
+              onPress={updateRecord}
+              backgroundColor={theme.colors.accent}
+              style={styles.button}
+            />
+          </View>
         </Card>
       </View>
     );
@@ -152,6 +168,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     marginBottom: theme.spaces.sm,
+  },
+  buttonGroup: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  button: {
+    flex: 1,
+    marginLeft: theme.spaces.xs,
+    marginRight: theme.spaces.xs,
   },
 });
 

@@ -1,7 +1,7 @@
 import type { Record } from '@/domain/models/Record';
 import { IntakeRecord } from '@/domain/models/Record';
 import type { SaveRecordAction } from '@/application/SaveRecordAction';
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { SizeOption, Card, Button } from '@/view/components';
 import {
   TextInput,
@@ -40,11 +40,11 @@ function factory(
     const [beverage, setBeverage] = useState('');
     const [size, setSize] = useState(0);
 
-    function submitIntakeRecord(amount: number) {
-      handleNewRecord(makeIntake(amount));
-
+    const goBack = useCallback(() => navigation.goBack(), [navigation]);
+    const submit = useCallback(() => {
+      handleNewRecord(makeIntake(size));
       navigation.navigate('Home');
-    }
+    }, [navigation, size]);
 
     return (
       <View style={styles.container}>
@@ -76,13 +76,20 @@ function factory(
             <SizeOption title="16oz" size={16} setSize={setSize} />
             <IntakeInput value={size} onChangeNumber={setSize} />
           </View>
-          <Button
-            onPress={() => {
-              submitIntakeRecord(size);
-            }}
-            title="Add"
-            backgroundColor={theme.colors.accent}
-          />
+          <View style={styles.buttonGroup}>
+            <Button
+              onPress={goBack}
+              title="Back"
+              backgroundColor={theme.colors.gray}
+              style={styles.button}
+            />
+            <Button
+              onPress={submit}
+              title="Add"
+              backgroundColor={theme.colors.accent}
+              style={styles.button}
+            />
+          </View>
         </Card>
       </View>
     );
@@ -131,6 +138,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     ...theme.fonts.sm,
     marginBottom: theme.spaces.sm,
+  },
+  buttonGroup: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  button: {
+    flex: 1,
+    marginLeft: theme.spaces.xs,
+    marginRight: theme.spaces.xs,
   },
 });
 

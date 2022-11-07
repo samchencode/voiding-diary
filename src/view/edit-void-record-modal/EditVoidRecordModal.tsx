@@ -53,6 +53,10 @@ function factory(
       navigateToRecordScreen();
     };
 
+    const goBack = useCallback(() => {
+      navigation.goBack();
+    }, [navigation]);
+
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
     const showDatePicker = () => {
@@ -105,7 +109,20 @@ function factory(
             onConfirm={handleConfirmDate}
             onCancel={hideDatePicker}
           />
-          <Button.Success title="Confirm" onPress={updateRecord} />
+          <View style={styles.buttonGroup}>
+            <Button
+              title="Back"
+              onPress={goBack}
+              backgroundColor={theme.colors.gray}
+              style={styles.button}
+            />
+            <Button
+              title="Confirm"
+              onPress={updateRecord}
+              backgroundColor={theme.colors.accent}
+              style={styles.button}
+            />
+          </View>
         </Card>
       </View>
     );
@@ -151,6 +168,15 @@ const styles = StyleSheet.create({
   },
   sizeText: {
     ...theme.fonts.md,
+  },
+  buttonGroup: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  button: {
+    flex: 1,
+    marginLeft: theme.spaces.xs,
+    marginRight: theme.spaces.xs,
   },
 });
 

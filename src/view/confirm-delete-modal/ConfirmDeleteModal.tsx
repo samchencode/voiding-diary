@@ -18,14 +18,18 @@ function factory(
     navigation,
     route,
   }: ConfirmDeleteModalProps) {
-    async function deleteRecord() {
+    const navigateToRecordScreen = useCallback(() => {
+      navigation.navigate('App', { screen: 'Record' });
+    }, [navigation]);
+
+    const deleteRecord = useCallback(async () => {
       await deleteRecordAction.execute(route.params.id);
       recordsStaleObservable.notifySubscribers();
       navigateToRecordScreen();
-    }
+    }, [navigateToRecordScreen, route.params.id]);
 
-    const navigateToRecordScreen = useCallback(() => {
-      navigation.navigate('App', { screen: 'Record' });
+    const goBack = useCallback(() => {
+      navigation.goBack();
     }, [navigation]);
 
     return (
@@ -46,13 +50,20 @@ function factory(
           <Text style={styles.title}>
             Are you sure you would like to delete?
           </Text>
-
-          <Button.Danger
-            title="Confirm Delete"
-            onPress={() => {
-              deleteRecord();
-            }}
-          />
+          <View style={styles.buttonGroup}>
+            <Button
+              title="Back"
+              onPress={goBack}
+              backgroundColor={theme.colors.gray}
+              style={styles.button}
+            />
+            <Button
+              title="Delete"
+              onPress={deleteRecord}
+              backgroundColor={theme.colors.danger}
+              style={styles.button}
+            />
+          </View>
         </Card>
       </View>
     );
@@ -82,6 +93,15 @@ const styles = StyleSheet.create({
   title: {
     ...theme.fonts.lg,
     marginBottom: theme.spaces.sm,
+  },
+  buttonGroup: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  button: {
+    flex: 1,
+    marginLeft: theme.spaces.xs,
+    marginRight: theme.spaces.xs,
   },
 });
 
