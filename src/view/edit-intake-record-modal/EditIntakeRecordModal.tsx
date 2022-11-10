@@ -1,23 +1,18 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import {
   StyleSheet,
   Text,
-  TouchableOpacity,
   TouchableWithoutFeedback,
   useWindowDimensions,
   View,
 } from 'react-native';
-import { Card, Button, VolumeInputGroup } from '@/view/components';
+import { Card, Button } from '@/view/components';
 import { theme } from '@/view/theme';
 import type { RootNavigationProps } from '@/view/router';
-import { IntakeRecord } from '@/domain/models/Record';
-
 import type { UpdateRecordAction } from '@/application/UpdateRecordAction';
-import { DateAndTime } from '@/domain/models/DateAndTime';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import type { Observable } from '@/view/observables';
-
 import { StatusBar } from '@/view/status-bar';
+import { IntakeRecordInputGroup } from '@/view/edit-intake-record-modal/components';
 
 type EditIntakeRecordModalProps = RootNavigationProps<'EditIntakeRecordModal'>;
 
@@ -29,45 +24,29 @@ function factory(
     navigation,
     route,
   }: EditIntakeRecordModalProps) {
-    const { intakeRecord } = route.params;
     const { width: screenWidth } = useWindowDimensions();
     const width = Math.min(screenWidth - theme.spaces.lg * 2, 400);
 
-    const [dateAndTime, setDateAndTime] = useState(
-      route.params.intakeRecord.getDateAndTime()
+    const { intakeRecord: initialIntakeRecord } = route.params;
+    const navigateToRecordScreen = useCallback(
+      () => navigation.navigate('App', { screen: 'Record' }),
+      [navigation]
     );
-    const [volume, setVolume] = useState(intakeRecord.getIntakeVolume());
 
-    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+    const id = useMemo(
+      () => initialIntakeRecord.getId(),
+      [initialIntakeRecord]
+    );
 
-    const showDatePicker = () => {
-      setDatePickerVisibility(true);
-    };
+    const [intakeRecord, setIntakeRecord] = useState(initialIntakeRecord);
 
-    const hideDatePicker = () => {
-      setDatePickerVisibility(false);
-    };
-
-    const handleConfirmDate = (date: Date) => {
-      setDateAndTime(new DateAndTime(date));
-      hideDatePicker();
-    };
-    const id = intakeRecord.getId();
-
-    const navigateToRecordScreen = useCallback(() => {
-      navigation.navigate('App', { screen: 'Record' });
-    }, [navigation]);
-
-    const updateRecord = async () => {
-      const r = new IntakeRecord(dateAndTime, volume);
-      await updateRecordAction.execute(id, r);
+    const updateRecord = useCallback(async () => {
+      await updateRecordAction.execute(id, intakeRecord);
       recordsStaleObservable.notifySubscribers();
       navigateToRecordScreen();
-    };
+    }, [id, intakeRecord, navigateToRecordScreen]);
 
-    const goBack = useCallback(() => {
-      navigation.goBack();
-    }, [navigation]);
+    const goBack = useCallback(() => navigation.goBack(), [navigation]);
 
     return (
       <View style={styles.container}>
@@ -85,29 +64,9 @@ function factory(
         </TouchableWithoutFeedback>
         <Card style={[styles.card, { width }]}>
           <Text style={styles.title}>Edit Record</Text>
-          <View style={styles.field}>
-            <Text style={styles.subtitle}>Size</Text>
-            <VolumeInputGroup
-              value={volume}
-              style={styles.volumeInputGroup}
-              onChangeValue={setVolume}
-            />
-          </View>
-          <View style={styles.field}>
-            <Text style={styles.subtitle}>Date</Text>
-            <TouchableOpacity onPress={showDatePicker}>
-              <Text style={styles.dateField}>
-                <Text>{dateAndTime.getDateString()} </Text>
-                <Text>{dateAndTime.getTimeString()} </Text>
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <DateTimePickerModal
-            isVisible={isDatePickerVisible}
-            mode="datetime"
-            date={dateAndTime.getDate()}
-            onConfirm={handleConfirmDate}
-            onCancel={hideDatePicker}
+          <IntakeRecordInputGroup
+            intakeRecord={intakeRecord}
+            onChangeRecord={setIntakeRecord}
           />
           <View style={styles.buttonGroup}>
             <Button
@@ -153,20 +112,12 @@ const styles = StyleSheet.create({
     ...theme.fonts.lg,
     marginBottom: theme.spaces.sm,
   },
-  subtitle: {
-    ...theme.fonts.sm,
+  field: {
+    marginBottom: theme.spaces.sm,
   },
-  dateField: {
-    ...theme.fonts.sm,
-    color: theme.colors.accent,
-  },
-  volumeInputGroup: {},
   buttonGroup: {
     display: 'flex',
     flexDirection: 'row',
-  },
-  field: {
-    marginBottom: theme.spaces.sm,
   },
   button: {
     flex: 1,
