@@ -36,13 +36,13 @@ export function factory(
 
     const onEditVoidRecord = useCallback(
       (voidRecord: VoidRecord) => {
-        navigation.navigate('EditVoidRecordModal', { voidRecord });
+        navigation.navigate('EditRecordModal', { record: voidRecord });
       },
       [navigation]
     );
     const onEditIntakeRecord = useCallback(
       (intakeRecord: IntakeRecord) => {
-        navigation.navigate('EditIntakeRecordModal', { intakeRecord });
+        navigation.navigate('EditRecordModal', { record: intakeRecord });
       },
       [navigation]
     );

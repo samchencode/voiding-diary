@@ -19,18 +19,13 @@ import type { Type as TestScreen } from '@/view/test-screen';
 import type { Type as AboutUsModal } from '@/view/about-us-modal';
 import type { Type as AttributionsModal } from '@/view/attributions-modal';
 import type { Type as NoGoalModal } from '@/view/no-goal-modal';
-import type { Type as EditIntakeRecordModal } from '@/view/edit-intake-record-modal';
-import type { Type as EditVoidRecordModal } from '@/view/edit-void-record-modal';
+import type { Type as EditRecordModal } from '@/view/edit-record-modal';
 import type { Type as RecordIntakeModal } from '@/view/record-intake-modal';
 import type { Type as ConfirmDeleteModal } from '@/view/confirm-delete-modal';
 import type { Type as TopBar } from '@/view/top-bar';
 import { makeIcon } from '@/view/router/makeIcon';
 import { theme } from '@/view/theme';
-import type {
-  IntakeRecord,
-  RecordId,
-  VoidRecord,
-} from '@/domain/models/Record';
+import type { RecordId, Record } from '@/domain/models/Record';
 import type { Environment } from '@/env';
 
 const GoalIcon = makeIcon('bullseye');
@@ -50,8 +45,7 @@ type RootNavigationParams = {
   AboutUsModal: undefined;
   AttributionsModal: undefined;
   NoGoalModal: undefined;
-  EditIntakeRecordModal: { intakeRecord: IntakeRecord };
-  EditVoidRecordModal: { voidRecord: VoidRecord };
+  EditRecordModal: { record: Record };
   RecordIntakeModal: undefined;
   ConfirmDeleteModal: { id: RecordId };
 };
@@ -66,8 +60,7 @@ function factory(
   AboutUsModal: AboutUsModal,
   AttributionsModal: AttributionsModal,
   NoGoalModal: NoGoalModal,
-  EditIntakeRecordModal: EditIntakeRecordModal,
-  EditVoidRecordModal: EditVoidRecordModal,
+  EditRecordModal: EditRecordModal,
   RecordIntakeModal: RecordIntakeModal,
   ConfirmDeleteModal: ConfirmDeleteModal,
   TestScreen: TestScreen,
@@ -161,13 +154,8 @@ function factory(
           options={{ presentation: 'transparentModal' }}
         />
         <Stack.Screen
-          name="EditIntakeRecordModal"
-          component={EditIntakeRecordModal}
-          options={{ presentation: 'transparentModal' }}
-        />
-        <Stack.Screen
-          name="EditVoidRecordModal"
-          component={EditVoidRecordModal}
+          name="EditRecordModal"
+          component={EditRecordModal}
           options={{ presentation: 'transparentModal' }}
         />
         <Stack.Screen

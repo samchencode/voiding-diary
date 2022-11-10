@@ -6,8 +6,7 @@ import { factory as GoalScreen } from '@/view/goal-screen';
 import { factory as RecordScreen } from '@/view/record-screen';
 import { factory as TestScreen } from '@/view/test-screen';
 import { factory as NoGoalModal } from '@/view/no-goal-modal';
-import { factory as EditIntakeRecordModal } from '@/view/edit-intake-record-modal';
-import { factory as EditVoidRecordModal } from '@/view/edit-void-record-modal';
+import { factory as EditRecordModal } from '@/view/edit-record-modal';
 import { factory as RecordIntakeModal } from '@/view/record-intake-modal';
 import { factory as AboutUsModal } from '@/view/about-us-modal';
 import { factory as AttributionsModal } from '@/view/attributions-modal';
@@ -82,8 +81,7 @@ export const module = {
   RecordScreen: ['factory', RecordScreen],
   TestScreen: ['factory', TestScreen],
   NoGoalModal: ['factory', NoGoalModal],
-  EditVoidRecordModal: ['factory', EditVoidRecordModal],
-  EditIntakeRecordModal: ['factory', EditIntakeRecordModal],
+  EditRecordModal: ['factory', EditRecordModal],
   ConfirmDeleteModal: ['factory', ConfirmDeleteModal],
   RecordIntakeModal: ['factory', RecordIntakeModal],
   AboutUsModal: ['factory', AboutUsModal],

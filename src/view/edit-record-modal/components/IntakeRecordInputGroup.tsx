@@ -1,15 +1,16 @@
 import React, { useCallback, useMemo } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { VolumeInputGroup } from '@/view/components';
+import type { Record } from '@/domain/models/Record';
 import { IntakeRecord } from '@/domain/models/Record';
 import { theme } from '@/view/theme';
 import type { Volume } from '@/domain/models/Volume';
-import { DateTimePicker } from '@/view/edit-intake-record-modal/components/DateTimePicker';
+import { DateTimePicker } from '@/view/edit-record-modal/components/DateTimePicker';
 import type { DateAndTime } from '@/domain/models/DateAndTime';
 
 type IntakeRecordInputGroupProps = {
   intakeRecord: IntakeRecord;
-  onChangeRecord: (r: IntakeRecord) => void;
+  onChangeRecord: (r: Record) => void;
 };
 
 function IntakeRecordInputGroup({
