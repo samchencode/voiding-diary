@@ -62,14 +62,14 @@ function factory(
         </TouchableWithoutFeedback>
         <Card style={styles.card}>
           <Text style={styles.title}>+Intake</Text>
-          <Text style={styles.subTitle}>Beverage</Text>
+          <Text style={styles.subtitle}>Beverage</Text>
           <TextInput
             style={styles.textInput}
             placeholder="Water"
             onChangeText={(newText) => setBeverage(newText)}
             defaultValue={beverage}
           />
-          <Text style={styles.subTitle}>Size</Text>
+          <Text style={styles.subtitle}>Size</Text>
           <VolumeInputGroup
             style={styles.volumeInputGroup}
             value={volume}
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     ...theme.fonts.lg,
     marginTop: -6,
   },
-  subTitle: {
+  subtitle: {
     ...theme.fonts.sm,
   },
   textInput: {
