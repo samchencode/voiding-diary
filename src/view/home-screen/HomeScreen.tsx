@@ -11,7 +11,8 @@ import {
 import { StatusBar } from '@/view/status-bar';
 import type { SaveRecordAction } from '@/application/SaveRecordAction';
 import { DateAndTime } from '@/domain/models/DateAndTime';
-import { UnknownVolume } from '@/domain/models/Volume';
+import type { Volume } from '@/domain/models/Volume';
+import { UnknownVolume, VolumeInOz } from '@/domain/models/Volume';
 import type { Record } from '@/domain/models/Record';
 import { IntakeRecord, VoidRecord } from '@/domain/models/Record';
 import type { GetTodaysRecordsAction } from '@/application/GetTodaysRecordsAction';
@@ -85,10 +86,19 @@ function factory(
       });
     }, []);
 
+    function isIntakeRecord(r: Record): r is IntakeRecord {
+      return r instanceof IntakeRecord;
+    }
+
+    function isVolumeInOz(v: Volume): v is VolumeInOz {
+      return v instanceof VolumeInOz;
+    }
+
     const totalIntake = records
-      .filter((r) => r instanceof IntakeRecord)
-      .map((r) => r as IntakeRecord)
-      .reduce((ag, v: IntakeRecord) => v.getIntakeVolume().getValue() + ag, 0);
+      .filter<IntakeRecord>(isIntakeRecord)
+      .map<Volume>((r: IntakeRecord) => r.getIntakeVolume())
+      .filter<VolumeInOz>(isVolumeInOz)
+      .reduce((ag, v: VolumeInOz) => v.getValue() + ag, 0);
 
     return (
       <SplitColorBackground

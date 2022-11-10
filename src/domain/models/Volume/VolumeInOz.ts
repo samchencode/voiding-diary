@@ -9,6 +9,14 @@ class VolumeInOz implements Volume {
     this.oz = ounces;
   }
 
+  getValueString(): string {
+    return this.oz.toString();
+  }
+
+  getUnitString(): string {
+    return 'oz';
+  }
+
   is(value: Volume): boolean {
     if (!(value instanceof VolumeInOz)) return false;
     return this.oz === value.getValue();
@@ -23,7 +31,7 @@ class VolumeInOz implements Volume {
   }
 
   toString() {
-    return `${this.oz} oz`;
+    return `${this.getValueString()} ${this.getUnitString()}`;
   }
 }
 

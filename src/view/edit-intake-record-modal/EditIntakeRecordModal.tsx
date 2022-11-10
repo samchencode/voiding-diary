@@ -37,7 +37,7 @@ function factory(
       route.params.intakeRecord.getDateAndTime()
     );
     const [volume, setVolume] = useState(
-      route.params.intakeRecord.getIntakeVolume().valueOf()
+      route.params.intakeRecord.getIntakeVolume().valueOf() // FIXME: valueof is -1 if value is unknown...
     );
 
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);

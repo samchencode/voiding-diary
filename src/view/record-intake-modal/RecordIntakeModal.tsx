@@ -2,7 +2,7 @@ import type { Record } from '@/domain/models/Record';
 import { IntakeRecord } from '@/domain/models/Record';
 import type { SaveRecordAction } from '@/application/SaveRecordAction';
 import React, { useState, useCallback } from 'react';
-import { SizeOption, Card, Button } from '@/view/components';
+import { Card, Button } from '@/view/components';
 import {
   TextInput,
   View,
@@ -13,11 +13,12 @@ import {
 import { theme } from '@/view/theme';
 import type { RootNavigationProps } from '@/view/router';
 import { DateAndTime } from '@/domain/models/DateAndTime';
-import { VolumeInOz } from '@/domain/models/Volume';
+import type { Volume } from '@/domain/models/Volume';
+import { UnknownVolume } from '@/domain/models/Volume';
 import type { Observable } from '@/view/observables';
 
 import { StatusBar } from '@/view/status-bar';
-import { IntakeInput } from '@/view/goal-screen/components';
+import { VolumeInputGroup } from '@/view/components/VolumeInputGroup';
 
 type RecordIntakeModalProps = RootNavigationProps<'RecordIntakeModal'>;
 
@@ -30,21 +31,20 @@ function factory(
     recordsStaleObservable.notifySubscribers();
   }
 
-  const makeIntake = (amount: number) => {
+  const makeIntake = (volume: Volume) => {
     const datetime = new DateAndTime(new Date());
-    const volume = new VolumeInOz(amount);
     return new IntakeRecord(datetime, volume);
   };
 
   return function RecordIntakeModal({ navigation }: RecordIntakeModalProps) {
     const [beverage, setBeverage] = useState('');
-    const [size, setSize] = useState(0);
+    const [volume, setVolume] = useState<Volume>(new UnknownVolume());
 
     const goBack = useCallback(() => navigation.goBack(), [navigation]);
     const submit = useCallback(() => {
-      handleNewRecord(makeIntake(size));
+      handleNewRecord(makeIntake(volume));
       navigation.navigate('Home');
-    }, [navigation, size]);
+    }, [navigation, volume]);
 
     return (
       <View style={styles.container}>
@@ -70,12 +70,11 @@ function factory(
             defaultValue={beverage}
           />
           <Text style={styles.subTitle}>Size</Text>
-          <View style={styles.rowOfSizes}>
-            <SizeOption title="8oz" size={8} setSize={setSize} />
-            <SizeOption title="10oz" size={10} setSize={setSize} />
-            <SizeOption title="16oz" size={16} setSize={setSize} />
-            <IntakeInput value={size} onChangeNumber={setSize} />
-          </View>
+          <VolumeInputGroup
+            style={styles.volumeInputGroup}
+            value={volume}
+            onChangeValue={setVolume}
+          />
           <View style={styles.buttonGroup}>
             <Button
               onPress={goBack}
@@ -133,10 +132,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     marginBottom: 5,
   },
-  rowOfSizes: {
-    display: 'flex',
-    flexDirection: 'row',
-    ...theme.fonts.sm,
+  volumeInputGroup: {
     marginBottom: theme.spaces.sm,
   },
   buttonGroup: {

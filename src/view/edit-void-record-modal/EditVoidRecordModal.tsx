@@ -38,7 +38,7 @@ function factory(
       route.params.voidRecord.getDateAndTime()
     );
     const [volume, setVolume] = useState(
-      route.params.voidRecord.getUrineVolume().valueOf()
+      route.params.voidRecord.getUrineVolume().valueOf() // FIXME: -1
     );
     const id = route.params.voidRecord.getId();
 

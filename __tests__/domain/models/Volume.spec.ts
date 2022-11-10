@@ -74,5 +74,19 @@ describe('Volume', () => {
       expect(+vol).toBe(8);
       expect(Number(vol)).toBe(8);
     });
+
+    it('should get the value as a string without units', () => {
+      const volOz = new VolumeInOz(8);
+      expect(volOz.getValueString()).toBe('8');
+      const volUnk = new UnknownVolume();
+      expect(volUnk.getValueString()).toBe('');
+    });
+
+    it('should get the unit as a string', () => {
+      const volOz = new VolumeInOz(9);
+      expect(volOz.getUnitString()).toBe('oz');
+      const volUnk = new UnknownVolume();
+      expect(volUnk.getUnitString()).toBe('');
+    });
   });
 });
