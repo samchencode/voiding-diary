@@ -11,6 +11,7 @@ import { factory as RecordIntakeModal } from '@/view/record-intake-modal';
 import { factory as AboutUsModal } from '@/view/about-us-modal';
 import { factory as AttributionsModal } from '@/view/attributions-modal';
 import { factory as ConfirmDeleteModal } from '@/view/confirm-delete-modal';
+import { GetRecordByIdAction } from '@/application/GetRecordByIdAction';
 import { GetAllRecordsAction } from '@/application/GetAllRecordsAction';
 import { GetGoalAction } from '@/application/GetGoalAction';
 import { expoSqliteDatabaseFactory } from '@/infrastructure/persistence/expo-sqlite/expoSqliteDatabaseFactory';
@@ -41,6 +42,7 @@ import {
 
 export const module = {
   // APPLICATION SERVICES
+  getRecordByIdAction: ['type', GetRecordByIdAction],
   getAllRecordsAction: ['type', GetAllRecordsAction],
   getTodaysRecordsAction: ['type', GetTodaysRecordsAction],
   saveRecordAction: ['type', SaveRecordAction],

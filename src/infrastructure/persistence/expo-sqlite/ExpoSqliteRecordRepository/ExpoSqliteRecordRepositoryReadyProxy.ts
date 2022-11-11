@@ -18,6 +18,11 @@ class ExpoSqliteRecordRepositoryReadyProxy implements RecordRepository {
     });
   }
 
+  async getById(id: RecordId): Promise<Record> {
+    await this.ready;
+    return this.repo.getById(id);
+  }
+
   async getAll(): Promise<Record[]> {
     await this.ready;
     return this.repo.getAll();

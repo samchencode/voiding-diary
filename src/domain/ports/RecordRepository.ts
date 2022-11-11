@@ -1,6 +1,7 @@
 import type { Record, RecordId } from '@/domain/models/Record';
 
 interface RecordRepository {
+  getById(id: RecordId): Promise<Record>;
   getAll(): Promise<Record[]>;
   getByDateInterval(startDate: Date, endDate: Date): Promise<Record[]>;
   getByLimitAndOffset(limit: number, offset: number): Promise<Record[]>;

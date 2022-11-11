@@ -1,10 +1,19 @@
-import type { Record, RecordId } from '@/domain/models/Record';
+import { RecordId } from '@/domain/models/Record';
+import type { Record } from '@/domain/models/Record';
 import type { RecordRepository } from '@/domain/ports/RecordRepository';
 import { hydrateRowSerializedRecord } from '@/domain/services/hydrateRecord';
 import { mockData } from '@/infrastructure/persistence/fake/mockData';
 
 class FakeRecordRepository implements RecordRepository {
   mockData = mockData.slice();
+
+  async getById(id: RecordId): Promise<Record> {
+    const datum = this.mockData.find((d) => id.is(new RecordId(d.id)));
+    if (!datum) throw new Error(`Record with id: ${id} not found`);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    return hydrateRowSerializedRecord(datum);
+  }
 
   async getAll(): Promise<Record[]> {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment

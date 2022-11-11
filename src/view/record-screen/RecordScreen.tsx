@@ -36,19 +36,25 @@ export function factory(
 
     const onEditVoidRecord = useCallback(
       (voidRecord: VoidRecord) => {
-        navigation.navigate('EditRecordModal', { record: voidRecord });
+        navigation.navigate('EditRecordModal', {
+          recordId: voidRecord.getId().toString(),
+        });
       },
       [navigation]
     );
     const onEditIntakeRecord = useCallback(
       (intakeRecord: IntakeRecord) => {
-        navigation.navigate('EditRecordModal', { record: intakeRecord });
+        navigation.navigate('EditRecordModal', {
+          recordId: intakeRecord.getId().toString(),
+        });
       },
       [navigation]
     );
     const onDelete = useCallback(
       (record: Record) => {
-        navigation.navigate('ConfirmDeleteModal', { id: record.getId() });
+        navigation.navigate('ConfirmDeleteModal', {
+          recordId: record.getId().toString(),
+        });
       },
       [navigation]
     );

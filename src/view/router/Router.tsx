@@ -25,7 +25,6 @@ import type { Type as ConfirmDeleteModal } from '@/view/confirm-delete-modal';
 import type { Type as TopBar } from '@/view/top-bar';
 import { makeIcon } from '@/view/router/makeIcon';
 import { theme } from '@/view/theme';
-import type { RecordId, Record } from '@/domain/models/Record';
 import type { Environment } from '@/env';
 
 const GoalIcon = makeIcon('bullseye');
@@ -45,9 +44,9 @@ type RootNavigationParams = {
   AboutUsModal: undefined;
   AttributionsModal: undefined;
   NoGoalModal: undefined;
-  EditRecordModal: { record: Record };
+  EditRecordModal: { recordId: string };
   RecordIntakeModal: undefined;
-  ConfirmDeleteModal: { id: RecordId };
+  ConfirmDeleteModal: { recordId: string };
 };
 
 const Tab = createBottomTabNavigator<AppNavigationParams>();

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,14 +9,18 @@ import {
 import { Card, Button } from '@/view/components';
 import { theme } from '@/view/theme';
 import type { RootNavigationProps } from '@/view/router';
+import type { GetRecordByIdAction } from '@/application/GetRecordByIdAction';
 import type { UpdateRecordAction } from '@/application/UpdateRecordAction';
 import type { Observable } from '@/view/observables';
 import { StatusBar } from '@/view/status-bar';
 import { EditRecordInputVisitor } from '@/view/edit-record-modal/EditRecordInputVisitor';
+import type { Record } from '@/domain/models/Record';
+import { RecordId } from '@/domain/models/Record';
 
 type EditRecordModalProps = RootNavigationProps<'EditRecordModal'>;
 
 function factory(
+  getRecordByIdAction: GetRecordByIdAction,
   updateRecordAction: UpdateRecordAction,
   recordsStaleObservable: Observable
 ) {
@@ -26,20 +30,31 @@ function factory(
 
     const goBack = useCallback(() => navigation.goBack(), [navigation]);
 
-    const { record: initialRecord } = route.params;
-    const id = useMemo(() => initialRecord.getId(), [initialRecord]);
-    const [record, setRecord] = useState(initialRecord);
+    const { recordId } = route.params;
+    const [initialRecord, setInitialRecord] = useState<Record | null>(null);
+
+    useEffect(() => {
+      getRecordByIdAction.execute(new RecordId(recordId)).then((r) => {
+        setInitialRecord(r);
+        setRecord(r);
+      });
+    }, [recordId]);
+
+    const id = useMemo(() => initialRecord?.getId(), [initialRecord]);
+    const [record, setRecord] = useState<Record | null>(null);
 
     const updateRecord = useCallback(async () => {
+      if (!id || !record) return;
       await updateRecordAction.execute(id, record);
       recordsStaleObservable.notifySubscribers();
       navigation.navigate('App', { screen: 'Record' });
     }, [id, record, navigation]);
 
-    const visitor = useMemo(
-      () => new EditRecordInputVisitor(record, setRecord),
-      [record]
-    );
+    const recordInputGroup = useMemo(() => {
+      if (!record) return null;
+      const visitor = new EditRecordInputVisitor(record, setRecord);
+      return visitor.getElement();
+    }, [record]);
 
     return (
       <View style={styles.container}>
@@ -53,7 +68,7 @@ function factory(
         </TouchableWithoutFeedback>
         <Card style={[styles.card, { width }]}>
           <Text style={styles.title}>Edit Record</Text>
-          {visitor.getElement()}
+          {recordInputGroup}
           <View style={styles.buttonGroup}>
             <Button
               title="Back"

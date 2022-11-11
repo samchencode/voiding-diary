@@ -5,8 +5,8 @@ import { StatusBar } from '@/view/status-bar';
 import { View, TouchableWithoutFeedback, StyleSheet, Text } from 'react-native';
 import { theme } from '@/view/theme';
 import type { RootNavigationProps } from '@/view/router';
-
 import type { Observable } from '@/view/observables';
+import { RecordId } from '@/domain/models/Record';
 
 type ConfirmDeleteModalProps = RootNavigationProps<'ConfirmDeleteModal'>;
 
@@ -18,15 +18,17 @@ function factory(
     navigation,
     route,
   }: ConfirmDeleteModalProps) {
+    const { recordId } = route.params;
+
     const navigateToRecordScreen = useCallback(() => {
       navigation.navigate('App', { screen: 'Record' });
     }, [navigation]);
 
     const deleteRecord = useCallback(async () => {
-      await deleteRecordAction.execute(route.params.id);
+      await deleteRecordAction.execute(new RecordId(recordId));
       recordsStaleObservable.notifySubscribers();
       navigateToRecordScreen();
-    }, [navigateToRecordScreen, route.params.id]);
+    }, [navigateToRecordScreen, recordId]);
 
     const goBack = useCallback(() => {
       navigation.goBack();

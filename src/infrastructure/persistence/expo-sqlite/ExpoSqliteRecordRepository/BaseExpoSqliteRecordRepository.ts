@@ -61,6 +61,15 @@ class BaseExpoSqliteRecordRepository implements RecordRepository {
     await this.executeSql('DROP TABLE records;');
   }
 
+  async getById(id: RecordId): Promise<Record> {
+    const results = await this.executeSqlAndHydrate(
+      `SELECT type, volumeOz, timestamp, id FROM records
+      WHERE id = ?`,
+      [id.toString()]
+    );
+    return results[0];
+  }
+
   async getAll(): Promise<Record[]> {
     return this.executeSqlAndHydrate(
       `SELECT type, volumeOz, timestamp, id FROM records
