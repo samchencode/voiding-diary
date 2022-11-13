@@ -15,9 +15,12 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.samuel88835.voidingdiary"
     },
     "android": {
       "adaptiveIcon": {
@@ -36,9 +39,16 @@
       [
         "expo-notifications",
         {
-          "sounds": ["src/assets/audio/alert.mp3"]
+          "sounds": [
+            "src/assets/audio/alert.mp3"
+          ]
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "7e210c9a-0ded-41b7-9683-67920610892e"
+      }
+    }
   }
 }
