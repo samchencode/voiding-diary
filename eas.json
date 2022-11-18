@@ -4,15 +4,21 @@
   },
   "build": {
     "development": {
+      "extends": "production",
       "developmentClient": true,
       "distribution": "internal"
     },
     "preview": {
+      "extends": "production",
       "distribution": "internal"
     },
     "emulator": {
+      "extends": "production",
       "ios": {
         "simulator": true
+      },
+      "android": {
+        "buildType": "apk"
       }
     },
     "production": {}
