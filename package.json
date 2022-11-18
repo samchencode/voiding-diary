@@ -1,7 +1,6 @@
 {
   "name": "voiding-diary",
   "version": "1.0.0",
-  "main": "src/index.ts",
   "scripts": {
     "start": "expo start --dev-client",
     "android": "expo run:android",
