@@ -14,18 +14,12 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.samuel88835.voidingdiary"
     },
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
-      },
       "package": "com.samuel88835.voidingdiary"
     },
     "androidNavigationBar": {
@@ -39,9 +33,7 @@
       [
         "expo-notifications",
         {
-          "sounds": [
-            "src/assets/audio/alert.mp3"
-          ]
+          "sounds": ["src/assets/audio/alert.mp3"]
         }
       ]
     ],
